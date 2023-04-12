@@ -1,7 +1,9 @@
 package com.practicum.playlistmarket
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.Toolbar
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -10,12 +12,13 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val arrowBack = findViewById<ImageView>(R.id.arrow_back)
+//        val toolbar = findViewById<Toolbar>(R.id.settings_toolbar)
+//        toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        arrowBack.setOnClickListener {
-            finish()
-        }
+    }
 
+    fun clickToolBar(view: View){
+        finish()
     }
 
 }
