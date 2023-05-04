@@ -1,19 +1,15 @@
 package com.practicum.playlistmarket
 
-import android.annotation.SuppressLint
+
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmarket.databinding.ActivitySearchBinding
-import com.practicum.playlistmarket.databinding.ActivitySettingsBinding
 
 class SearchActivity : AppCompatActivity() {
     //lateinit var binding: ActivitySearchBinding
@@ -25,14 +21,17 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_QUERY = "SEARCH_QUERY"
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        // binding = ActivitySearchBinding.inflate(layoutInflater)
          setContentView(R.layout.activity_search)
        // setContentView(binding.root)
      //   init()
+
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.search_toolbar)
+        toolbar.setNavigationOnClickListener{
+            finish()
+        }
 
         val btClear = findViewById<ImageView>(R.id.btClear)
         edText = findViewById(R.id.editSearch)
@@ -52,8 +51,6 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 btClear.visibility = clearButtonVisibility(s)
-
-
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -63,7 +60,6 @@ class SearchActivity : AppCompatActivity() {
         }
 
         edText.addTextChangedListener(simpleTextWatcher)
-
 
     }
 
@@ -76,9 +72,6 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-   fun clickToolBar(view: View) {
-        finish()
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

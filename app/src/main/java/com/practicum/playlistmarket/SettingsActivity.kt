@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatDelegate
 
 class SettingsActivity : AppCompatActivity() {
@@ -23,6 +24,11 @@ class SettingsActivity : AppCompatActivity() {
         val shareApp = findViewById<LinearLayout>(R.id.share_app)
         val support = findViewById<LinearLayout>(R.id.support)
         val termsOfUse = findViewById<LinearLayout>(R.id.termsОfUse)
+
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_toolbar)
+        toolbar.setNavigationOnClickListener{
+            finish()
+        }
 
         shareApp.setOnClickListener {
             val massage = "https://practicum.yandex.ru/android-developer/"
@@ -61,7 +67,6 @@ class SettingsActivity : AppCompatActivity() {
 
     }
 
-
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     fun nightTheme(view: View) {
         val switch = findViewById<Switch>(R.id.switch_setting)
@@ -71,10 +76,5 @@ class SettingsActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
-
-    fun clickToolBar(view: View) {
-        finish()
-    }
-
 
 }
