@@ -14,6 +14,7 @@ import android.widget.ImageView
 class SearchActivity : AppCompatActivity() {
     //lateinit var binding: ActivitySearchBinding
     private lateinit var edText: EditText
+    lateinit var searchText : String
     //val adapter = SearchAdapter()
 
 
@@ -51,10 +52,13 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 btClear.visibility = clearButtonVisibility(s)
+
+
             }
 
             override fun afterTextChanged(s: Editable?) {
                 //empty
+                searchText = edText.text.toString()
             }
 
         }
@@ -75,7 +79,8 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_QUERY, edText.text.toString())
+        outState.putString(SEARCH_QUERY, searchText)
+
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
