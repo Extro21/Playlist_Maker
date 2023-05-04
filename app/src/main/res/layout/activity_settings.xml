@@ -18,6 +18,7 @@
             style="@style/tooBarText"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:text="@string/settings"
           />
 
@@ -36,7 +37,7 @@
         android:paddingEnd="6dp"
         android:text="@string/dark_theme"
         android:textSize="@dimen/size_text_setting"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        tools:ignore="UseSwitchCompatOrMaterialXml,UsingOnClickInXml" />
 
 
     <LinearLayout
@@ -80,7 +81,6 @@
             android:layout_marginTop="@dimen/margin_top_setting_menu"
             android:layout_marginBottom="@dimen/margin_bot_setting_menu"
             android:layout_weight="1"
-
             android:text="@string/write_support" />
 
         <ImageView

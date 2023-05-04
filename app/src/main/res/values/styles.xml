@@ -56,7 +56,6 @@
 
     <style name="tooBarText">
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
@@ -68,6 +67,21 @@
         <item name="android:fontFamily">@font/ys_text_regular</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="edSearchStyle">
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="drawableTint">@color/gray</item>
+        <item name="android:backgroundTint">@color/gray_search</item>
+    </style>
+
+    <style name="bgSearch">
+        <item name="android:backgroundTint">@color/gray_search</item>
+    </style>
+
+    <style name="edClear">
+        <item name="tint">@color/gray</item>
+
     </style>
 
 </resources>
