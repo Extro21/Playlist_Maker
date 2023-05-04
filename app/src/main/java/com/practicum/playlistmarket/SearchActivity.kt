@@ -52,13 +52,12 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 btClear.visibility = clearButtonVisibility(s)
-
+                searchText = edText.text.toString()
 
             }
 
             override fun afterTextChanged(s: Editable?) {
-                //empty
-                searchText = edText.text.toString()
+
             }
 
         }
