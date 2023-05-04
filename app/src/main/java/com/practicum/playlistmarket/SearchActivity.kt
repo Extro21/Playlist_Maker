@@ -16,7 +16,7 @@ import com.practicum.playlistmarket.databinding.ActivitySearchBinding
 import com.practicum.playlistmarket.databinding.ActivitySettingsBinding
 
 class SearchActivity : AppCompatActivity() {
-    lateinit var binding: ActivitySearchBinding
+    //lateinit var binding: ActivitySearchBinding
     private lateinit var edText: EditText
     //val adapter = SearchAdapter()
 
@@ -29,9 +29,9 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        // setContentView(R.layout.activity_search)
-        setContentView(binding.root)
+       // binding = ActivitySearchBinding.inflate(layoutInflater)
+         setContentView(R.layout.activity_search)
+       // setContentView(binding.root)
      //   init()
 
         val btClear = findViewById<ImageView>(R.id.btClear)

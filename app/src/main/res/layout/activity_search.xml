@@ -45,7 +45,7 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="9dp"
-            android:hint="@string/search"
+            android:hint="@string/searchEd"
             android:maxLength="50"
             android:maxLines="1"
             android:paddingStart="13dp"
