@@ -82,11 +82,10 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+   override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        val searchQuery = savedInstanceState.getString(SEARCH_QUERY, "")
-        edText.setText(searchQuery)
-    }
+        edText.setText(savedInstanceState.getString(SEARCH_QUERY, ""))
+ }
 
 
 //    fun init() {
