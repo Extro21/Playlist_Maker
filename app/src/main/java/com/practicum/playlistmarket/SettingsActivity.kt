@@ -44,8 +44,8 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.address)) )
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.massageOneSupport))
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.massageTwoSupport)
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.themeSupport))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.massageSupport)
                 )
             }
             startActivity(intent)

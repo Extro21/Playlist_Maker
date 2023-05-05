@@ -11,9 +11,9 @@
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="sentText">Отправляем текст</string>
     <string name="massageEmail">https://practicum.yandex.ru/android-developer/</string>
-    <string name="address">vostrik16@uandex.ru</string>
-    <string name="massageOneSupport">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
-    <string name="massageTwoSupport">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="address">vostrik16@yandex.ru</string>
+    <string name="themeSupport">Сообщение разработчикам и разработчицам приложения Playlist Market</string>
+    <string name="massageSupport">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="urlTermsOfUse">https://yandex.ru/legal/practicum_offer/</string>
 
 </resources>
