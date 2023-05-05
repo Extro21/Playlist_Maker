@@ -35,7 +35,7 @@ class SettingsActivity : AppCompatActivity() {
                 type = "text/plain"
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.massageEmail))
             }
-            startActivity(Intent.createChooser(intent, getString(R.string.sentText)))
+            startActivity(Intent.createChooser(intent, getString(R.string.massageEmail)))
         }
 
 
