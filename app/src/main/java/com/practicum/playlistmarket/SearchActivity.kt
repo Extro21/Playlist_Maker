@@ -88,23 +88,4 @@ class SearchActivity : AppCompatActivity() {
  }
 
 
-//    fun init() {
-//        binding.apply {
-//            rcViewSearch.layoutManager =
-//                LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
-//            rcViewSearch.adapter = adapter
-////val music = Music(R.drawable.ic_music, "Кукла колдуна", "Король и шут", "3:56")
-////adapter.addMusicList(music)
-//
-//            val musicList = ArrayList<Music>(
-//                listOf(
-//                    Music(R.drawable.ic_music, "Кукла колдуна", "Король и шут", "3:56"),
-//                    Music(R.drawable.ic_music, "Анархист", "Король и шут", "3:56"),
-//                    Music(R.drawable.ic_music, "Лесник", "Король и шут", "3:56"),
-//                    Music(R.drawable.ic_music, "Камнем по голове", "Король и шут", "3:56")
-//                )
-//            )
-//            adapter.addMusicAllList(musicList)
-//        }
-//    }
 }

@@ -31,28 +31,21 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         shareApp.setOnClickListener {
-            val massage = "https://practicum.yandex.ru/android-developer/"
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, massage)
-            startActivity(Intent.createChooser(intent, "Отправляем текст"))
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.massageEmail))
+            }
+            startActivity(Intent.createChooser(intent, getString(R.string.sentText)))
         }
 
 
-        support.setOnClickListener {
-            val address = "vostrik16@uandex.ru"
 
-            val intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                type = "text/plain"
-                putExtra(Intent.EXTRA_EMAIL, arrayOf(address))
-                putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    "Сообщение разработчикам и разработчицам приложения Playlist Maker"
-                )
-                putExtra(
-                    Intent.EXTRA_TEXT,
-                    "Спасибо разработчикам и разработчицам за крутое приложение!"
+        support.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.address)) )
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.massageOneSupport))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.massageTwoSupport)
                 )
             }
             startActivity(intent)
@@ -60,8 +53,8 @@ class SettingsActivity : AppCompatActivity() {
 
 
         termsOfUse.setOnClickListener {
-            val address = Uri.parse("https://yandex.ru/legal/practicum_offer/")
-            val intent = Intent(Intent.ACTION_VIEW, address)
+            val intent = Intent(Intent.ACTION_VIEW).apply{
+                data = Uri.parse(getString(R.string.urlTermsOfUse))}
             startActivity(intent)
         }
 
