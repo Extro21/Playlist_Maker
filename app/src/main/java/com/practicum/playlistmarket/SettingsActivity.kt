@@ -1,17 +1,13 @@
 package com.practicum.playlistmarket
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Switch
-import android.widget.TextView
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatDelegate
 
 class SettingsActivity : AppCompatActivity() {
@@ -26,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
         val termsOfUse = findViewById<LinearLayout>(R.id.termsОfUse)
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_toolbar)
-        toolbar.setNavigationOnClickListener{
+        toolbar.setNavigationOnClickListener {
             finish()
         }
 
@@ -43,18 +39,18 @@ class SettingsActivity : AppCompatActivity() {
         support.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
-                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.address)) )
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.address)))
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.themeSupport))
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.massageSupport)
-                )
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.massageSupport))
             }
             startActivity(intent)
         }
 
 
         termsOfUse.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW).apply{
-                data = Uri.parse(getString(R.string.urlTermsOfUse))}
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(getString(R.string.urlTermsOfUse))
+            }
             startActivity(intent)
         }
 

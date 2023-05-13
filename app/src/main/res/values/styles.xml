@@ -81,7 +81,15 @@
 
     <style name="edClear">
         <item name="tint">@color/gray</item>
+    </style>
 
+    <style name="trackSettingAttribute">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="tint">@color/gray</item>
+        <item name="fontFamily">@font/ys_text_regular</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
     </style>
 
 </resources>
