@@ -7,12 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmarket.databinding.SearchTrackItemBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchHolder>() {
 
-
-    private val trackList = ArrayList<Track>()
-
+    var trackList = ArrayList<Track>()
 
     class SearchHolder(item: View) : RecyclerView.ViewHolder(item) {
         private val binding = SearchTrackItemBinding.bind(item)
@@ -21,12 +22,13 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchHolder>() {
             Glide.with(itemView)
                 .load(track.artworkUrl100)
                 .centerCrop()
-                .placeholder(R.drawable.icon_treck_default)
+                .placeholder(R.drawable.icon_track_default)
                 .transform(RoundedCorners(cornerSize))
                 .into(imageMusicSearch)
 
             textGroup.text = track.artistName
-            textTimeMusic.text = track.trackTime
+            textTimeMusic.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toInt())
             textSong.text = track.trackName
         }
 
@@ -42,13 +44,6 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchHolder>() {
         holder.bind(trackList[position])
     }
 
-    override fun getItemCount(): Int {
-        return trackList.size
-    }
-
-    fun addMusicAllList(tracks: ArrayList<Track>) {
-        trackList.addAll(tracks)
-    }
-
+    override fun getItemCount(): Int = trackList.size
 
 }

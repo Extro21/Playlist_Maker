@@ -59,4 +59,13 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <style name="mistakeImageNotInternet">
+        <item name="android:src">@drawable/dark_mode_not_internet</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="mistakeImageNotFound">
+        <item name="android:src">@drawable/dark_mode_not_found</item>
+    </style>
+
 </resources>

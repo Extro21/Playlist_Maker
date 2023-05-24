@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -13,14 +13,14 @@
         android:layout_marginStart="13dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        tools:src="@drawable/icon_track_default" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textSong"
@@ -32,7 +32,8 @@
             android:fontFamily="@font/ys_text_regular"
             android:maxLines="1"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="Название песни" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -43,7 +44,8 @@
                 android:id="@+id/textGroup"
                 style="@style/trackSettingAttribute"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                tools:text="Название группы" />
 
             <ImageView
                 style="@style/trackSettingAttribute"
@@ -58,7 +60,8 @@
                 android:id="@+id/textTimeMusic"
                 style="@style/trackSettingAttribute"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                tools:text="00:00" />
 
         </LinearLayout>
 

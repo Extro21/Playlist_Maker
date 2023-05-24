@@ -8,16 +8,21 @@
     tools:context=".SearchActivity">
 
 
-    <TextView
-        style="@style/textMenuSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="24dp"
-        android:fontFamily="@font/ys_display_medium"
-        android:text="@string/search"
-        android:textSize="22sp" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/search_toolbar"
+        style="@style/toolBarTop"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        tools:ignore="UsingOnClickInXml">
+
+        <TextView
+            style="@style/tooBarText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/search" />
+
+    </androidx.appcompat.widget.Toolbar>
 
 
     <LinearLayout
@@ -39,10 +44,12 @@
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="9dp"
             android:hint="@string/searchEd"
+            android:imeOptions="actionDone"
             android:maxLength="50"
             android:maxLines="1"
             android:paddingStart="13dp"
             android:paddingEnd="14dp"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -55,45 +62,99 @@
             android:layout_marginEnd="12dp"
             android:src="@drawable/ic_baseline_close_24"
             android:visibility="gone" />
+
+
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcViewSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcViewSearch"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray"
-            app:layout_constraintBottom_toTopOf="@+id/nav_view"
-            app:layout_constraintEnd_toEndOf="@+id/nav_view"
-            app:layout_constraintStart_toStartOf="@+id/nav_view" />
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="0dp"
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/massageNotFound"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?android:attr/windowBackground"
-            app:itemIconTint="@drawable/bottom_navigation_selector"
-            app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
-            app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
-            app:itemTextColor="@drawable/bottom_navigation_selector"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/bottom_nav_menu" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="86dp"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                style="@style/mistakeImageNotFound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="16dp" />
+
+            <TextView
+                android:id="@+id/placeholderMessage"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/ys_text_medium"
+                android:textAlignment="center"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="19sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/massageNotInternet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="86dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                style="@style/mistakeImageNotInternet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="16dp" />
+
+            <TextView
+                android:id="@+id/placeholderMessageNotInternet"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/ys_text_medium"
+                android:textAlignment="center"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="19sp"
+                tools:text="Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету" />
+
+            <Button
+                android:id="@+id/btResetSearch"
+                style="@style/mistakeImageNotInternet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="?attr/colorOnSecondary"
+                android:fontFamily="@font/ys_display_medium"
+                android:letterSpacing="0"
+                android:text="@string/reset"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                app:cornerRadius="54dp" />
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
 
 
 </LinearLayout>

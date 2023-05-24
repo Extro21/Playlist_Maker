@@ -92,4 +92,13 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <style name="mistakeImageNotInternet">
+        <item name="android:src">@drawable/not_internet</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="mistakeImageNotFound">
+        <item name="android:src">@drawable/nothing_was_found</item>
+    </style>
+
 </resources>

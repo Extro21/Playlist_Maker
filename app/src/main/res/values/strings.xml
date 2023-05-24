@@ -14,6 +14,9 @@
     <string name="themeSupport">Сообщение разработчикам и разработчицам приложения Playlist Market</string>
     <string name="massageSupport">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="urlTermsOfUse">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="nothing_not_found">Ничего не нашлось</string>
+    <string name="reset">Обновить</string>
+    <string name="not_internet">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
 
 
 </resources>
