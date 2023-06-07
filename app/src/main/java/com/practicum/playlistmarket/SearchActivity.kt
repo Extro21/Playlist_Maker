@@ -1,27 +1,42 @@
 package com.practicum.playlistmarket
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.practicum.playlistmarket.databinding.ActivitySearchBinding
 import com.practicum.playlistmarket.network.SongSearchResponse
 import com.practicum.playlistmarket.network.TrackApi
+import com.practicum.playlistmarket.search.HistoryAdapter
+import com.practicum.playlistmarket.search.SearchAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+const val HISTORY_TRACK = "history_track"
+const val KEY_HISTORY = "key_history"
+const val KEY_HISTORY_ALL = "key_history_all"
+
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private lateinit var searchText: String
-    private val adapter = SearchAdapter()
+    private lateinit var sharedPref: SharedPreferences
+    private val searchAdapter = SearchAdapter()
+    private val historyAdapter = HistoryAdapter()
+    private var flag = false
+    private val tracksHistory = ArrayList<Track>()
+    private val tracksSearch = ArrayList<Track>()
+
 
     private val retrofit =
         Retrofit.Builder().baseUrl(urlMusicItunes)
@@ -29,21 +44,18 @@ class SearchActivity : AppCompatActivity() {
             .build()
     private val trackApi = retrofit.create(TrackApi::class.java)
 
-    private val tracks = ArrayList<Track>()
-
-    companion object {
-        private const val SEARCH_QUERY = "SEARCH_QUERY"
-        private const val TRACK_QUERY = "TRACK_QUERY"
-        private const val urlMusicItunes = "https://itunes.apple.com"
-        private const val successfully = 200
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_search)
         setContentView(binding.root)
         init()
+
+        sharedPref = getSharedPreferences(HISTORY_TRACK, MODE_PRIVATE)
+        val searchHistory = SearchHistory(sharedPref)
+
+        searchHistory.addTrackHistory(tracksHistory)
+        sharedPref.registerOnSharedPreferenceChangeListener(searchHistory.listener)
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.search_toolbar)
         toolbar.setNavigationOnClickListener {
@@ -58,14 +70,35 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
+
+        binding.apply {
+            btClearHistory.setOnClickListener {
+                searchHistory.clearTrack()
+                historyMenu.visibility = View.GONE
+                historyAdapter.notifyDataSetChanged()
+            }
+        }
+
         binding.apply {
             btClear.setOnClickListener {
-                tracks.clear()
+                tracksSearch.clear()
                 editSearch.setText("")
                 val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboard.hideSoftInputFromWindow(editSearch.windowToken, 0) // скрыть клавиатуру
                 editSearch.clearFocus()
-                recreate()
+                searchAdapter.notifyDataSetChanged()
+                historyAdapter.notifyDataSetChanged()
+            }
+
+            editSearch.setOnFocusChangeListener { view, hasFocus ->
+                historyMenu.visibility =
+                    if (hasFocus && editSearch.text.isEmpty() &&
+                        tracksHistory.isNotEmpty()
+                    ) View.VISIBLE else View.GONE
+
+                if (!hasFocus) sharedPref.edit()
+                    .putString(KEY_HISTORY_ALL, Gson().toJson(historyAdapter.trackListHistory))
+                    .apply()
             }
         }
 
@@ -78,12 +111,17 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.btClear.visibility = clearButtonVisibility(s)
                 searchText = s.toString()
+                if (searchText.isNotEmpty()) {
+                    binding.historyMenu.visibility = View.GONE
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
             }
         }
         binding.editSearch.addTextChangedListener(simpleTextWatcher)
+
+
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -97,8 +135,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_QUERY, searchText)
-        outState.putParcelableArrayList(TRACK_QUERY, adapter.trackList)
-
+        outState.putParcelableArrayList(TRACK_QUERY, searchAdapter.trackList)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -106,35 +143,63 @@ class SearchActivity : AppCompatActivity() {
         binding.editSearch.setText(savedInstanceState.getString(SEARCH_QUERY, ""))
         val trackSave = savedInstanceState.getParcelableArrayList<Track>(TRACK_QUERY)
         if (trackSave != null) {
-            adapter.trackList.addAll(trackSave)
+            searchAdapter.trackList.addAll(trackSave)
         }
     }
 
     private fun init() {
-        adapter.trackList = tracks
+        searchAdapter.trackList = tracksSearch
+        historyAdapter.trackListHistory = tracksHistory
+
         binding.apply {
             rcViewSearch.layoutManager =
                 LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
-            rcViewSearch.adapter = adapter
+            rcViewSearch.adapter = searchAdapter
+
+            rcViewHistory.layoutManager =
+                LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
+            rcViewHistory.adapter = historyAdapter
+
+            if (tracksHistory.isEmpty()) {
+                historyMenu.visibility = View.GONE
+            }
 
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!flag){
+            binding.editSearch.requestFocus()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(binding.editSearch, InputMethodManager.SHOW_IMPLICIT)
+            flag = true
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        sharedPref.edit()
+            .putString(KEY_HISTORY_ALL, Gson().toJson(historyAdapter.trackListHistory))
+            .apply()
+    }
+
+
     private fun showMessage(textNotFound: String, textNotInternet: String) {
         binding.apply {
             if (textNotFound.isNotEmpty()) {
-                tracks.clear()
+                tracksSearch.clear()
                 placeholderMessage.text = textNotFound
                 massageNotInternet.visibility = View.GONE
                 massageNotFound.visibility = View.VISIBLE
-                adapter.notifyDataSetChanged()
+                searchAdapter.notifyDataSetChanged()
             }
             if (textNotInternet.isNotEmpty()) {
-                tracks.clear()
+                tracksSearch.clear()
                 placeholderMessageNotInternet.text = textNotInternet
                 massageNotFound.visibility = View.GONE
                 massageNotInternet.visibility = View.VISIBLE
-                adapter.notifyDataSetChanged()
+                searchAdapter.notifyDataSetChanged()
                 btResetSearch.setOnClickListener {
                     massageNotInternet.visibility = View.GONE
                     search()
@@ -153,23 +218,30 @@ class SearchActivity : AppCompatActivity() {
                     when (response.code()) {
                         successfully -> {
                             if (response.body()?.results?.isNotEmpty() == true) {
-                                tracks.clear()
+                                tracksSearch.clear()
                                 binding.massageNotFound.visibility = View.GONE
-                                tracks.addAll(response.body()?.results!!)
-                                adapter.notifyDataSetChanged()
-                                //  showMessage("", "")
+                                tracksSearch.addAll(response.body()?.results!!)
+                                searchAdapter.notifyDataSetChanged()
                             } else {
-                                showMessage(getString(R.string.nothing_not_found), "")
+                                showMessage(SearchStatus.NOTHING_FOUND.nameStatus, "")
+                                binding.historyMenu.visibility = View.GONE
                             }
                         }
-                        else -> showMessage("", getString(R.string.not_internet))
+                        else -> showMessage("", SearchStatus.NO_INTERNET.nameStatus)
                     }
                 }
 
                 override fun onFailure(call: Call<SongSearchResponse>, t: Throwable) {
-                    showMessage("", getString(R.string.not_internet))
+                    showMessage("", SearchStatus.NO_INTERNET.nameStatus)
                 }
             })
+    }
+
+    companion object {
+        private const val SEARCH_QUERY = "SEARCH_QUERY"
+        private const val TRACK_QUERY = "TRACK_QUERY"
+        private const val urlMusicItunes = "https://itunes.apple.com"
+        private const val successfully = 200
     }
 
 }

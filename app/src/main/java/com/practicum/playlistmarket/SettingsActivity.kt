@@ -10,6 +10,8 @@ import android.widget.LinearLayout
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatDelegate
 
+
+
 class SettingsActivity : AppCompatActivity() {
 
 
@@ -20,6 +22,7 @@ class SettingsActivity : AppCompatActivity() {
         val shareApp = findViewById<LinearLayout>(R.id.share_app)
         val support = findViewById<LinearLayout>(R.id.support)
         val termsOfUse = findViewById<LinearLayout>(R.id.termsОfUse)
+
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_toolbar)
         toolbar.setNavigationOnClickListener {
@@ -53,6 +56,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+
 
     }
 
