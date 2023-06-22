@@ -1,13 +1,16 @@
 package com.practicum.playlistmarket
-import android.app.Activity
+
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Switch
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
+
+
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -16,43 +19,55 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val shareApp = findViewById<TextView>(R.id.share_app)
+        val shareApp = findViewById<LinearLayout>(R.id.share_app)
+        val support = findViewById<LinearLayout>(R.id.support)
+        val termsOfUse = findViewById<LinearLayout>(R.id.termsОfUse)
+
+
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_toolbar)
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         shareApp.setOnClickListener {
-          // val intent = Intent(Intent.ACTION_SEND)
-            val intent = Intent().apply {
-                action = Intent.ACTION_SEND
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.massageEmail))
             }
-            intent.type = "plain/text";
-            intent.putExtra(Intent.EXTRA_EMAIL, "vlad@yandex.ru")
-            intent.putExtra(Intent.EXTRA_SUBJECT, "go")
-            intent.putExtra(Intent.EXTRA_TEXT, "hello")
-            startActivity(Intent.createChooser(intent,
-                "Отправка письма..."));
+            startActivity(Intent.createChooser(intent, getString(R.string.massageEmail)))
         }
 
 
-//        toolbar.setNavigationOnClickListener { onBackPressed() }
 
+        support.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.address)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.themeSupport))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.massageSupport))
+            }
+            startActivity(intent)
+        }
+
+
+        termsOfUse.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(getString(R.string.urlTermsOfUse))
+            }
+            startActivity(intent)
+        }
 
 
     }
 
-
-
-    fun nightTheme(view: View){
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    fun nightTheme(view: View) {
         val switch = findViewById<Switch>(R.id.switch_setting)
-        if(switch.isChecked){
+        if (switch.isChecked) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
-
-    fun clickToolBar(view: View){
-        finish()
-    }
-
-
-
 
 }
