@@ -11,7 +11,7 @@ class SearchHistory(private val sharedPref: SharedPreferences){
     private val historyAdapter = HistoryAdapter()
 
     companion object {
-        private const val historyTrackMax = 10
+        private const val HISTORY_TRACK_MAX = 10
     }
 
 
@@ -24,7 +24,7 @@ class SearchHistory(private val sharedPref: SharedPreferences){
                 val track = sharedPrefHistory?.getString(key, null)
                 if (track != null) {
                     repeatingTrackCheck(track, tracksHistory)
-                    if (historyAdapter.trackListHistory.size >= historyTrackMax) {
+                    if (historyAdapter.trackListHistory.size >= HISTORY_TRACK_MAX) {
                         tracksHistory.removeAt(historyAdapter.trackListHistory.size - 1)
                     }
                     historyAdapter.trackListHistory.add(0, createTrackFromJson(track))

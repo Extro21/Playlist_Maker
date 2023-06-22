@@ -29,7 +29,7 @@ const val KEY_HISTORY_ALL = "key_history_all"
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var searchText: String
+    private var searchText: String = ""
     private lateinit var sharedPref: SharedPreferences
     private val searchAdapter = SearchAdapter()
     private val historyAdapter = HistoryAdapter()
@@ -169,7 +169,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!flag){
+        if (!flag) {
             binding.editSearch.requestFocus()
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(binding.editSearch, InputMethodManager.SHOW_IMPLICIT)
