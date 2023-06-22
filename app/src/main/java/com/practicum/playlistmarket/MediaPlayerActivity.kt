@@ -62,7 +62,6 @@ class MediaPlayerActivity : AppCompatActivity() {
         }
 
         val cornerSize = resources.getDimensionPixelSize(R.dimen.corners_image_track)
-        intent.getStringExtra(EXTRA_IMAGE)
 
         fun getCoverArtwork() =
             intent.getStringExtra(EXTRA_IMAGE)?.replaceAfterLast('/', "512x512bb.jpg")
