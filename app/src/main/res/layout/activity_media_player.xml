@@ -66,13 +66,12 @@
             android:maxLines="1"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="22sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/group_name"
             app:layout_constraintEnd_toEndOf="@id/content_end"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/content_start"
             app:layout_constraintTop_toBottomOf="@id/track_image"
-            tools:text="Кукла колдуна" />
+            tools:text="Yesterday (Remastered 2009)" />
 
         <TextView
             android:id="@+id/group_name"
@@ -80,15 +79,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="34dp"
+            android:fontFamily="@font/ys_text_medium"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="14sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/image_group_name"
             app:layout_constraintEnd_toEndOf="@id/content_end"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/content_start"
             app:layout_constraintTop_toBottomOf="@id/track_name"
-            tools:text="Король и шут" />
+            tools:text="The Beatles" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/bt_add_like_play"
