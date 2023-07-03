@@ -19,6 +19,12 @@
     <string name="not_internet">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="you_search">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="duration">Длительность</string>
+    <string name="album">Альбом</string>
+    <string name="year">Год</string>
+    <string name="genre">Жанр</string>
+    <string name="country">Страна</string>
+    <string name="_00_00">00:00</string>
 
 
 </resources>
