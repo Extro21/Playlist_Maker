@@ -3,10 +3,11 @@ package com.practicum.playlistmarket
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,11 +32,18 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private var searchText: String = ""
     private lateinit var sharedPref: SharedPreferences
+
+    //    private val searchAdapter = SearchAdapter()
+//    private val historyAdapter = HistoryAdapter()
     private val searchAdapter = SearchAdapter()
     private val historyAdapter = HistoryAdapter()
+
     private var flag = false
     private val tracksHistory = ArrayList<Track>()
     private val tracksSearch = ArrayList<Track>()
+    private val handler = Handler(Looper.getMainLooper())
+
+    private val searchRunnable = Runnable { search() }
 
 
     private val retrofit =
@@ -55,6 +63,7 @@ class SearchActivity : AppCompatActivity() {
         val searchHistory = SearchHistory(sharedPref)
 
         searchHistory.addTrackHistory(tracksHistory)
+
         sharedPref.registerOnSharedPreferenceChangeListener(searchHistory.listener)
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.search_toolbar)
@@ -62,13 +71,13 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.editSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search()
-                true
-            }
-            false
-        }
+//        binding.editSearch.setOnEditorActionListener { _, actionId, _ ->
+//            if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                search()
+//                true
+//            }
+//            false
+//        }
 
 
         binding.apply {
@@ -86,6 +95,7 @@ class SearchActivity : AppCompatActivity() {
                 val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboard.hideSoftInputFromWindow(editSearch.windowToken, 0) // скрыть клавиатуру
                 editSearch.clearFocus()
+                binding.progressBar.visibility = View.GONE
                 searchAdapter.notifyDataSetChanged()
                 historyAdapter.notifyDataSetChanged()
             }
@@ -109,14 +119,34 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchDebounce()
                 binding.btClear.visibility = clearButtonVisibility(s)
                 searchText = s.toString()
+
+                binding.progressBar.visibility = View.VISIBLE
+                searchAdapter.notifyDataSetChanged()
+
                 if (searchText.isNotEmpty()) {
                     binding.historyMenu.visibility = View.GONE
                 }
+
+                if (searchText.isNotEmpty() and tracksSearch.isEmpty()) {
+                    binding.progressBar.visibility = View.VISIBLE
+                    searchAdapter.notifyDataSetChanged()
+                }
+
+                if (searchText.isEmpty()) {
+                    tracksSearch.clear()
+                    binding.progressBar.visibility = View.GONE
+                    binding.historyMenu.visibility = View.VISIBLE
+                    searchAdapter.notifyDataSetChanged()
+                    historyAdapter.notifyDataSetChanged()
+                }
+
             }
 
             override fun afterTextChanged(s: Editable?) {
+
             }
         }
         binding.editSearch.addTextChangedListener(simpleTextWatcher)
@@ -192,6 +222,7 @@ class SearchActivity : AppCompatActivity() {
                 placeholderMessage.text = textNotFound
                 massageNotInternet.visibility = View.GONE
                 massageNotFound.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
                 searchAdapter.notifyDataSetChanged()
             }
             if (textNotInternet.isNotEmpty()) {
@@ -199,6 +230,7 @@ class SearchActivity : AppCompatActivity() {
                 placeholderMessageNotInternet.text = textNotInternet
                 massageNotFound.visibility = View.GONE
                 massageNotInternet.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
                 searchAdapter.notifyDataSetChanged()
                 btResetSearch.setOnClickListener {
                     massageNotInternet.visibility = View.GONE
@@ -221,10 +253,15 @@ class SearchActivity : AppCompatActivity() {
                                 tracksSearch.clear()
                                 binding.massageNotFound.visibility = View.GONE
                                 tracksSearch.addAll(response.body()?.results!!)
+                                binding.progressBar.visibility = View.GONE
+
                                 searchAdapter.notifyDataSetChanged()
                             } else {
-                                showMessage(SearchStatus.NOTHING_FOUND.nameStatus, "")
-                                binding.historyMenu.visibility = View.GONE
+                                if (binding.editSearch.text.isNotEmpty()) {
+                                    showMessage(SearchStatus.NOTHING_FOUND.nameStatus, "")
+                                    binding.historyMenu.visibility = View.GONE
+                                    binding.progressBar.visibility = View.GONE
+                                }
                             }
                         }
                         else -> showMessage("", SearchStatus.NO_INTERNET.nameStatus)
@@ -237,11 +274,18 @@ class SearchActivity : AppCompatActivity() {
             })
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+
     companion object {
         private const val SEARCH_QUERY = "SEARCH_QUERY"
         private const val TRACK_QUERY = "TRACK_QUERY"
         private const val urlMusicItunes = "https://itunes.apple.com"
         private const val successfully = 200
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
 }

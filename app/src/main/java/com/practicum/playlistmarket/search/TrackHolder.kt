@@ -25,6 +25,7 @@ class TrackHolder(item: View) : RecyclerView.ViewHolder(item) {
         textTimeMusic.text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toInt())
         textSong.text = track.trackName
+
     }
 
 }
