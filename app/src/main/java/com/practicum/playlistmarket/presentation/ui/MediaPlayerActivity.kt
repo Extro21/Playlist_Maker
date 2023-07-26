@@ -1,6 +1,5 @@
-package com.practicum.playlistmarket
+package com.practicum.playlistmarket.presentation.ui
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,7 +7,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmarket.Creator.Creator
+import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivityMediaPlayerBinding
+import com.practicum.playlistmarket.domain.api.TrackStateListener
+import com.practicum.playlistmarket.domain.api.TrackTimeListener
+import com.practicum.playlistmarket.presentation.StatePlayer.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,15 +27,16 @@ const val EXTRA_COLLECTION_NAME = "track_collection_name"
 const val EXTRA_SONG = "track_song"
 
 
-class MediaPlayerActivity : AppCompatActivity() {
+class MediaPlayerActivity : AppCompatActivity(), TrackTimeListener, TrackStateListener {
 
-
+    private val playerInteractor = Creator.providePlayerInteractor(this, this)
+    val handler = Handler(Looper.getMainLooper())
+    var state = STATE_DEFAULT.state
     private lateinit var binding: ActivityMediaPlayerBinding
     private lateinit var songUrl: String
-    private var mediaPlayer = MediaPlayer()
-    val handler = Handler(Looper.getMainLooper())
 
-    private var playerState = STATE_DEFAULT
+    var btEnabled = false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,10 +46,21 @@ class MediaPlayerActivity : AppCompatActivity() {
 
 
         songUrl = intent.getStringExtra(EXTRA_SONG).toString()
-        preparePlayer()
+        playerInteractor.preparePlayer(songUrl)
+
+//
+//        val timeInteractor = playerRepository.
+//
+////        timeInteractor.setOnTimeListener { time ->
+////            onTimeChanged(time)
+////        }
+//
+        listenState()
 
         binding.btPlay.setOnClickListener {
-            playbackControl()
+            playerInteractor.playbackControl()
+            checkState(state)
+
         }
 
 
@@ -68,6 +84,7 @@ class MediaPlayerActivity : AppCompatActivity() {
             finish()
         }
 
+
         val data = intent.getStringExtra(EXTRA_DATA).toString()
         val dataOnlyYear = data.substring(0, 4)
         binding.yearApp.text = dataOnlyYear
@@ -79,12 +96,10 @@ class MediaPlayerActivity : AppCompatActivity() {
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(time.toInt())
         }
 
-        val cornerSize = resources.getDimensionPixelSize(R.dimen.corners_image_track)
-
         fun getCoverArtwork() =
             intent.getStringExtra(EXTRA_IMAGE)?.replaceAfterLast('/', "512x512bb.jpg")
 
-
+        val cornerSize = resources.getDimensionPixelSize(R.dimen.corners_image_track)
         Glide.with(this)
             .load(getCoverArtwork())
             .centerCrop()
@@ -92,87 +107,62 @@ class MediaPlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(cornerSize))
             .into(binding.trackImage)
 
-
     }
 
-    private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
-    }
-
-    private fun startPlayer() {
-        mediaPlayer.start()
-        binding.btPlay.setImageResource(R.drawable.button_pauseb)
-        playerState = STATE_PLAYING
-        timeSound()
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        binding.btPlay.setImageResource(R.drawable.bt_play)
-        playerState = STATE_PAUSED
-
-    }
-
-    private fun preparePlayer() {
-        mediaPlayer.setDataSource(songUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            binding.btPlay.isEnabled = true
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            binding.btPlay.setImageResource(R.drawable.bt_play)
-            playerState = STATE_PREPARED
-            binding.timeLeft.text = DEFAULT_TIME_TRACK
-
-
-        }
-    }
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        playerInteractor.pausePlayer()
+        binding.btPlay.setImageResource(R.drawable.bt_play)
+        btEnabled = false
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        playerInteractor.releasePlayer()
+
     }
 
-    private fun timeSound() {
+    override fun onTimeChanged(time: String) {
+        binding.timeLeft.text = time
+
+    }
+
+    override fun getState(state: Int) {
+        this.state = state
+    }
+
+
+    fun checkState(state : Int){
+        when(state){
+           STATE_PLAYING.state ->  binding.btPlay.setImageResource(R.drawable.button_pauseb)
+            STATE_PAUSED.state, STATE_DEFAULT.state ->  binding.btPlay.setImageResource(R.drawable.bt_play)
+            STATE_PREPARED.state -> {
+                binding.btPlay.setImageResource(R.drawable.bt_play)
+                binding.timeLeft.text = DEFAULT_TIME_TRACK
+            }
+        }
+    }
+
+    private fun listenState() {
         handler.postDelayed(
             object : Runnable {
                 override fun run() {
-                    if (playerState == STATE_PLAYING) {
-                        binding.timeLeft.text = SimpleDateFormat(
-                            "mm:ss",
-                            Locale.getDefault()
-                        ).format(mediaPlayer.currentPosition)
-
-                        handler.postDelayed(
-                            this,
-                            REFRESH_LIST_DELAY_MILLIS,
-                        )
-                    }
+                    checkState(state)
+                    handler.postDelayed(
+                        this,
+                        REFRESH_STATE
+                    )
                 }
             },
-            REFRESH_LIST_DELAY_MILLIS
+            REFRESH_STATE
         )
     }
 
+
+
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val REFRESH_LIST_DELAY_MILLIS = 300L
+        private const val REFRESH_STATE = 100L
         private const val DEFAULT_TIME_TRACK = "00:00"
     }
 

@@ -1,5 +1,6 @@
-package com.practicum.playlistmarket.network
+package com.practicum.playlistmarket.data.network
 
+import com.practicum.playlistmarket.data.dto.SongSearchResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

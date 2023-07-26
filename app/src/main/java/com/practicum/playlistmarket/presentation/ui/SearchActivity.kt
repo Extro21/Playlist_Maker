@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket
+package com.practicum.playlistmarket.presentation.ui
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,11 +12,12 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import com.practicum.playlistmarket.R
+import com.practicum.playlistmarket.presentation.SearchStatus
 import com.practicum.playlistmarket.databinding.ActivitySearchBinding
-import com.practicum.playlistmarket.network.SongSearchResponse
-import com.practicum.playlistmarket.network.TrackApi
-import com.practicum.playlistmarket.search.HistoryAdapter
-import com.practicum.playlistmarket.search.SearchAdapter
+import com.practicum.playlistmarket.domain.models.Track
+import com.practicum.playlistmarket.data.dto.SongSearchResponse
+import com.practicum.playlistmarket.data.network.TrackApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,17 +31,20 @@ const val KEY_HISTORY_ALL = "key_history_all"
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
+
+
     private var searchText: String = ""
+
     private lateinit var sharedPref: SharedPreferences
 
-    //    private val searchAdapter = SearchAdapter()
-//    private val historyAdapter = HistoryAdapter()
     private val searchAdapter = SearchAdapter()
     private val historyAdapter = HistoryAdapter()
 
     private var flag = false
+
     private val tracksHistory = ArrayList<Track>()
     private val tracksSearch = ArrayList<Track>()
+
     private val handler = Handler(Looper.getMainLooper())
 
     private val searchRunnable = Runnable { search() }
@@ -66,19 +70,11 @@ class SearchActivity : AppCompatActivity() {
 
         sharedPref.registerOnSharedPreferenceChangeListener(searchHistory.listener)
 
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.search_toolbar)
+       // val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.search_toolbar)
+        val toolbar = binding.searchToolbar
         toolbar.setNavigationOnClickListener {
             finish()
         }
-
-//        binding.editSearch.setOnEditorActionListener { _, actionId, _ ->
-//            if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                search()
-//                true
-//            }
-//            false
-//        }
-
 
         binding.apply {
             btClearHistory.setOnClickListener {
@@ -254,7 +250,6 @@ class SearchActivity : AppCompatActivity() {
                                 binding.massageNotFound.visibility = View.GONE
                                 tracksSearch.addAll(response.body()?.results!!)
                                 binding.progressBar.visibility = View.GONE
-
                                 searchAdapter.notifyDataSetChanged()
                             } else {
                                 if (binding.editSearch.text.isNotEmpty()) {

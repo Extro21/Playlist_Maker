@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket
+package com.practicum.playlistmarket.domain.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
