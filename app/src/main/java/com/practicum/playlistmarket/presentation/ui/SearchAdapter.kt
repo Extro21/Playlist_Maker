@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.search
+package com.practicum.playlistmarket.presentation.ui
 
 import android.content.Intent
 import android.os.Handler
@@ -9,11 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.practicum.playlistmarket.*
+import com.practicum.playlistmarket.domain.models.Track
+import com.practicum.playlistmarket.presentation.TrackHolder
 
 
 class SearchAdapter : RecyclerView.Adapter<TrackHolder>() {
 
     var trackList = ArrayList<Track>()
+
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 

@@ -1,7 +1,8 @@
-package com.practicum.playlistmarket
+package com.practicum.playlistmarket.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.practicum.playlistmarket.R
 
 class MediaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

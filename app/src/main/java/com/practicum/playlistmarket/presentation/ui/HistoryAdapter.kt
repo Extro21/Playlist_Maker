@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.search
+package com.practicum.playlistmarket.presentation.ui
 
 import android.content.Intent
 import android.os.Handler
@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmarket.*
+import com.practicum.playlistmarket.domain.models.Track
+import com.practicum.playlistmarket.presentation.TrackHolder
+
 import kotlin.collections.ArrayList
 
 

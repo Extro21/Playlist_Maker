@@ -1,8 +1,8 @@
-package com.practicum.playlistmarket
+package com.practicum.playlistmarket.presentation.ui
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import com.practicum.playlistmarket.search.HistoryAdapter
+import com.practicum.playlistmarket.domain.models.Track
 
 
 class SearchHistory(private val sharedPref: SharedPreferences){
@@ -29,8 +29,6 @@ class SearchHistory(private val sharedPref: SharedPreferences){
                     }
                     historyAdapter.trackListHistory.add(0, createTrackFromJson(track))
                     historyAdapter.notifyItemInserted(0)
-
-
                 }
             }
         }
