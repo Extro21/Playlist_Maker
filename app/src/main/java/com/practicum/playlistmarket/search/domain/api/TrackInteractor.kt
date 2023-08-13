@@ -10,8 +10,4 @@ interface TrackInteractor {
         fun consume(foundTrack: List<Track>?, errorMessage : String?)
     }
 
-//    interface TrackConsumer {
-//        fun consume(foundTrack: List<Track>, code : Int)
-//    }
-
 }

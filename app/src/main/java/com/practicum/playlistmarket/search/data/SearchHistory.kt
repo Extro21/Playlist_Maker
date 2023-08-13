@@ -5,9 +5,7 @@ import com.google.gson.Gson
 import com.practicum.playlistmarket.player.domain.models.Track
 import com.practicum.playlistmarket.search.ui.HistoryAdapter
 
-//const val HISTORY_TRACK = "history_track"
-//const val KEY_HISTORY = "key_history"
-//const val KEY_HISTORY_ALL = "key_history_all"
+
 
 class SearchHistory(private val sharedPref: SharedPreferences){
     lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
@@ -35,12 +33,6 @@ class SearchHistory(private val sharedPref: SharedPreferences){
             }
         }
     }
-
-//    fun clearTrack(){
-//        sharedPref.edit().clear().apply()
-//        historyAdapter.trackListHistory.clear()
-//    }
-
 
     private fun createTrackFromJson(json: String?): Track {
         return Gson().fromJson(json, Track::class.java)

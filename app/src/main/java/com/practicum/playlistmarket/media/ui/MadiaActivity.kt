@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.presentation
+package com.practicum.playlistmarket.media.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

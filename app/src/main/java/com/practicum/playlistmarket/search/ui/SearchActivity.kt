@@ -34,7 +34,6 @@ class SearchActivity : AppCompatActivity() {
     private var isClickAllowed = true
 
 
-
     private val historyAdapter = HistoryAdapter {
         if (clickDebounce()) {
             openPlayerToIntent(it)
@@ -43,19 +42,15 @@ class SearchActivity : AppCompatActivity() {
 
     private val searchAdapter = SearchAdapter {
         if (clickDebounce()) {
-            //interactorHistory.addTrackInAdapter(it)
             vm.addHistoryTrack(it)
             openPlayerToIntent(it)
         }
     }
 
 
-//    private var isClickAllowed = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
-        // setContentView(R.layout.activity_search)
         setContentView(binding.root)
 
         vm = ViewModelProvider(
@@ -64,13 +59,8 @@ class SearchActivity : AppCompatActivity() {
         )[SearchViewModel::class.java]
 
         init()
-        // interactorHistory.addHistoryTrack(tracksHistory)
         vm.addHistoryTracks(tracksHistory)
 
-//        sharedPref = getSharedPreferences(HISTORY_TRACK, MODE_PRIVATE)
-//        val searchHistory = SearchHistory(sharedPref)
-//        searchHistory.addTrackHistory(tracksHistory)
-//        sharedPref.registerOnSharedPreferenceChangeListener(searchHistory.listener)
 
         vm.observeState().observe(this) {
             render(it)
@@ -114,6 +104,10 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
+        binding.btResetSearch.setOnClickListener {
+            binding.massageNotInternet.visibility = View.GONE
+            vm.searchRequest(binding.editSearch.text.toString())
+        }
 
         binding.editSearch.addTextChangedListener {
             //searchDebounce()
@@ -122,12 +116,6 @@ class SearchActivity : AppCompatActivity() {
             vm.searchDebounce(
                 changedText = it?.toString() ?: ""
             )
-
-            binding.btResetSearch.setOnClickListener {
-                binding.massageNotInternet.visibility = View.GONE
-                vm.searchRequest(binding.editSearch.text.toString())
-            }
-
 
             //binding.progressBar.visibility = View.VISIBLE
             searchAdapter.notifyDataSetChanged()

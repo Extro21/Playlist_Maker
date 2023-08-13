@@ -30,12 +30,6 @@ class SettingsActivity : AppCompatActivity() {
             SettingViewModel.getViewModelFactory()
         )[SettingViewModel::class.java]
 
-
-//        val shareApp = findViewById<LinearLayout>(R.id.share_app)
-//        val support = findViewById<LinearLayout>(R.id.support)
-//        val termsOfUse = findViewById<LinearLayout>(R.id.termsОfUse)
-
-
         //val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_toolbar)
         binding.settingsToolbar.setNavigationOnClickListener {
             finish()

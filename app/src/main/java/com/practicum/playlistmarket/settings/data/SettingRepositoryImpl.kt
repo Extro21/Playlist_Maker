@@ -7,10 +7,6 @@ import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.settings.domain.SettingRepository
 
 
-private const val SHARED_PREF_THEME = "shared_pref_theme"
-private const val KEY_THEME = "key_theme"
-
-
 class SettingRepositoryImpl(private val context: Context,private val sharedPreferencesThemeSettings: SharedPreferencesThemeSettings) : SettingRepository {
 
     override fun sharingApp(link: String) {
@@ -19,7 +15,6 @@ class SettingRepositoryImpl(private val context: Context,private val sharedPrefe
             putExtra(Intent.EXTRA_TEXT, link)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        //context.startActivity(Intent.createChooser(intent, link))
         context.startActivity(intent)
     }
 

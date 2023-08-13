@@ -74,9 +74,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             postTime,
         )
 
-//        handler.removeCallbacks(searchRunnable)
-//        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-
     }
 
 

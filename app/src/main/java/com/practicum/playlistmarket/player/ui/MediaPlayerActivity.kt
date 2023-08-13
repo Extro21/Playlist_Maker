@@ -2,7 +2,7 @@ package com.practicum.playlistmarket.player.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -10,8 +10,7 @@ import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivityMediaPlayerBinding
 import com.practicum.playlistmarket.util.StatePlayer
 import com.practicum.playlistmarket.util.StatePlayer.*
-import java.text.SimpleDateFormat
-import java.util.*
+
 
 const val EXTRA_TRACK_NAME = "track_name"
 const val EXTRA_ARTIST_NAME = "artist_name"
@@ -24,7 +23,7 @@ const val EXTRA_COLLECTION_NAME = "track_collection_name"
 const val EXTRA_SONG = "track_song"
 
 
-class MediaPlayerActivity : ComponentActivity() {
+class MediaPlayerActivity : AppCompatActivity() {
 
 
     var state = STATE_DEFAULT
@@ -33,7 +32,6 @@ class MediaPlayerActivity : ComponentActivity() {
     private lateinit var viewModel: MediaPlayerViewModel
 
     private var songUrl: String = ""
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +45,6 @@ class MediaPlayerActivity : ComponentActivity() {
 
         viewModel.preparePlayer(songUrl)
 
-        //  listenState()
 
         binding.btPlay.setOnClickListener {
             viewModel.playStart()
@@ -74,29 +71,42 @@ class MediaPlayerActivity : ComponentActivity() {
             finish()
         }
 
+
         val data = intent.getStringExtra(EXTRA_DATA).toString()
-        val dataOnlyYear = data.substring(0, 4)
-        binding.yearApp.text = dataOnlyYear
+        viewModel.correctDataSong(data)
+        viewModel.dataSong.observe(this) {
+            binding.yearApp.text = it
+        }
 
 
         val time = intent.getStringExtra(EXTRA_TIME_MILLIS)
+
         if (time != null) {
-            binding.durationApp.text =
-                SimpleDateFormat("mm:ss", Locale.getDefault()).format(time.toInt())
+            viewModel.correctTimeSong(time)
+
+            viewModel.timeSong.observe(this) {
+                binding.durationApp.text = it
+            }
         }
 
-        fun getCoverArtwork() =
-            intent.getStringExtra(EXTRA_IMAGE)?.replaceAfterLast('/', "512x512bb.jpg")
 
-        val cornerSize = resources.getDimensionPixelSize(R.dimen.corners_image_track)
-        Glide.with(this)
-            .load(getCoverArtwork())
-            .centerCrop()
-            .placeholder(R.drawable.icon_track_default)
-            .transform(RoundedCorners(cornerSize))
-            .into(binding.trackImage)
+        val urlImage = intent.getStringExtra(EXTRA_IMAGE)
+        viewModel.getCoverArtwork(urlImage)
 
-        viewModel.timeData.observe(this) { time ->
+        viewModel.coverArtwork.observe(this){
+            var url = it
+
+            val cornerSize = resources.getDimensionPixelSize(R.dimen.corners_image_track)
+            Glide.with(this)
+                .load(url)
+                .centerCrop()
+                .placeholder(R.drawable.icon_track_default)
+                .transform(RoundedCorners(cornerSize))
+                .into(binding.trackImage)
+        }
+
+
+        viewModel.secondCounter.observe(this) { time ->
             binding.timeLeft.text = time
         }
 
@@ -105,33 +115,17 @@ class MediaPlayerActivity : ComponentActivity() {
         }
 
 
-
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
         binding.btPlay.setImageResource(R.drawable.bt_play)
-        //btEnabled = false
+
     }
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//            // viewModel.onDestroy()
-//    }
 
 
-
-
-//    override fun onTimeChanged(time: String) {
-//        binding.timeLeft.text = time
-//    }
-//
-//    override fun getState(state: StatePlayer) {
-//        this.state = state
-//    }
-
-    fun checkState(state: StatePlayer) {
+    private fun checkState(state: StatePlayer) {
         when (state) {
             STATE_PLAYING -> binding.btPlay.setImageResource(R.drawable.button_pauseb)
             STATE_PAUSED, STATE_DEFAULT -> binding.btPlay.setImageResource(R.drawable.bt_play)
@@ -141,21 +135,6 @@ class MediaPlayerActivity : ComponentActivity() {
             }
         }
     }
-//
-//    private fun listenState() {
-//        handler.postDelayed(
-//            object : Runnable {
-//                override fun run() {
-//                    checkState(state)
-//                    handler.postDelayed(
-//                        this,
-//                        REFRESH_STATE
-//                    )
-//                }
-//            },
-//            REFRESH_STATE
-//        )
-//    }
 
     companion object {
         private const val DEFAULT_TIME_TRACK = "00:00"
