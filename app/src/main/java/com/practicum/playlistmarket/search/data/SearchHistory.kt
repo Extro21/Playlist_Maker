@@ -1,17 +1,18 @@
-package com.practicum.playlistmarket.presentation.ui
+package com.practicum.playlistmarket.search.data
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.practicum.playlistmarket.player.domain.models.Track
 import com.practicum.playlistmarket.search.ui.HistoryAdapter
-import com.practicum.playlistmarket.search.ui.KEY_HISTORY
-import com.practicum.playlistmarket.search.ui.KEY_HISTORY_ALL
 
+//const val HISTORY_TRACK = "history_track"
+//const val KEY_HISTORY = "key_history"
+//const val KEY_HISTORY_ALL = "key_history_all"
 
 class SearchHistory(private val sharedPref: SharedPreferences){
     lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
 
-    private val historyAdapter = HistoryAdapter()
+    private val historyAdapter = HistoryAdapter {}
 
     companion object {
         private const val HISTORY_TRACK_MAX = 10
@@ -35,10 +36,10 @@ class SearchHistory(private val sharedPref: SharedPreferences){
         }
     }
 
-    fun clearTrack(){
-        sharedPref.edit().clear().apply()
-        historyAdapter.trackListHistory.clear()
-    }
+//    fun clearTrack(){
+//        sharedPref.edit().clear().apply()
+//        historyAdapter.trackListHistory.clear()
+//    }
 
 
     private fun createTrackFromJson(json: String?): Track {

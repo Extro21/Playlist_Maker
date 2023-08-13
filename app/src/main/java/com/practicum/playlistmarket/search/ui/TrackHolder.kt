@@ -23,7 +23,7 @@ class TrackHolder(item: View) : RecyclerView.ViewHolder(item) {
 
         textGroup.text = track.artistName
         textTimeMusic.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toInt())
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis?.toInt())
         textSong.text = track.trackName
 
     }

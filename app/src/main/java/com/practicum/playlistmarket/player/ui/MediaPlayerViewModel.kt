@@ -42,9 +42,14 @@ class MediaPlayerViewModel() : ViewModel(), TrackTimeListener, TrackStateListene
         // binding.btPlay.setImageResource(R.drawable.bt_play)
     }
 
-    fun onDestroy() {
+    override fun onCleared() {
+        super.onCleared()
         playerInteractor.releasePlayer()
     }
+
+//    fun onDestroy() {
+//        playerInteractor.releasePlayer()
+//    }
 
     override fun onTimeChanged(time: String) {
         _timeData.value = time

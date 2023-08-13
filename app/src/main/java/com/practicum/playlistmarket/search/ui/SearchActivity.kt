@@ -1,39 +1,27 @@
 package com.practicum.playlistmarket.search.ui
 
 import android.content.Context
-import android.content.SharedPreferences
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.practicum.playlistmarket.Creator.Creator
-import com.practicum.playlistmarket.R
-import com.practicum.playlistmarket.presentation.SearchStatus
 import com.practicum.playlistmarket.databinding.ActivitySearchBinding
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.presentation.ui.SearchHistory
-import com.practicum.playlistmarket.search.domain.api.TrackInteractor
+import com.practicum.playlistmarket.player.ui.*
+import com.practicum.playlistmarket.player.ui.MediaPlayerActivity
 
-
-const val HISTORY_TRACK = "history_track"
-const val KEY_HISTORY = "key_history"
-const val KEY_HISTORY_ALL = "key_history_all"
 
 class SearchActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivitySearchBinding
 
     private var searchText: String = ""
-
-    private lateinit var sharedPref: SharedPreferences
-
-    private val searchAdapter = SearchAdapter()
-    private val historyAdapter = HistoryAdapter()
 
     private var flag = false
     private val tracksHistory = ArrayList<Track>()
@@ -41,33 +29,52 @@ class SearchActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private val searchRunnable = Runnable { search() }
+    private lateinit var vm: SearchViewModel
 
-    private val moviesInteractor = Creator.provideTrackInteractor()
+    private var isClickAllowed = true
 
-//    private val adapter = MoviesAdapter {
-//        if (clickDebounce()) {
-//            val intent = Intent(this, PosterActivity::class.java)
-//            intent.putExtra("poster", it.image)
-//            startActivity(intent)
-//        }
-//    }
+
+
+    private val historyAdapter = HistoryAdapter {
+        if (clickDebounce()) {
+            openPlayerToIntent(it)
+        }
+    }
+
+    private val searchAdapter = SearchAdapter {
+        if (clickDebounce()) {
+            //interactorHistory.addTrackInAdapter(it)
+            vm.addHistoryTrack(it)
+            openPlayerToIntent(it)
+        }
+    }
+
 
 //    private var isClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_search)
+        // setContentView(R.layout.activity_search)
         setContentView(binding.root)
+
+        vm = ViewModelProvider(
+            this,
+            SearchViewModel.factoryViewModelSearch()
+        )[SearchViewModel::class.java]
+
         init()
+        // interactorHistory.addHistoryTrack(tracksHistory)
+        vm.addHistoryTracks(tracksHistory)
 
-        sharedPref = getSharedPreferences(HISTORY_TRACK, MODE_PRIVATE)
-        val searchHistory = SearchHistory(sharedPref)
+//        sharedPref = getSharedPreferences(HISTORY_TRACK, MODE_PRIVATE)
+//        val searchHistory = SearchHistory(sharedPref)
+//        searchHistory.addTrackHistory(tracksHistory)
+//        sharedPref.registerOnSharedPreferenceChangeListener(searchHistory.listener)
 
-        searchHistory.addTrackHistory(tracksHistory)
-
-        sharedPref.registerOnSharedPreferenceChangeListener(searchHistory.listener)
+        vm.observeState().observe(this) {
+            render(it)
+        }
 
         val toolbar = binding.searchToolbar
         toolbar.setNavigationOnClickListener {
@@ -76,22 +83,24 @@ class SearchActivity : AppCompatActivity() {
 
         binding.apply {
             btClearHistory.setOnClickListener {
-                searchHistory.clearTrack()
-                historyMenu.visibility = View.GONE
-                historyAdapter.notifyDataSetChanged()
+                // interactorHistory.clearTrack(historyAdapter.trackListHistory)
+                vm.clearTrackListHistory(historyAdapter.trackListHistory)
+                // searchHistory.clearTrack()
+
+                // historyMenu.visibility = View.GONE
+
+                // historyAdapter.notifyDataSetChanged()
             }
+        }
+
+        vm.clearHistory.observe(this) {
+            binding.historyMenu.visibility = View.GONE
+            historyAdapter.notifyDataSetChanged()
         }
 
         binding.apply {
             btClear.setOnClickListener {
-                tracksSearch.clear()
-                editSearch.setText("")
-                val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                keyboard.hideSoftInputFromWindow(editSearch.windowToken, 0) // скрыть клавиатуру
-                editSearch.clearFocus()
-                binding.progressBar.visibility = View.GONE
-                searchAdapter.notifyDataSetChanged()
-                historyAdapter.notifyDataSetChanged()
+                clearSearch()
             }
 
             editSearch.setOnFocusChangeListener { view, hasFocus ->
@@ -100,50 +109,96 @@ class SearchActivity : AppCompatActivity() {
                         tracksHistory.isNotEmpty()
                     ) View.VISIBLE else View.GONE
 
-                if (!hasFocus) sharedPref.edit()
-                    .putString(KEY_HISTORY_ALL, Gson().toJson(historyAdapter.trackListHistory))
-                    .apply()
-            }
-        }
-
-
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //empty
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchDebounce()
-                binding.btClear.visibility = clearButtonVisibility(s)
-                searchText = s.toString()
-
-                binding.progressBar.visibility = View.VISIBLE
-                searchAdapter.notifyDataSetChanged()
-
-                if (searchText.isNotEmpty()) {
-                    binding.historyMenu.visibility = View.GONE
-                }
-
-                if (searchText.isNotEmpty() and tracksSearch.isEmpty()) {
-                    binding.progressBar.visibility = View.VISIBLE
-                    searchAdapter.notifyDataSetChanged()
-                }
-
-                if (searchText.isEmpty()) {
-                    tracksSearch.clear()
-                    binding.progressBar.visibility = View.GONE
-                    binding.historyMenu.visibility = View.VISIBLE
-                    searchAdapter.notifyDataSetChanged()
-                    historyAdapter.notifyDataSetChanged()
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
+                if (!hasFocus) vm.addHistoryList(historyAdapter.trackListHistory)
 
             }
         }
-        binding.editSearch.addTextChangedListener(simpleTextWatcher)
 
+
+        binding.editSearch.addTextChangedListener {
+            //searchDebounce()
+            binding.btClear.visibility = clearButtonVisibility(it)
+            //searchText = it.toString()
+            vm.searchDebounce(
+                changedText = it?.toString() ?: ""
+            )
+
+            binding.btResetSearch.setOnClickListener {
+                binding.massageNotInternet.visibility = View.GONE
+                vm.searchRequest(binding.editSearch.text.toString())
+            }
+
+
+            //binding.progressBar.visibility = View.VISIBLE
+            searchAdapter.notifyDataSetChanged()
+
+            if (searchText.isNotEmpty()) {
+                binding.historyMenu.visibility = View.GONE
+            }
+        }
+
+    }
+
+    private fun render(state: TrackState) {
+        when (state) {
+            is TrackState.Content -> showContent(state.tracks)
+            is TrackState.Empty -> showEmpty(state.message)
+            is TrackState.Error -> showError(state.errorMessage)
+            is TrackState.Loading -> showLoading()
+        }
+    }
+
+    fun showLoading() {
+        binding.rcViewSearch.visibility = View.GONE
+        binding.historyMenu.visibility = View.GONE
+        binding.massageNotFound.visibility = View.GONE
+        binding.massageNotInternet.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun showError(errorMessage: String) {
+        binding.rcViewSearch.visibility = View.GONE
+        binding.massageNotInternet.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+        binding.massageNotFound.visibility = View.GONE
+        binding.placeholderMessageNotInternet.text = errorMessage
+    }
+
+    private fun showEmpty(emptyMessage: String) {
+        binding.rcViewSearch.visibility = View.GONE
+        binding.massageNotFound.visibility = View.VISIBLE
+        binding.massageNotInternet.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.placeholderMessage.visibility = View.VISIBLE
+        binding.placeholderMessage.text = emptyMessage
+    }
+
+    private fun showContent(track: List<Track>) {
+        binding.massageNotFound.visibility = View.GONE
+        binding.massageNotInternet.visibility = View.GONE
+        binding.rcViewSearch.visibility = View.VISIBLE
+        binding.placeholderMessage.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.historyMenu.visibility = View.GONE
+        searchAdapter.trackList.clear()
+        searchAdapter.trackList.addAll(track)
+        searchAdapter.notifyDataSetChanged()
+    }
+
+
+    fun clearSearch() {
+        binding.apply {
+            tracksSearch.clear()
+            editSearch.setText("")
+            val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            keyboard.hideSoftInputFromWindow(editSearch.windowToken, 0) // скрыть клавиатуру
+            editSearch.clearFocus()
+            progressBar.visibility = View.GONE
+            massageNotFound.visibility = View.GONE
+            massageNotInternet.visibility = View.GONE
+            searchAdapter.notifyDataSetChanged()
+            historyAdapter.notifyDataSetChanged()
+        }
 
     }
 
@@ -202,93 +257,37 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        sharedPref.edit()
-            .putString(KEY_HISTORY_ALL, Gson().toJson(historyAdapter.trackListHistory))
-            .apply()
+        vm.addHistoryList(historyAdapter.trackListHistory)
     }
 
-
-    private fun showMessage(textNotFound: String, textNotInternet: String) {
-        binding.apply {
-            if (textNotFound.isNotEmpty()) {
-                tracksSearch.clear()
-                placeholderMessage.text = textNotFound
-                placeholderMessage.visibility = View.VISIBLE
-                massageNotInternet.visibility = View.GONE
-                massageNotFound.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.GONE
-                searchAdapter.notifyDataSetChanged()
-            }
-            if (textNotInternet.isNotEmpty()) {
-                tracksSearch.clear()
-                placeholderMessageNotInternet.text = textNotInternet
-                massageNotFound.visibility = View.GONE
-                massageNotInternet.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.GONE
-                searchAdapter.notifyDataSetChanged()
-                btResetSearch.setOnClickListener {
-                    massageNotInternet.visibility = View.GONE
-                    search()
-                }
-            }
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
+        return current
     }
 
-    private fun search() {
-        if (binding.editSearch.text.isNotEmpty()) {
-            binding.apply {
-
-                placeholderMessage.visibility = View.GONE
-                rcViewSearch.visibility = View.GONE
-//                massageNotInternet.visibility = View.GONE
-//                massageNotFound.visibility = View.GONE
-                progressBar.visibility = View.VISIBLE
-
-                moviesInteractor.searchTrack(editSearch.text.toString(), object : TrackInteractor.TrackConsumer {
-                    override fun consume(foundMovies: List<Track>, code : Int) {
-                        handler.post {
-                            if (code != 200){
-                                showMessage("", SearchStatus.NO_INTERNET.nameStatus)
-                                progressBar.visibility = View.GONE
-                            } else {
-                                progressBar.visibility = View.GONE
-                                tracksSearch.clear()
-                                tracksSearch.addAll(foundMovies)
-                                rcViewSearch.visibility = View.VISIBLE
-                                massageNotInternet.visibility = View.GONE
-                                massageNotFound.visibility = View.GONE
-                                searchAdapter.notifyDataSetChanged()
-                                if (tracksSearch.isEmpty()) {
-                                    showMessage(SearchStatus.NOTHING_FOUND.nameStatus, "")
-                                } else {
-                                    progressBar.visibility = View.GONE
-                                }
-                            }
-
-                        }
-                    }
-                })
-
-            }
-
-        }
-    }
-
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    private fun openPlayerToIntent(track: Track) {
+        val intent = Intent(this, MediaPlayerActivity::class.java)
+        intent.putExtra(EXTRA_TRACK_NAME, track.trackName)
+        intent.putExtra(EXTRA_ARTIST_NAME, track.artistName)
+        intent.putExtra(EXTRA_TIME_MILLIS, track.trackTimeMillis)
+        intent.putExtra(EXTRA_IMAGE, track.artworkUrl100)
+        intent.putExtra(EXTRA_DATA, track.releaseDate)
+        intent.putExtra(EXTRA_COLLECTION_NAME, track.collectionName)
+        intent.putExtra(EXTRA_PRIMARY_NAME, track.primaryGenreName)
+        intent.putExtra(EXTRA_COUNTRY, track.country)
+        intent.putExtra(EXTRA_SONG, track.previewUrl)
+        startActivity(intent)
     }
 
 
     companion object {
         private const val SEARCH_QUERY = "SEARCH_QUERY"
         private const val TRACK_QUERY = "TRACK_QUERY"
-        private const val urlMusicItunes = "https://itunes.apple.com"
-        private const val successfully = 200
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-
     }
 
 }

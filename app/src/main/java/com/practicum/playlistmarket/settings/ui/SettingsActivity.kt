@@ -3,7 +3,6 @@ package com.practicum.playlistmarket.settings.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivitySettingsBinding
@@ -11,11 +10,11 @@ import com.practicum.playlistmarket.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
 
-   // private lateinit var viewModel: SettingViewModel
+    // private lateinit var viewModel: SettingViewModel
     private lateinit var binding: ActivitySettingsBinding
 
     //lateinit var shar: SharedPreferences
-   private lateinit var viewModel: SettingViewModel
+    private lateinit var viewModel: SettingViewModel
     //private val settingInterctor = Creator.provideSettingInteractor(this)
 
 
@@ -26,20 +25,23 @@ class SettingsActivity : AppCompatActivity() {
 
         //val factory = SettingViewModel.getViewModelFactory()
 
-        viewModel = ViewModelProvider(this, SettingViewModel.getViewModelFactory())[SettingViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            SettingViewModel.getViewModelFactory()
+        )[SettingViewModel::class.java]
 
 
-        val shareApp = findViewById<LinearLayout>(R.id.share_app)
-        val support = findViewById<LinearLayout>(R.id.support)
-        val termsOfUse = findViewById<LinearLayout>(R.id.termsОfUse)
+//        val shareApp = findViewById<LinearLayout>(R.id.share_app)
+//        val support = findViewById<LinearLayout>(R.id.support)
+//        val termsOfUse = findViewById<LinearLayout>(R.id.termsОfUse)
 
 
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_toolbar)
-        toolbar.setNavigationOnClickListener {
+        //val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_toolbar)
+        binding.settingsToolbar.setNavigationOnClickListener {
             finish()
         }
 
-        shareApp.setOnClickListener {
+        binding.shareApp.setOnClickListener {
 //            val intent = Intent(Intent.ACTION_SEND).apply {
 //                type = "text/plain"
 //                putExtra(Intent.EXTRA_TEXT, getString(R.string.massageEmail))
@@ -52,7 +54,7 @@ class SettingsActivity : AppCompatActivity() {
 
 
 
-        support.setOnClickListener {
+        binding.support.setOnClickListener {
             viewModel.sentSupport()
 //            val intent = Intent(Intent.ACTION_SENDTO).apply {
 //                data = Uri.parse("mailto:")
@@ -64,7 +66,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
 
-        termsOfUse.setOnClickListener {
+        binding.termsFUse.setOnClickListener {
             viewModel.termOfUse()
 //            val link = "https://yandex.ru/legal/practicum_offer/"
 //            settingInterctor.openTermsOfUse(link)

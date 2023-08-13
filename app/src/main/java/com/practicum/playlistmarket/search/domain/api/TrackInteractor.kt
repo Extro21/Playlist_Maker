@@ -7,7 +7,11 @@ interface TrackInteractor {
     fun searchTrack(expression: String, consumer: TrackConsumer)
 
     interface TrackConsumer {
-        fun consume(foundTrack: List<Track>, code : Int)
+        fun consume(foundTrack: List<Track>?, errorMessage : String?)
     }
+
+//    interface TrackConsumer {
+//        fun consume(foundTrack: List<Track>, code : Int)
+//    }
 
 }

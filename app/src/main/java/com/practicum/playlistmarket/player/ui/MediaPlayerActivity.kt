@@ -1,8 +1,6 @@
 package com.practicum.playlistmarket.player.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -106,6 +104,8 @@ class MediaPlayerActivity : ComponentActivity() {
             checkState(it)
         }
 
+
+
     }
 
     override fun onPause() {
@@ -114,11 +114,14 @@ class MediaPlayerActivity : ComponentActivity() {
         binding.btPlay.setImageResource(R.drawable.bt_play)
         //btEnabled = false
     }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//            // viewModel.onDestroy()
+//    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.onDestroy()
-    }
+
+
 
 //    override fun onTimeChanged(time: String) {
 //        binding.timeLeft.text = time
@@ -155,7 +158,6 @@ class MediaPlayerActivity : ComponentActivity() {
 //    }
 
     companion object {
-        private const val REFRESH_STATE = 100L
         private const val DEFAULT_TIME_TRACK = "00:00"
     }
 }

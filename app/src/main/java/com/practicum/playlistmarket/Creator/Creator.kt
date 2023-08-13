@@ -7,10 +7,14 @@ import com.practicum.playlistmarket.player.domain.api.TrackTimeListener
 import com.practicum.playlistmarket.player.domain.api.PlayerInteractor
 import com.practicum.playlistmarket.player.domain.impl.PlayerInteractorImpl
 import com.practicum.playlistmarket.player.domain.repository.PlayerRepository
+import com.practicum.playlistmarket.search.data.SharedPreferencesHistoryImpl
 import com.practicum.playlistmarket.search.data.dto.TrackRepositoryImpl
 import com.practicum.playlistmarket.search.data.network.RetrofitNetworkClient
+import com.practicum.playlistmarket.search.domain.api.SharedPreferensecHistory
+import com.practicum.playlistmarket.search.domain.api.TrackHistoryInteractor
 import com.practicum.playlistmarket.search.domain.api.TrackInteractor
 import com.practicum.playlistmarket.search.domain.api.TrackRepository
+import com.practicum.playlistmarket.search.domain.impl.TrackHistoryInteractorImpl
 import com.practicum.playlistmarket.search.domain.impl.TrackInteraktorImpl
 import com.practicum.playlistmarket.settings.data.SettingRepositoryImpl
 import com.practicum.playlistmarket.settings.data.SharedPreferencesThemeSettings
@@ -46,6 +50,14 @@ object Creator {
 
     fun provideSettingInteractor(context: Context): SettingInteractor{
         return SettingInteractorImpl(getSettingRepository(context))
+    }
+
+   private fun getHistoryRepository(context: Context) : SharedPreferensecHistory {
+            return SharedPreferencesHistoryImpl(context)
+    }
+
+    fun provideHistoryInteractor(context: Context) : TrackHistoryInteractor {
+        return TrackHistoryInteractorImpl(getHistoryRepository(context))
     }
 
 

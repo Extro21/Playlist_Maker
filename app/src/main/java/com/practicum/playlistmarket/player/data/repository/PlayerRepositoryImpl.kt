@@ -27,6 +27,7 @@ class PlayerRepositoryImpl(
     private var playerState = StatePlayer.STATE_DEFAULT
 
     override fun preparePlayer(trackUrl: String) {
+        mediaPlayer.reset()
         mediaPlayer.setDataSource(trackUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {

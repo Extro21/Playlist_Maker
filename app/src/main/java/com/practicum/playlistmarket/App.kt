@@ -12,10 +12,7 @@ class App : Application() {
         super.onCreate()
 
         interactor = Creator.provideSettingInteractor(applicationContext)
-
-
         val darkTheme = interactor.defaultChange()
-
         switchTheme(darkTheme)
     }
 
