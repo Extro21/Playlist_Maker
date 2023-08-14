@@ -38,6 +38,7 @@
         </activity>
         <activity
             android:name=".player.ui.MediaPlayerActivity"
+
             android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
