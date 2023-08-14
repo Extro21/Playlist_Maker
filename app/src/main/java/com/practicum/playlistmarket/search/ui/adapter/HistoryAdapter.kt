@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmarket.*
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.util.TrackClickListener
 
 
 import kotlin.collections.ArrayList
