@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.search.ui
+package com.practicum.playlistmarket.search.ui.view_model
 
 import android.app.Application
 import android.os.Handler
@@ -15,6 +15,7 @@ import com.practicum.playlistmarket.Creator.Creator
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.player.domain.models.Track
 import com.practicum.playlistmarket.search.domain.api.TrackInteractor
+import com.practicum.playlistmarket.search.ui.activity.TrackState
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -92,21 +93,27 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                                 }
                                 when {
                                     errorMessage != null -> {
-                                        renderState(TrackState.Error(
-                                            errorMessage = getApplication<Application>().
-                                            getString(R.string.not_internet)
-                                        ))
+                                        renderState(
+                                            TrackState.Error(
+                                                errorMessage = getApplication<Application>().getString(
+                                                    R.string.not_internet
+                                                )
+                                            )
+                                        )
                                     }
                                     tracks.isEmpty() -> {
-                                        renderState(TrackState.Empty(
-                                            message = getApplication<Application>().
-                                            getString(R.string.nothing_not_found)
-                                        ))
+                                        renderState(
+                                            TrackState.Empty(
+                                                message = getApplication<Application>().getString(R.string.nothing_not_found)
+                                            )
+                                        )
                                     }
                                     else -> {
-                                        renderState(TrackState.Content(
-                                            tracks = tracks
-                                        ))
+                                        renderState(
+                                            TrackState.Content(
+                                                tracks = tracks
+                                            )
+                                        )
                                     }
                                 }
                         }

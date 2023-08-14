@@ -3,7 +3,7 @@ package com.practicum.playlistmarket.search.data
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.search.ui.HistoryAdapter
+import com.practicum.playlistmarket.search.ui.adapter.HistoryAdapter
 
 
 

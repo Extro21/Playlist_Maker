@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.player.ui
+package com.practicum.playlistmarket.player.ui.activity
 
 import android.os.Bundle
 import android.view.View
@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivityMediaPlayerBinding
+import com.practicum.playlistmarket.player.ui.view_model.MediaPlayerViewModel
 import com.practicum.playlistmarket.util.StatePlayer
 import com.practicum.playlistmarket.util.StatePlayer.*
 

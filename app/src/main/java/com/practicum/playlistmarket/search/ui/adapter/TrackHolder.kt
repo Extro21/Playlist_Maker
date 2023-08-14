@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.search.ui
+package com.practicum.playlistmarket.search.ui.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

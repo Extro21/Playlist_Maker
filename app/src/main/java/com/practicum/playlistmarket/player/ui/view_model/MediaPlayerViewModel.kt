@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.player.ui
+package com.practicum.playlistmarket.player.ui.view_model
 
 import android.os.Handler
 import android.os.Looper

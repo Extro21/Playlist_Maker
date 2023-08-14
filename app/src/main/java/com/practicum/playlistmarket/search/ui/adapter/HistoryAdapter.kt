@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.search.ui
+package com.practicum.playlistmarket.search.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,11 +8,12 @@ import com.practicum.playlistmarket.player.domain.models.Track
 import com.practicum.playlistmarket.util.TrackClickListener
 
 
-class SearchAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackHolder>() {
-    
+import kotlin.collections.ArrayList
 
-    var trackList = ArrayList<Track>()
 
+class HistoryAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackHolder>() {
+
+    var trackListHistory = ArrayList<Track>()
 
 
 
@@ -23,13 +24,15 @@ class SearchAdapter(private val clickListener: TrackClickListener) : RecyclerVie
     }
 
     override fun onBindViewHolder(holder: TrackHolder, position: Int) {
-        holder.bind(trackList[position])
+        holder.bind(trackListHistory[position])
 
-        holder.itemView.setOnClickListener { clickListener.onTrackClick(trackList[position]) }
+        holder.itemView.setOnClickListener {
+                clickListener.onTrackClick(trackListHistory[position])
 
+        }
     }
 
-    override fun getItemCount(): Int = trackList.size
+    override fun getItemCount(): Int = trackListHistory.size
 
 
 }

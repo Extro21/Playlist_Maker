@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.search.ui
+package com.practicum.playlistmarket.search.ui.activity
 
 import com.practicum.playlistmarket.player.domain.models.Track
 

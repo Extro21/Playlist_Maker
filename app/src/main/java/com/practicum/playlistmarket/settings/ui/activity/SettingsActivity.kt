@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.settings.ui
+package com.practicum.playlistmarket.settings.ui.activity
 
 
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivitySettingsBinding
+import com.practicum.playlistmarket.settings.ui.view_model.SettingViewModel
 
 
 class SettingsActivity : AppCompatActivity() {

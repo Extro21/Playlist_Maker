@@ -23,21 +23,21 @@
                 android:value="" />
         </activity>
                <activity
-            android:name=".settings.ui.SettingsActivity"
+            android:name=".settings.ui.activity.SettingsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".search.ui.SearchActivity"
+            android:name=".search.ui.activity.SearchActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".player.ui.MediaPlayerActivity"
+            android:name=".player.ui.activity.MediaPlayerActivity"
 
             android:screenOrientation="portrait"
             android:exported="false">

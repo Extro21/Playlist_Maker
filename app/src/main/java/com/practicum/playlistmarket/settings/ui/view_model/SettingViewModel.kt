@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.settings.ui
+package com.practicum.playlistmarket.settings.ui.view_model
 
 import android.app.Application
 import androidx.lifecycle.*
