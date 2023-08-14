@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.settings.domain
+package com.practicum.playlistmarket.settings.domain.api
 
 interface SettingRepository {
 

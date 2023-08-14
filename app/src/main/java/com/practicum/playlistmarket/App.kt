@@ -2,7 +2,7 @@ package com.practicum.playlistmarket
 
 import android.app.Application
 import com.practicum.playlistmarket.Creator.Creator
-import com.practicum.playlistmarket.settings.domain.SettingInteractor
+import com.practicum.playlistmarket.settings.domain.api.SettingInteractor
 
 class App : Application() {
 

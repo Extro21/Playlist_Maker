@@ -1,13 +1,15 @@
-package com.practicum.playlistmarket.settings.data
+package com.practicum.playlistmarket.settings.data.repository
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.practicum.playlistmarket.R
-import com.practicum.playlistmarket.settings.domain.SettingRepository
+import com.practicum.playlistmarket.settings.data.SharedPreferencesThemeSettings
+import com.practicum.playlistmarket.settings.domain.api.SettingRepository
 
 
-class SettingRepositoryImpl(private val context: Context,private val sharedPreferencesThemeSettings: SharedPreferencesThemeSettings) : SettingRepository {
+class SettingRepositoryImpl(private val context: Context,private val sharedPreferencesThemeSettings: SharedPreferencesThemeSettings) :
+    SettingRepository {
 
     override fun sharingApp(link: String) {
         val intent = Intent(Intent.ACTION_SEND).apply {

@@ -16,11 +16,11 @@ import com.practicum.playlistmarket.search.domain.api.TrackInteractor
 import com.practicum.playlistmarket.search.domain.api.TrackRepository
 import com.practicum.playlistmarket.search.domain.impl.TrackHistoryInteractorImpl
 import com.practicum.playlistmarket.search.domain.impl.TrackInteraktorImpl
-import com.practicum.playlistmarket.settings.data.SettingRepositoryImpl
+import com.practicum.playlistmarket.settings.data.repository.SettingRepositoryImpl
 import com.practicum.playlistmarket.settings.data.SharedPreferencesThemeSettings
-import com.practicum.playlistmarket.settings.domain.SettingInteractor
-import com.practicum.playlistmarket.settings.domain.SettingInteractorImpl
-import com.practicum.playlistmarket.settings.domain.SettingRepository
+import com.practicum.playlistmarket.settings.domain.api.SettingInteractor
+import com.practicum.playlistmarket.settings.domain.impl.SettingInteractorImpl
+import com.practicum.playlistmarket.settings.domain.api.SettingRepository
 
 
 object Creator {
@@ -48,7 +48,7 @@ object Creator {
         return SettingRepositoryImpl(context, SharedPreferencesThemeSettings(context))
     }
 
-    fun provideSettingInteractor(context: Context): SettingInteractor{
+    fun provideSettingInteractor(context: Context): SettingInteractor {
         return SettingInteractorImpl(getSettingRepository(context))
     }
 

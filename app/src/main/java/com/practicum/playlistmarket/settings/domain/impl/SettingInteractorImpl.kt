@@ -1,4 +1,7 @@
-package com.practicum.playlistmarket.settings.domain
+package com.practicum.playlistmarket.settings.domain.impl
+
+import com.practicum.playlistmarket.settings.domain.api.SettingInteractor
+import com.practicum.playlistmarket.settings.domain.api.SettingRepository
 
 
 class SettingInteractorImpl(private val repository: SettingRepository) : SettingInteractor {
