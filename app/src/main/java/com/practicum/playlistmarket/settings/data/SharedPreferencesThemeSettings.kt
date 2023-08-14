@@ -14,10 +14,10 @@ class SharedPreferencesThemeSettings(private val context: Context) {
     var darkTheme = false
 
 
-    fun valueChangeDefault() : Boolean {
-        sharedPreferences = context.getSharedPreferences(SHARED_PREF_THEME, Application.MODE_PRIVATE)
-        val boo =  sharedPreferences.getBoolean(KEY_THEME, false)
-        return boo
+    fun valueChangeDefault(): Boolean {
+        sharedPreferences =
+            context.getSharedPreferences(SHARED_PREF_THEME, Application.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(KEY_THEME, false)
     }
 
 
