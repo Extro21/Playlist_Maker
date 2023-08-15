@@ -1,6 +1,6 @@
 package com.practicum.playlistmarket.player.domain.api
 
-import com.practicum.playlistmarket.util.StatePlayer
+import com.practicum.playlistmarket.player.domain.StatePlayer
 
 interface TrackStateListener {
 

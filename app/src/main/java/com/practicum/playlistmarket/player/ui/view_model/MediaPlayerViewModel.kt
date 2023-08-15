@@ -2,25 +2,28 @@ package com.practicum.playlistmarket.player.ui.view_model
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.practicum.playlistmarket.Creator.Creator
 import com.practicum.playlistmarket.player.domain.api.TrackStateListener
 import com.practicum.playlistmarket.player.domain.api.TrackTimeListener
-import com.practicum.playlistmarket.util.StatePlayer
+import com.practicum.playlistmarket.player.domain.StatePlayer
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.log
 
 class MediaPlayerViewModel() : ViewModel(), TrackTimeListener, TrackStateListener {
     private val playerInteractor = Creator.providePlayerInteractor(this, this)
     val handler = Handler(Looper.getMainLooper())
 
     init {
-        listenState()
+      //  listenState()
+
     }
 
-    var state = StatePlayer.STATE_DEFAULT
+    private var state :StatePlayer = playerInteractor.getState()
 
     private val _secondCounter = MutableLiveData<String>()
     val secondCounter: LiveData<String> = _secondCounter
@@ -50,16 +53,22 @@ class MediaPlayerViewModel() : ViewModel(), TrackTimeListener, TrackStateListene
         _timeSong.value = SimpleDateFormat("mm:ss", Locale.getDefault()).format(time?.toInt())
     }
 
+
+
     fun preparePlayer(urlTrack: String) {
         playerInteractor.preparePlayer(urlTrack)
+        Log.e("mylog", state.toString())
     }
 
     fun playStart() {
         playerInteractor.playbackControl()
+        Log.e("mylog", state.toString())
+
     }
 
     fun onPause() {
         playerInteractor.pausePlayer()
+        Log.e("mylog", state.toString())
     }
 
     override fun onCleared() {
@@ -73,38 +82,36 @@ class MediaPlayerViewModel() : ViewModel(), TrackTimeListener, TrackStateListene
 
     override fun getState(state: StatePlayer) {
         this.state = state
+        _checkState.value = state
     }
 
-    fun checkState(state: StatePlayer) {
-        when (state) {
-            StatePlayer.STATE_PLAYING -> _checkState.value =
-                StatePlayer.STATE_PLAYING
-            StatePlayer.STATE_PAUSED -> _checkState.value =
-                StatePlayer.STATE_PAUSED
-            StatePlayer.STATE_DEFAULT -> _checkState.value = StatePlayer.STATE_DEFAULT
-            StatePlayer.STATE_PREPARED -> {
-                _checkState.value = StatePlayer.STATE_PREPARED
-            }
-        }
-    }
+//    fun checkState(state : StatePlayer) {
+//        when (state) {
+//            StatePlayer.STATE_PLAYING -> _checkState.value = playerInteractor.getState()
+//            StatePlayer.STATE_PAUSED -> _checkState.value = playerInteractor.getState()
+//            StatePlayer.STATE_DEFAULT -> _checkState.value = playerInteractor.getState()
+//            StatePlayer.STATE_PREPARED -> _checkState.value = playerInteractor.getState()
+//
+//        }
+//    }
 
-    private fun listenState() {
-        handler.postDelayed(
-            object : Runnable {
-                override fun run() {
-                    checkState(state)
-                    handler.postDelayed(
-                        this,
-                        REFRESH_STATE
-                    )
-                }
-            },
-            REFRESH_STATE
-        )
-    }
+//    private fun listenState() {
+//        handler.postDelayed(
+//            object : Runnable {
+//                override fun run() {
+//                    checkState(state)
+//                    handler.postDelayed(
+//                        this,
+//                        REFRESH_STATE
+//                    )
+//                }
+//            },
+//            REFRESH_STATE
+//        )
+//    }
 
     companion object {
-        private const val REFRESH_STATE = 100L
+        private const val REFRESH_STATE = 1L
     }
 
 

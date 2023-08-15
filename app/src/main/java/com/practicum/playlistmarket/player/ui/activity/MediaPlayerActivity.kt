@@ -1,6 +1,7 @@
 package com.practicum.playlistmarket.player.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -9,8 +10,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivityMediaPlayerBinding
 import com.practicum.playlistmarket.player.ui.view_model.MediaPlayerViewModel
-import com.practicum.playlistmarket.util.StatePlayer
-import com.practicum.playlistmarket.util.StatePlayer.*
+import com.practicum.playlistmarket.player.domain.StatePlayer
+import com.practicum.playlistmarket.player.domain.StatePlayer.*
 
 
 const val EXTRA_TRACK_NAME = "track_name"
@@ -27,7 +28,7 @@ const val EXTRA_SONG = "track_song"
 class MediaPlayerActivity : AppCompatActivity() {
 
 
-    var state = STATE_DEFAULT
+    //var state = STATE_DEFAULT
     private lateinit var binding: ActivityMediaPlayerBinding
 
     private lateinit var viewModel: MediaPlayerViewModel
@@ -49,8 +50,15 @@ class MediaPlayerActivity : AppCompatActivity() {
 
         binding.btPlay.setOnClickListener {
             viewModel.playStart()
-            checkState(state)
+            //checkState(state)
         }
+
+        viewModel.checkState.observe(this){
+            checkState(it)
+            Log.e("mylog1",it.toString())
+
+        }
+
 
         binding.apply {
             trackName.text = intent.getStringExtra(EXTRA_TRACK_NAME)
@@ -90,7 +98,6 @@ class MediaPlayerActivity : AppCompatActivity() {
             }
         }
 
-
         val urlImage = intent.getStringExtra(EXTRA_IMAGE)
         viewModel.getCoverArtwork(urlImage)
 
@@ -106,13 +113,8 @@ class MediaPlayerActivity : AppCompatActivity() {
                 .into(binding.trackImage)
         }
 
-
         viewModel.secondCounter.observe(this) { time ->
             binding.timeLeft.text = time
-        }
-
-        viewModel.checkState.observe(this) {
-            checkState(it)
         }
 
 
@@ -121,15 +123,17 @@ class MediaPlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
-        binding.btPlay.setImageResource(R.drawable.bt_play)
+      //  binding.btPlay.setImageResource(R.drawable.bt_play)
 
     }
 
 
     private fun checkState(state: StatePlayer) {
         when (state) {
-            STATE_PLAYING -> binding.btPlay.setImageResource(R.drawable.button_pauseb)
-            STATE_PAUSED, STATE_DEFAULT -> binding.btPlay.setImageResource(R.drawable.bt_play)
+            STATE_PLAYING -> {binding.btPlay.setImageResource(R.drawable.button_pauseb)
+                Log.e("mylog1", state.toString())}
+            STATE_PAUSED, STATE_DEFAULT -> {binding.btPlay.setImageResource(R.drawable.bt_play)
+                Log.e("mylog1", state.toString())}
             STATE_PREPARED -> {
                 binding.btPlay.setImageResource(R.drawable.bt_play)
                 binding.timeLeft.text = DEFAULT_TIME_TRACK

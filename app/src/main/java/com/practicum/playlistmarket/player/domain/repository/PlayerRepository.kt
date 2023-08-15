@@ -1,5 +1,7 @@
 package com.practicum.playlistmarket.player.domain.repository
 
+import com.practicum.playlistmarket.player.domain.StatePlayer
+
 interface PlayerRepository {
 
 
@@ -11,5 +13,7 @@ interface PlayerRepository {
     fun releasePlayer()
     fun updateTime(time : String)
     fun getTime() : String
+
+    fun getState() : StatePlayer
 
 }
