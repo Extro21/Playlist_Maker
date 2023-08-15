@@ -19,11 +19,15 @@ sealed class TrackState {
 //        val message: String
 //    ) : TrackState()
 
-    data class Error(
-        val errorMessage: SearchStatus
-    ) : TrackState()
+//    data class Error(
+//        val errorMessage: SearchStatus
+//    ) : TrackState()
+//
+//    data class Empty(
+//        val message: SearchStatus
+//    ) : TrackState()
 
-    data class Empty(
-        val message: SearchStatus
-    ) : TrackState()
+    object Error : TrackState()
+
+    object Empty : TrackState()
 }

@@ -26,22 +26,22 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val handler = Handler(Looper.getMainLooper())
 
     private val _clearHistory = MutableLiveData<Unit>()
-    val clearHistory : LiveData<Unit> = _clearHistory
+    val clearHistory: LiveData<Unit> = _clearHistory
 
-    fun addHistoryTracks(tracksHistory : ArrayList<Track>){
+    fun addHistoryTracks(tracksHistory: ArrayList<Track>) {
         interactorHistory.addHistoryTracks(tracksHistory)
     }
 
-    fun addHistoryList(tracksHistory : ArrayList<Track>){
+    fun addHistoryList(tracksHistory: ArrayList<Track>) {
         interactorHistory.editHistoryList(tracksHistory)
     }
 
 
-    fun clearTrackListHistory(tracksHistory : ArrayList<Track>){
-      _clearHistory.value = interactorHistory.clearTrack(tracksHistory)
+    fun clearTrackListHistory(tracksHistory: ArrayList<Track>) {
+        _clearHistory.value = interactorHistory.clearTrack(tracksHistory)
     }
 
-    fun addHistoryTrack(track: Track){
+    fun addHistoryTrack(track: Track) {
         interactorHistory.addTrackInAdapter(track)
     }
 
@@ -78,49 +78,38 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-
-
-
     fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(TrackState.Loading)
 
             interactorSearch.searchTrack(newSearchText, object : TrackInteractor.TrackConsumer {
-                        override fun consume(foundTrack: List<Track>?, errorMessage: String?) {
-                                val tracks = mutableListOf<Track>()
-                                if (foundTrack != null) {
-                                    tracks.addAll(foundTrack)
-                                }
-                                when {
-                                    errorMessage != null -> {
-                                        renderState(
-                                            TrackState.Error(
-//                                                errorMessage = getApplication<Application>().getString(
-//                                                    R.string.not_internet
-//                                                )
-                                            SearchStatus.NO_INTERNET
-                                            )
-                                        )
-                                    }
-                                    tracks.isEmpty() -> {
-                                        renderState(
-                                            TrackState.Empty(
-                                               // message = getApplication<Application>().getString(R.string.nothing_not_found)
-                                            SearchStatus.NOTHING_FOUND
-                                            )
-                                        )
-                                    }
-                                    else -> {
-                                        renderState(
-                                            TrackState.Content(
-                                                tracks = tracks
-                                            )
-                                        )
-                                    }
-                                }
+                override fun consume(foundTrack: List<Track>?, errorMessage: String?) {
+                    val tracks = mutableListOf<Track>()
+                    if (foundTrack != null) {
+                        tracks.addAll(foundTrack)
+                    }
+                    when {
+                        errorMessage != null -> {
+                            renderState(
+                                TrackState.Error
+                            )
                         }
-                    })
-            }
+                        tracks.isEmpty() -> {
+                            renderState(
+                                TrackState.Empty
+                            )
+                        }
+                        else -> {
+                            renderState(
+                                TrackState.Content(
+                                    tracks = tracks
+                                )
+                            )
+                        }
+                    }
+                }
+            })
+        }
 
 
     }

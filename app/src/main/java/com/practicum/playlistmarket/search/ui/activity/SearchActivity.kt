@@ -135,8 +135,8 @@ class SearchActivity : AppCompatActivity() {
     private fun render(state: TrackState) {
         when (state) {
             is TrackState.Content -> showContent(state.tracks)
-            is TrackState.Empty -> showEmpty(state.message)
-            is TrackState.Error -> showError(state.errorMessage)
+            is TrackState.Empty -> showEmpty()
+            is TrackState.Error -> showError()
             is TrackState.Loading -> showLoading()
         }
     }
@@ -149,27 +149,23 @@ class SearchActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun showError(errorMessage: SearchStatus) {
+    private fun showError() {
         binding.rcViewSearch.visibility = View.GONE
         binding.massageNotInternet.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
         binding.massageNotFound.visibility = View.GONE
-        if(errorMessage == SearchStatus.NO_INTERNET){
-            binding.placeholderMessageNotInternet.text = getString(R.string.not_internet)
-        }
+        binding.placeholderMessageNotInternet.text = getString(R.string.not_internet)
+
 
     }
 
-    private fun showEmpty(emptyMessage: SearchStatus) {
+    private fun showEmpty() {
         binding.rcViewSearch.visibility = View.GONE
         binding.massageNotFound.visibility = View.VISIBLE
         binding.massageNotInternet.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         binding.placeholderMessage.visibility = View.VISIBLE
-        if(emptyMessage == SearchStatus.NOTHING_FOUND){
-            binding.placeholderMessage.text = getString(R.string.nothing_not_found)
-        }
-
+        binding.placeholderMessage.text = getString(R.string.nothing_not_found)
     }
 
     private fun showContent(track: List<Track>) {
