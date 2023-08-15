@@ -13,7 +13,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmarket.Creator.Creator
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.search.domain.SearchStatus
 import com.practicum.playlistmarket.search.domain.api.TrackInteractor
 import com.practicum.playlistmarket.search.ui.activity.TrackState
 

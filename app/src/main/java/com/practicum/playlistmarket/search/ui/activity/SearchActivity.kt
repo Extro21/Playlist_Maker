@@ -16,7 +16,6 @@ import com.practicum.playlistmarket.databinding.ActivitySearchBinding
 import com.practicum.playlistmarket.player.domain.models.Track
 import com.practicum.playlistmarket.player.ui.activity.*
 import com.practicum.playlistmarket.player.ui.activity.MediaPlayerActivity
-import com.practicum.playlistmarket.search.domain.SearchStatus
 import com.practicum.playlistmarket.search.ui.adapter.HistoryAdapter
 import com.practicum.playlistmarket.search.ui.adapter.SearchAdapter
 import com.practicum.playlistmarket.search.ui.view_model.SearchViewModel

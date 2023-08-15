@@ -1,7 +1,6 @@
 package com.practicum.playlistmarket.search.ui.activity
 
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.search.domain.SearchStatus
 
 sealed class TrackState {
 

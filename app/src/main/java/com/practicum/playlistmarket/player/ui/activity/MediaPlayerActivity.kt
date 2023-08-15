@@ -51,7 +51,6 @@ class MediaPlayerActivity : AppCompatActivity() {
         binding.btPlay.setOnClickListener {
             viewModel.playStart()
             //checkState(state)
-            Log.e("clik", "кликКнопка")
         }
 
         viewModel.checkState.observe(this) {

@@ -62,8 +62,6 @@ class MediaPlayerViewModel() : ViewModel(), TrackTimeListener, TrackStateListene
 
     fun playStart() {
         playerInteractor.playbackControl()
-        Log.e("clik", "кликВью")
-       // Log.e("mylog", state.toString())
 
     }
 

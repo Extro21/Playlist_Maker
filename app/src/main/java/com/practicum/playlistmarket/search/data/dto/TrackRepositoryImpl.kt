@@ -1,7 +1,7 @@
 package com.practicum.playlistmarket.search.data.dto
 
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.search.domain.SearchStatus
+import com.practicum.playlistmarket.search.data.SearchStatus
 import com.practicum.playlistmarket.search.data.NetworkClient
 import com.practicum.playlistmarket.search.domain.api.TrackRepository
 import com.practicum.playlistmarket.util.Resource
