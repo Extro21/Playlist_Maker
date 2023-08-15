@@ -120,8 +120,6 @@ class MediaPlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
-        //  binding.btPlay.setImageResource(R.drawable.bt_play)
-
     }
 
 
