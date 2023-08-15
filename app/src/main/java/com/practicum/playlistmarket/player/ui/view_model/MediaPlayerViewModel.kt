@@ -84,30 +84,6 @@ class MediaPlayerViewModel() : ViewModel(), TrackTimeListener, TrackStateListene
         _checkState.value = state
     }
 
-//    fun checkState(state : StatePlayer) {
-//        when (state) {
-//            StatePlayer.STATE_PLAYING -> _checkState.value = playerInteractor.getState()
-//            StatePlayer.STATE_PAUSED -> _checkState.value = playerInteractor.getState()
-//            StatePlayer.STATE_DEFAULT -> _checkState.value = playerInteractor.getState()
-//            StatePlayer.STATE_PREPARED -> _checkState.value = playerInteractor.getState()
-//
-//        }
-//    }
-
-//    private fun listenState() {
-//        handler.postDelayed(
-//            object : Runnable {
-//                override fun run() {
-//                    checkState(state)
-//                    handler.postDelayed(
-//                        this,
-//                        REFRESH_STATE
-//                    )
-//                }
-//            },
-//            REFRESH_STATE
-//        )
-//    }
 
     companion object {
         private const val REFRESH_STATE = 1L

@@ -27,8 +27,6 @@ const val EXTRA_SONG = "track_song"
 
 class MediaPlayerActivity : AppCompatActivity() {
 
-
-    //var state = STATE_DEFAULT
     private lateinit var binding: ActivityMediaPlayerBinding
 
     private lateinit var viewModel: MediaPlayerViewModel
@@ -50,7 +48,6 @@ class MediaPlayerActivity : AppCompatActivity() {
 
         binding.btPlay.setOnClickListener {
             viewModel.playStart()
-            //checkState(state)
         }
 
         viewModel.checkState.observe(this) {
