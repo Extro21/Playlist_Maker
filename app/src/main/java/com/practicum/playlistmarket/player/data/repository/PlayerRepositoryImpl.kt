@@ -33,16 +33,21 @@ class PlayerRepositoryImpl(
 
     override fun preparePlayer(trackUrl: String) {
         mediaPlayer.reset()
+        Log.e("mylogRep", "reset")
         mediaPlayer.setDataSource(trackUrl)
+        Log.e("mylogRep", "url")
         mediaPlayer.prepareAsync()
+        Log.e("mylogRep", "Async")
         mediaPlayer.setOnPreparedListener {
             playerState = StatePlayer.STATE_PREPARED
             trackStateListener.getState(playerState)
+            Log.e("mylogRep", "setOnPreparedListener")
         }
         mediaPlayer.setOnCompletionListener {
             playerState = StatePlayer.STATE_PREPARED
             trackStateListener.getState(playerState)
             time = DEFAULT_TIME_TRACK
+            Log.e("mylogRep", "setOnCompletionListener")
         }
     }
 
@@ -70,6 +75,7 @@ class PlayerRepositoryImpl(
         playerState = StatePlayer.STATE_PLAYING
         mediaPlayer.start()
         updateTime(time)
+        Log.e("mylogRep", "updateTimePlayer")
         trackStateListener.getState(playerState)
     }
 
@@ -81,7 +87,9 @@ class PlayerRepositoryImpl(
 
 
     override fun updateTime(time: String) {
+        Log.e("mylogRep", "updateTime")
         this.time = time
+
         handler.postDelayed(
             object : Runnable {
                 override fun run() {
@@ -91,6 +99,7 @@ class PlayerRepositoryImpl(
                             Locale.getDefault()
                         ).format(mediaPlayer.currentPosition)
                         trackTimeListener.onTimeChanged(this@PlayerRepositoryImpl.time)
+                        Log.e("timeLOG", mediaPlayer.currentPosition.toString())
                         handler.postDelayed(
                             this,
                             REFRESH_LIST_DELAY_MILLIS,

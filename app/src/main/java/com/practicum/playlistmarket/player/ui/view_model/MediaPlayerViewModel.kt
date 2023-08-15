@@ -23,7 +23,7 @@ class MediaPlayerViewModel() : ViewModel(), TrackTimeListener, TrackStateListene
 
     }
 
-    private var state :StatePlayer = playerInteractor.getState()
+    //private var state :StatePlayer = playerInteractor.getState()
 
     private val _secondCounter = MutableLiveData<String>()
     val secondCounter: LiveData<String> = _secondCounter
@@ -57,18 +57,18 @@ class MediaPlayerViewModel() : ViewModel(), TrackTimeListener, TrackStateListene
 
     fun preparePlayer(urlTrack: String) {
         playerInteractor.preparePlayer(urlTrack)
-        Log.e("mylog", state.toString())
+      //  Log.e("mylog", state.toString())
     }
 
     fun playStart() {
         playerInteractor.playbackControl()
-        Log.e("mylog", state.toString())
+       // Log.e("mylog", state.toString())
 
     }
 
     fun onPause() {
         playerInteractor.pausePlayer()
-        Log.e("mylog", state.toString())
+     //   Log.e("mylog", state.toString())
     }
 
     override fun onCleared() {
@@ -81,7 +81,7 @@ class MediaPlayerViewModel() : ViewModel(), TrackTimeListener, TrackStateListene
     }
 
     override fun getState(state: StatePlayer) {
-        this.state = state
+      //  this.state = state
         _checkState.value = state
     }
 

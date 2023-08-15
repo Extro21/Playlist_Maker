@@ -53,9 +53,9 @@ class MediaPlayerActivity : AppCompatActivity() {
             //checkState(state)
         }
 
-        viewModel.checkState.observe(this){
+        viewModel.checkState.observe(this) {
             checkState(it)
-            Log.e("mylog1",it.toString())
+            Log.e("mylogPlay", it.toString())
 
         }
 
@@ -101,7 +101,7 @@ class MediaPlayerActivity : AppCompatActivity() {
         val urlImage = intent.getStringExtra(EXTRA_IMAGE)
         viewModel.getCoverArtwork(urlImage)
 
-        viewModel.coverArtwork.observe(this){
+        viewModel.coverArtwork.observe(this) {
             var url = it
 
             val cornerSize = resources.getDimensionPixelSize(R.dimen.corners_image_track)
@@ -123,17 +123,21 @@ class MediaPlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
-      //  binding.btPlay.setImageResource(R.drawable.bt_play)
+        //  binding.btPlay.setImageResource(R.drawable.bt_play)
 
     }
 
 
     private fun checkState(state: StatePlayer) {
         when (state) {
-            STATE_PLAYING -> {binding.btPlay.setImageResource(R.drawable.button_pauseb)
-                Log.e("mylog1", state.toString())}
-            STATE_PAUSED, STATE_DEFAULT -> {binding.btPlay.setImageResource(R.drawable.bt_play)
-                Log.e("mylog1", state.toString())}
+            STATE_PLAYING -> {
+                binding.btPlay.setImageResource(R.drawable.button_pauseb)
+                Log.e("mylogPlayningState", state.toString())
+            }
+            STATE_PAUSED, STATE_DEFAULT -> {
+                binding.btPlay.setImageResource(R.drawable.bt_play)
+                Log.e("mylogPauseStaytrning", state.toString())
+            }
             STATE_PREPARED -> {
                 binding.btPlay.setImageResource(R.drawable.bt_play)
                 binding.timeLeft.text = DEFAULT_TIME_TRACK
