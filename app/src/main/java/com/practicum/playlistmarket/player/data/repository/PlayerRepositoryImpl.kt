@@ -33,21 +33,16 @@ class PlayerRepositoryImpl(
 
     override fun preparePlayer(trackUrl: String) {
         mediaPlayer.reset()
-        Log.e("mylogRep", "reset")
         mediaPlayer.setDataSource(trackUrl)
-        Log.e("mylogRep", "url")
         mediaPlayer.prepareAsync()
-        Log.e("mylogRep", "Async")
         mediaPlayer.setOnPreparedListener {
             playerState = StatePlayer.STATE_PREPARED
             trackStateListener.getState(playerState)
-            Log.e("mylogRep", "setOnPreparedListener")
         }
         mediaPlayer.setOnCompletionListener {
             playerState = StatePlayer.STATE_PREPARED
             trackStateListener.getState(playerState)
             time = DEFAULT_TIME_TRACK
-            Log.e("mylogRep", "setOnCompletionListener")
         }
     }
 
@@ -67,6 +62,7 @@ class PlayerRepositoryImpl(
             }
             else -> {
                 StatePlayer.STATE_DEFAULT
+                    //   StatePlayer.STATE_PLAYING
             }
         }
     }

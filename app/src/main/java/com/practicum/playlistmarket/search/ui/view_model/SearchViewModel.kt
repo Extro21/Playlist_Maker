@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmarket.Creator.Creator
-import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.player.domain.models.Track
+import com.practicum.playlistmarket.search.domain.SearchStatus
 import com.practicum.playlistmarket.search.domain.api.TrackInteractor
 import com.practicum.playlistmarket.search.ui.activity.TrackState
 
@@ -95,16 +95,18 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                                     errorMessage != null -> {
                                         renderState(
                                             TrackState.Error(
-                                                errorMessage = getApplication<Application>().getString(
-                                                    R.string.not_internet
-                                                )
+//                                                errorMessage = getApplication<Application>().getString(
+//                                                    R.string.not_internet
+//                                                )
+                                            SearchStatus.NO_INTERNET
                                             )
                                         )
                                     }
                                     tracks.isEmpty() -> {
                                         renderState(
                                             TrackState.Empty(
-                                                message = getApplication<Application>().getString(R.string.nothing_not_found)
+                                               // message = getApplication<Application>().getString(R.string.nothing_not_found)
+                                            SearchStatus.NOTHING_FOUND
                                             )
                                         )
                                     }

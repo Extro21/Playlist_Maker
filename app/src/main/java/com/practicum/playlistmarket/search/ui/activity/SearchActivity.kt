@@ -11,11 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivitySearchBinding
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.player.ui.*
 import com.practicum.playlistmarket.player.ui.activity.*
 import com.practicum.playlistmarket.player.ui.activity.MediaPlayerActivity
+import com.practicum.playlistmarket.search.domain.SearchStatus
 import com.practicum.playlistmarket.search.ui.adapter.HistoryAdapter
 import com.practicum.playlistmarket.search.ui.adapter.SearchAdapter
 import com.practicum.playlistmarket.search.ui.view_model.SearchViewModel
@@ -148,21 +149,27 @@ class SearchActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun showError(errorMessage: String) {
+    private fun showError(errorMessage: SearchStatus) {
         binding.rcViewSearch.visibility = View.GONE
         binding.massageNotInternet.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
         binding.massageNotFound.visibility = View.GONE
-        binding.placeholderMessageNotInternet.text = errorMessage
+        if(errorMessage == SearchStatus.NO_INTERNET){
+            binding.placeholderMessageNotInternet.text = getString(R.string.not_internet)
+        }
+
     }
 
-    private fun showEmpty(emptyMessage: String) {
+    private fun showEmpty(emptyMessage: SearchStatus) {
         binding.rcViewSearch.visibility = View.GONE
         binding.massageNotFound.visibility = View.VISIBLE
         binding.massageNotInternet.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         binding.placeholderMessage.visibility = View.VISIBLE
-        binding.placeholderMessage.text = emptyMessage
+        if(emptyMessage == SearchStatus.NOTHING_FOUND){
+            binding.placeholderMessage.text = getString(R.string.nothing_not_found)
+        }
+
     }
 
     private fun showContent(track: List<Track>) {
