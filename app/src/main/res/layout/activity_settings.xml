@@ -23,14 +23,26 @@
     </androidx.appcompat.widget.Toolbar>
 
 
-    <Switch
+<!--    <Switch-->
+<!--        android:id="@+id/switch_setting"-->
+<!--        style="@style/switchStyle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="21dp"-->
+<!--        android:fontFamily="@font/ys_display_regular"-->
+<!--        android:paddingStart="16dp"-->
+<!--        android:paddingEnd="6dp"-->
+<!--        android:text="@string/dark_theme"-->
+<!--        android:textSize="@dimen/size_text_setting"-->
+<!--        tools:ignore="UseSwitchCompatOrMaterialXml,UsingOnClickInXml" />-->
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_setting"
         style="@style/switchStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="21dp"
         android:fontFamily="@font/ys_display_regular"
-        android:onClick="nightTheme"
         android:paddingStart="16dp"
         android:paddingEnd="6dp"
         android:text="@string/dark_theme"
