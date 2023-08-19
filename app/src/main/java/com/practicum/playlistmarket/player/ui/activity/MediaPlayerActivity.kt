@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmarket.R
@@ -12,6 +11,7 @@ import com.practicum.playlistmarket.databinding.ActivityMediaPlayerBinding
 import com.practicum.playlistmarket.player.ui.view_model.MediaPlayerViewModel
 import com.practicum.playlistmarket.player.domain.StatePlayer
 import com.practicum.playlistmarket.player.domain.StatePlayer.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 const val EXTRA_TRACK_NAME = "track_name"
@@ -29,10 +29,11 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMediaPlayerBinding
 
-    private lateinit var viewModel: MediaPlayerViewModel
+   // private lateinit var viewModel: MediaPlayerViewModel
 
     private var songUrl: String = ""
 
+    private val vm : MediaPlayerViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +42,17 @@ class MediaPlayerActivity : AppCompatActivity() {
 
         songUrl = intent.getStringExtra(EXTRA_SONG).toString()
 
-        viewModel = ViewModelProvider(this)[MediaPlayerViewModel::class.java]
+      //  viewModel = ViewModelProvider(this)[MediaPlayerViewModel::class.java]
 
-        viewModel.preparePlayer(songUrl)
+        vm.preparePlayer(songUrl)
 
 
         binding.btPlay.setOnClickListener {
-            viewModel.playStart()
+            vm.playStart()
+           // vm.onTimeChanged()
         }
 
-        viewModel.checkState.observe(this) {
+        vm.checkState.observe(this) {
             checkState(it)
             Log.e("mylogPlay", it.toString())
 
@@ -79,8 +81,8 @@ class MediaPlayerActivity : AppCompatActivity() {
 
 
         val data = intent.getStringExtra(EXTRA_DATA).toString()
-        viewModel.correctDataSong(data)
-        viewModel.dataSong.observe(this) {
+        vm.correctDataSong(data)
+        vm.dataSong.observe(this) {
             binding.yearApp.text = it
         }
 
@@ -88,17 +90,17 @@ class MediaPlayerActivity : AppCompatActivity() {
         val time = intent.getStringExtra(EXTRA_TIME_MILLIS)
 
         if (time != null) {
-            viewModel.correctTimeSong(time)
+            vm.correctTimeSong(time)
 
-            viewModel.timeSong.observe(this) {
+            vm.timeSong.observe(this) {
                 binding.durationApp.text = it
             }
         }
 
         val urlImage = intent.getStringExtra(EXTRA_IMAGE)
-        viewModel.getCoverArtwork(urlImage)
+        vm.getCoverArtwork(urlImage)
 
-        viewModel.coverArtwork.observe(this) {
+        vm.coverArtwork.observe(this) {
             var url = it
 
             val cornerSize = resources.getDimensionPixelSize(R.dimen.corners_image_track)
@@ -110,7 +112,7 @@ class MediaPlayerActivity : AppCompatActivity() {
                 .into(binding.trackImage)
         }
 
-        viewModel.secondCounter.observe(this) { time ->
+        vm.secondCounter.observe(this) { time ->
             binding.timeLeft.text = time
         }
 
@@ -119,7 +121,7 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.onPause()
+        vm.onPause()
     }
 
 

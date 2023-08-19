@@ -4,6 +4,9 @@ import com.practicum.playlistmarket.player.domain.StatePlayer
 
 interface TrackStateListener {
 
-    fun getState(state : StatePlayer)
+   // fun getState(state : StatePlayer)
+
+    fun getState(state : StatePlayer) : StatePlayer
+
 
 }

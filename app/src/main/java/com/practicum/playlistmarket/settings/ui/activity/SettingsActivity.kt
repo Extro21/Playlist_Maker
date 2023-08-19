@@ -3,35 +3,33 @@ package com.practicum.playlistmarket.settings.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivitySettingsBinding
 import com.practicum.playlistmarket.settings.ui.view_model.SettingViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SettingsActivity : AppCompatActivity() {
 
-    // private lateinit var viewModel: SettingViewModel
+
     private lateinit var binding: ActivitySettingsBinding
 
-    //lateinit var shar: SharedPreferences
-    private lateinit var viewModel: SettingViewModel
-    //private val settingInterctor = Creator.provideSettingInteractor(this)
 
+    //private lateinit var viewModel: SettingViewModel
+
+
+   private val viewModel: SettingViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //val factory = SettingViewModel.getViewModelFactory()
 
-        viewModel = ViewModelProvider(
-            this,
-            SettingViewModel.getViewModelFactory()
-        )[SettingViewModel::class.java]
 
-        //val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_toolbar)
+     //   viewModel = ViewModelProvider(this, SettingViewModel.getViewModelFactory())[SettingViewModel::class.java]
+
+
         binding.settingsToolbar.setNavigationOnClickListener {
             finish()
         }

@@ -26,39 +26,39 @@ import com.practicum.playlistmarket.settings.domain.api.SettingRepository
 object Creator {
 
 
-    private fun getPlayerRepository(trackTimeListener: TrackTimeListener, stateListener: TrackStateListener): PlayerRepository {
-        return PlayerRepositoryImpl(trackTimeListener, stateListener)
+    private fun getPlayerRepository(stateListener: TrackStateListener): PlayerRepository {
+        return PlayerRepositoryImpl(stateListener)
     }
 
 
-    fun providePlayerInteractor(trackTimeListener: TrackTimeListener, stateListener: TrackStateListener): PlayerInteractor {
-        return PlayerInteractorImpl(getPlayerRepository(trackTimeListener, stateListener))
+    fun providePlayerInteractor(stateListener: TrackStateListener): PlayerInteractor {
+        return PlayerInteractorImpl(getPlayerRepository(stateListener))
     }
 
 
-    private fun getTrackRepository(): TrackRepository {
-        return TrackRepositoryImpl(RetrofitNetworkClient())
-    }
+//    private fun getTrackRepository(): TrackRepository {
+//        return TrackRepositoryImpl(RetrofitNetworkClient())
+//    }
 
-    fun provideTrackInteractor(): TrackInteractor {
-        return TrackInteraktorImpl(getTrackRepository())
-    }
+//    fun provideTrackInteractor(): TrackInteractor {
+//        return TrackInteraktorImpl(getTrackRepository())
+//    }
 
-    private fun getSettingRepository(context: Context): SettingRepository {
-        return SettingRepositoryImpl(context, SharedPreferencesThemeSettings(context))
-    }
+//    private fun getSettingRepository(context: Context): SettingRepository {
+//        return SettingRepositoryImpl(context, SharedPreferencesThemeSettings(context))
+//    }
 
-    fun provideSettingInteractor(context: Context): SettingInteractor {
-        return SettingInteractorImpl(getSettingRepository(context))
-    }
+//    fun provideSettingInteractor(context: Context): SettingInteractor {
+//        return SettingInteractorImpl(getSettingRepository(context))
+//    }
+//
+//   private fun getHistoryRepository(context: Context) : SharedPreferensecHistory {
+//            return SharedPreferencesHistoryImpl(context)
+//    }
 
-   private fun getHistoryRepository(context: Context) : SharedPreferensecHistory {
-            return SharedPreferencesHistoryImpl(context)
-    }
-
-    fun provideHistoryInteractor(context: Context) : TrackHistoryInteractor {
-        return TrackHistoryInteractorImpl(getHistoryRepository(context))
-    }
+//    fun provideHistoryInteractor(context: Context) : TrackHistoryInteractor {
+//        return TrackHistoryInteractorImpl(getHistoryRepository(context))
+//    }
 
 
 }

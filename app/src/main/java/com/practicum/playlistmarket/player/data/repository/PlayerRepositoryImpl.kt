@@ -8,14 +8,16 @@ import com.practicum.playlistmarket.player.domain.api.TrackStateListener
 import com.practicum.playlistmarket.player.domain.api.TrackTimeListener
 import com.practicum.playlistmarket.player.domain.repository.PlayerRepository
 import com.practicum.playlistmarket.player.domain.StatePlayer
+import com.practicum.playlistmarket.player.domain.api.PlayerListener
 import java.text.SimpleDateFormat
 import java.util.*
 
 class PlayerRepositoryImpl(
-    private var trackTimeListener: TrackTimeListener,
-    private val trackStateListener: TrackStateListener,
-) :
-    PlayerRepository {
+//    private var trackTimeListener: TrackTimeListener,
+   private val trackStateListener: TrackStateListener,
+) : PlayerRepository {
+
+
 
     val handler = Handler(Looper.getMainLooper())
 
@@ -37,7 +39,7 @@ class PlayerRepositoryImpl(
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             playerState = StatePlayer.STATE_PREPARED
-            trackStateListener.getState(playerState)
+         //   trackStateListener.getState(playerState)
         }
         mediaPlayer.setOnCompletionListener {
             playerState = StatePlayer.STATE_PREPARED
@@ -62,7 +64,6 @@ class PlayerRepositoryImpl(
             }
             else -> {
                 StatePlayer.STATE_DEFAULT
-                    //   StatePlayer.STATE_PLAYING
             }
         }
     }
@@ -94,8 +95,8 @@ class PlayerRepositoryImpl(
                             "mm:ss",
                             Locale.getDefault()
                         ).format(mediaPlayer.currentPosition)
-                        trackTimeListener.onTimeChanged(this@PlayerRepositoryImpl.time)
-                        Log.e("timeLOG", mediaPlayer.currentPosition.toString())
+                      //trackTimeListener.setTimeListener(this@PlayerRepositoryImpl.time)
+
                         handler.postDelayed(
                             this,
                             REFRESH_LIST_DELAY_MILLIS,
@@ -106,6 +107,12 @@ class PlayerRepositoryImpl(
             REFRESH_LIST_DELAY_MILLIS
         )
     }
+
+
+   override fun setupListener(listener: PlayerListener){
+        listener.onTimeUpdate(this@PlayerRepositoryImpl.time)
+    }
+
 
     companion object {
         private const val REFRESH_LIST_DELAY_MILLIS = 200L
