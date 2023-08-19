@@ -18,7 +18,7 @@ class MediaPlayerViewModel(private val playerInteractor : PlayerInteractor
   // private val playerInteractor1 = Creator.providePlayerInteractor(this, this)
 
     init{
-        playerInteractor.setListenerToPlayer(this)
+        playerInteractor.setListener(this)
     }
 
     private val _secondCounter = MutableLiveData<String>()

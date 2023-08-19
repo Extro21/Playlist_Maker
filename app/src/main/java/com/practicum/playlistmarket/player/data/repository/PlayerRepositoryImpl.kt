@@ -14,7 +14,7 @@ import java.util.*
 
 class PlayerRepositoryImpl(
 //    private var trackTimeListener: TrackTimeListener,
-   private val trackStateListener: TrackStateListener,
+  // private val trackStateListener: TrackStateListener,
 ) : PlayerRepository {
 
 
@@ -43,7 +43,7 @@ class PlayerRepositoryImpl(
         }
         mediaPlayer.setOnCompletionListener {
             playerState = StatePlayer.STATE_PREPARED
-            trackStateListener.getState(playerState)
+         //   trackStateListener.getState(playerState)
             time = DEFAULT_TIME_TRACK
         }
     }
@@ -73,13 +73,13 @@ class PlayerRepositoryImpl(
         mediaPlayer.start()
         updateTime(time)
         Log.e("mylogRep", "updateTimePlayer")
-        trackStateListener.getState(playerState)
+      //  trackStateListener.getState(playerState)
     }
 
     override fun pausePlayer() {
         playerState = StatePlayer.STATE_PAUSED
         mediaPlayer.pause()
-        trackStateListener.getState(playerState)
+     //   trackStateListener.getState(playerState)
     }
 
 

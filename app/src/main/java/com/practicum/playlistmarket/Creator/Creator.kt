@@ -26,14 +26,14 @@ import com.practicum.playlistmarket.settings.domain.api.SettingRepository
 object Creator {
 
 
-    private fun getPlayerRepository(stateListener: TrackStateListener): PlayerRepository {
-        return PlayerRepositoryImpl(stateListener)
-    }
-
-
-    fun providePlayerInteractor(stateListener: TrackStateListener): PlayerInteractor {
-        return PlayerInteractorImpl(getPlayerRepository(stateListener))
-    }
+//    private fun getPlayerRepository(stateListener: TrackStateListener): PlayerRepository {
+//        return PlayerRepositoryImpl(stateListener)
+//    }
+//
+//
+//    fun providePlayerInteractor(stateListener: TrackStateListener): PlayerInteractor {
+//        return PlayerInteractorImpl(getPlayerRepository(stateListener))
+//    }
 
 
 //    private fun getTrackRepository(): TrackRepository {

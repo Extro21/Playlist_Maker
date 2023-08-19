@@ -11,6 +11,14 @@ import com.practicum.playlistmarket.player.ui.view_model.MediaPlayerViewModel
 class PlayerInteractorImpl(private val repository: PlayerRepository,
                            ) : PlayerInteractor {
 
+    override fun setListener(listener : PlayerListener){
+        repository.setupListener(listener)
+    }
+
+//    override fun setListenerToPlayer(listener:PlayerListener){
+//        repository.setupListener(listener)
+//    }
+
     override fun playbackControl() {
         repository.playbackControl()
     }
@@ -39,13 +47,7 @@ class PlayerInteractorImpl(private val repository: PlayerRepository,
       return  repository.getState()
     }
 
-    override fun setListener(listener : PlayerListener){
-        repository.setupListener(listener)
-    }
 
-    override fun setListenerToPlayer(listener:PlayerListener){
-        repository.setupListener(listener)
-    }
 
 
 

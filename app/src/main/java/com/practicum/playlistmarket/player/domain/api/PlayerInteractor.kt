@@ -15,7 +15,7 @@ interface PlayerInteractor {
 
     fun getState() : StatePlayer
 
-    fun setListenerToPlayer(listener:PlayerListener)
+    //fun setListenerToPlayer(listener:PlayerListener)
     fun setListener(listener : PlayerListener)
 
 }

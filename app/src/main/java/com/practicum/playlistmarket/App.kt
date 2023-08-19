@@ -36,7 +36,7 @@ class App() : Application() {
                     viewSettingModelModule,
                     viewSearchViewModel,
                     viewPlayerModelModule, dataSettingModule, domainSettingModule,
-                    dataPlayerModule, domainPlayerModule, timeListenerModule,
+                    dataPlayerModule, domainPlayerModule,
                     domainSearchModule, dataSearchModule,
                 )
             )
