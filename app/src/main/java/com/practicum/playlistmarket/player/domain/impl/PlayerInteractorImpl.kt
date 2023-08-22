@@ -1,11 +1,10 @@
 package com.practicum.playlistmarket.player.domain.impl
 
-import com.practicum.playlistmarket.player.domain.StatePlayer
+import android.util.Log
 import com.practicum.playlistmarket.player.domain.api.PlayerInteractor
 import com.practicum.playlistmarket.player.domain.api.PlayerListener
-import com.practicum.playlistmarket.player.domain.api.TrackTimeListener
 import com.practicum.playlistmarket.player.domain.repository.PlayerRepository
-import com.practicum.playlistmarket.player.ui.view_model.MediaPlayerViewModel
+
 
 
 class PlayerInteractorImpl(private val repository: PlayerRepository,
@@ -13,11 +12,8 @@ class PlayerInteractorImpl(private val repository: PlayerRepository,
 
     override fun setListener(listener : PlayerListener){
         repository.setupListener(listener)
+        Log.e("TimeLog", "time")
     }
-
-//    override fun setListenerToPlayer(listener:PlayerListener){
-//        repository.setupListener(listener)
-//    }
 
     override fun playbackControl() {
         repository.playbackControl()
@@ -38,16 +34,6 @@ class PlayerInteractorImpl(private val repository: PlayerRepository,
     override fun releasePlayer() {
         repository.releasePlayer()
     }
-
-    override fun getTime(): String {
-        return repository.getTime()
-    }
-
-    override fun getState(): StatePlayer {
-      return  repository.getState()
-    }
-
-
 
 
 

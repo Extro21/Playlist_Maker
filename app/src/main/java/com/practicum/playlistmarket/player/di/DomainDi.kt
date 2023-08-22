@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.player.ui.di
+package com.practicum.playlistmarket.player.di
 
 import com.practicum.playlistmarket.player.domain.api.PlayerInteractor
 import com.practicum.playlistmarket.player.domain.impl.PlayerInteractorImpl

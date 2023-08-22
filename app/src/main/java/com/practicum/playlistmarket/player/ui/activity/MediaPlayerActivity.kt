@@ -29,8 +29,6 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMediaPlayerBinding
 
-   // private lateinit var viewModel: MediaPlayerViewModel
-
     private var songUrl: String = ""
 
     private val vm : MediaPlayerViewModel by viewModel()
@@ -42,14 +40,11 @@ class MediaPlayerActivity : AppCompatActivity() {
 
         songUrl = intent.getStringExtra(EXTRA_SONG).toString()
 
-      //  viewModel = ViewModelProvider(this)[MediaPlayerViewModel::class.java]
-
         vm.preparePlayer(songUrl)
 
 
         binding.btPlay.setOnClickListener {
             vm.playStart()
-           // vm.onTimeChanged()
         }
 
         vm.checkState.observe(this) {
@@ -115,15 +110,12 @@ class MediaPlayerActivity : AppCompatActivity() {
         vm.secondCounter.observe(this) { time ->
             binding.timeLeft.text = time
         }
-
-
     }
 
     override fun onPause() {
         super.onPause()
         vm.onPause()
     }
-
 
     private fun checkState(state: StatePlayer) {
         when (state) {

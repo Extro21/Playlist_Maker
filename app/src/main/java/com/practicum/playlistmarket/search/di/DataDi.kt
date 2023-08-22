@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.search.ui.di
+package com.practicum.playlistmarket.search.di
 
 import com.practicum.playlistmarket.search.data.NetworkClient
 import com.practicum.playlistmarket.search.data.SharedPreferencesHistoryImpl

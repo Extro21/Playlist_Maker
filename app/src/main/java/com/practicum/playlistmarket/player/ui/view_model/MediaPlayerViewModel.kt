@@ -1,24 +1,22 @@
 package com.practicum.playlistmarket.player.ui.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.practicum.playlistmarket.player.domain.api.TrackStateListener
-import com.practicum.playlistmarket.player.domain.api.TrackTimeListener
 import com.practicum.playlistmarket.player.domain.StatePlayer
 import com.practicum.playlistmarket.player.domain.api.PlayerInteractor
 import com.practicum.playlistmarket.player.domain.api.PlayerListener
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MediaPlayerViewModel(private val playerInteractor : PlayerInteractor
-                          ) : ViewModel() , PlayerListener  {
+class MediaPlayerViewModel(
+    private val playerInteractor: PlayerInteractor
+) : ViewModel(), PlayerListener {
 
 
-  // private val playerInteractor1 = Creator.providePlayerInteractor(this, this)
-
-    init{
-        playerInteractor.setListener(this)
+    init {
+        listen()
     }
 
     private val _secondCounter = MutableLiveData<String>()
@@ -50,20 +48,19 @@ class MediaPlayerViewModel(private val playerInteractor : PlayerInteractor
     }
 
 
-
     fun preparePlayer(urlTrack: String) {
         playerInteractor.preparePlayer(urlTrack)
-      //  Log.e("mylog", state.toString())
+        //  Log.e("mylog", state.toString())
     }
 
     fun playStart() {
         playerInteractor.playbackControl()
-
+        Log.e("TimeLog", "PlayerStart")
     }
 
     fun onPause() {
         playerInteractor.pausePlayer()
-     //   Log.e("mylog", state.toString())
+        //   Log.e("mylog", state.toString())
     }
 
     override fun onCleared() {
@@ -71,34 +68,17 @@ class MediaPlayerViewModel(private val playerInteractor : PlayerInteractor
         playerInteractor.releasePlayer()
     }
 
-//    override fun onTimeChanged(time: String) {
-//        _secondCounter.value = time
-//    }
-//
-//    override fun getState(state: StatePlayer) {
-//      //  this.state = state
-//        _checkState.value = state
-//    }
-
-//    fun onTimeChanged() {
-//
-//      //  _secondCounter.value = trackTimeListener.onTimeChanged()
-//
-//    }
-
-    override fun onTimeUpdate(time : String) {
-        _secondCounter.value = time
+   private fun listen(){
+        playerInteractor.setListener(this)
     }
 
-//    fun getState(state: StatePlayer) {
-//        //  this.state = state
-//        _checkState.value = trackStateListener.getState(state)
-//    }
+    override fun onStateUpdate(state: StatePlayer) {
+        _checkState.value = state
+    }
 
-
-
-    companion object {
-        private const val REFRESH_STATE = 1L
+    override fun onTimeUpdate(time: String) {
+        Log.e("TimeLog", time)
+        _secondCounter.value = time
     }
 
 

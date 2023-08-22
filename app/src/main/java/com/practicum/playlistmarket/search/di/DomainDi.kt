@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.search.ui.di
+package com.practicum.playlistmarket.search.di
 
 import com.practicum.playlistmarket.search.domain.api.TrackHistoryInteractor
 import com.practicum.playlistmarket.search.domain.api.TrackInteractor

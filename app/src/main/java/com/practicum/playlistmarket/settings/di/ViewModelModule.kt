@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.settings.ui.di
+package com.practicum.playlistmarket.settings.di
 
 import com.practicum.playlistmarket.settings.ui.view_model.SettingViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel

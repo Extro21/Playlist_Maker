@@ -29,6 +29,7 @@ class SearchHistory(private val sharedPref: SharedPreferences){
                     }
                     historyAdapter.trackListHistory.add(0, createTrackFromJson(track))
                     historyAdapter.notifyItemInserted(0)
+
                 }
             }
         }

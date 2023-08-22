@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.settings.ui.di
+package com.practicum.playlistmarket.settings.di
 
 import com.practicum.playlistmarket.settings.domain.api.SettingInteractor
 import com.practicum.playlistmarket.settings.domain.impl.SettingInteractorImpl

@@ -14,8 +14,6 @@ class HistoryAdapter(private val clickListener: TrackClickListener) : RecyclerVi
 
     var trackListHistory = ArrayList<Track>()
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.search_track_item, parent, false)
@@ -24,10 +22,7 @@ class HistoryAdapter(private val clickListener: TrackClickListener) : RecyclerVi
 
     override fun onBindViewHolder(holder: TrackHolder, position: Int) {
         holder.bind(trackListHistory[position])
-
-        holder.itemView.setOnClickListener {
-                clickListener.onTrackClick(trackListHistory[position])
-
+        holder.itemView.setOnClickListener {clickListener.onTrackClick(trackListHistory[position])
         }
     }
 
