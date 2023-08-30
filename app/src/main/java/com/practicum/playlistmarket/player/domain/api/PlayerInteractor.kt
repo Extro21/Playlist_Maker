@@ -1,7 +1,5 @@
 package com.practicum.playlistmarket.player.domain.api
 
-import com.practicum.playlistmarket.player.domain.StatePlayer
-
 
 interface PlayerInteractor {
 
@@ -11,6 +9,7 @@ interface PlayerInteractor {
     fun preparePlayer(trackUrl : String)
     fun releasePlayer()
 
-    fun getState() : StatePlayer
+
+    fun setListener(listener : PlayerListener)
 
 }

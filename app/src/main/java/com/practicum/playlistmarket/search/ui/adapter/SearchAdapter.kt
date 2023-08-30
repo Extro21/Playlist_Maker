@@ -8,12 +8,8 @@ import com.practicum.playlistmarket.player.domain.models.Track
 
 
 class SearchAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackHolder>() {
-    
 
     var trackList = ArrayList<Track>()
-
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackHolder {
         val view =
@@ -23,8 +19,7 @@ class SearchAdapter(private val clickListener: TrackClickListener) : RecyclerVie
 
     override fun onBindViewHolder(holder: TrackHolder, position: Int) {
         holder.bind(trackList[position])
-
-        holder.itemView.setOnClickListener { clickListener.onTrackClick(trackList[position]) }
+        holder.itemView.setOnClickListener {clickListener.onTrackClick(trackList[position]) }
 
     }
 

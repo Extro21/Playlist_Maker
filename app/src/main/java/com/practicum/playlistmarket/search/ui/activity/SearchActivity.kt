@@ -9,7 +9,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivitySearchBinding
@@ -19,6 +18,7 @@ import com.practicum.playlistmarket.player.ui.activity.MediaPlayerActivity
 import com.practicum.playlistmarket.search.ui.adapter.HistoryAdapter
 import com.practicum.playlistmarket.search.ui.adapter.SearchAdapter
 import com.practicum.playlistmarket.search.ui.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
@@ -33,38 +33,29 @@ class SearchActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private lateinit var vm: SearchViewModel
+    private val vm: SearchViewModel by viewModel()
 
     private var isClickAllowed = true
 
-
     private val historyAdapter = HistoryAdapter {
-        if (clickDebounce()) {
-            openPlayerToIntent(it)
-        }
+       if (clickDebounce()) {
+           openPlayer(it)
+       }
     }
 
     private val searchAdapter = SearchAdapter {
         if (clickDebounce()) {
-            vm.addHistoryTrack(it)
-            openPlayerToIntent(it)
-        }
+            openPlayer(it)
+       }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        vm = ViewModelProvider(
-            this,
-            SearchViewModel.factoryViewModelSearch()
-        )[SearchViewModel::class.java]
-
         init()
         vm.addHistoryTracks(tracksHistory)
-
 
         vm.observeState().observe(this) {
             render(it)
@@ -77,13 +68,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.apply {
             btClearHistory.setOnClickListener {
-                // interactorHistory.clearTrack(historyAdapter.trackListHistory)
                 vm.clearTrackListHistory(historyAdapter.trackListHistory)
-                // searchHistory.clearTrack()
-
-                // historyMenu.visibility = View.GONE
-
-                // historyAdapter.notifyDataSetChanged()
             }
         }
 
@@ -104,7 +89,6 @@ class SearchActivity : AppCompatActivity() {
                     ) View.VISIBLE else View.GONE
 
                 if (!hasFocus) vm.addHistoryList(historyAdapter.trackListHistory)
-
             }
         }
 
@@ -114,14 +98,11 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.editSearch.addTextChangedListener {
-            //searchDebounce()
             binding.btClear.visibility = clearButtonVisibility(it)
-            //searchText = it.toString()
             vm.searchDebounce(
                 changedText = it?.toString() ?: ""
             )
 
-            //binding.progressBar.visibility = View.VISIBLE
             searchAdapter.notifyDataSetChanged()
 
             if (searchText.isNotEmpty()) {
@@ -154,8 +135,6 @@ class SearchActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.GONE
         binding.massageNotFound.visibility = View.GONE
         binding.placeholderMessageNotInternet.text = getString(R.string.not_internet)
-
-
     }
 
     private fun showEmpty() {
@@ -275,6 +254,12 @@ class SearchActivity : AppCompatActivity() {
         intent.putExtra(EXTRA_COUNTRY, track.country)
         intent.putExtra(EXTRA_SONG, track.previewUrl)
         startActivity(intent)
+        historyAdapter.notifyDataSetChanged()
+    }
+
+    fun openPlayer(track: Track) {
+            vm.addHistoryTrack(track)
+            openPlayerToIntent(track)
     }
 
 

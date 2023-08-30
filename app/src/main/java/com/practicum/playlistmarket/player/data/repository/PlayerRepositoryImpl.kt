@@ -4,32 +4,25 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.practicum.playlistmarket.player.domain.api.TrackStateListener
-import com.practicum.playlistmarket.player.domain.api.TrackTimeListener
+
 import com.practicum.playlistmarket.player.domain.repository.PlayerRepository
 import com.practicum.playlistmarket.player.domain.StatePlayer
+import com.practicum.playlistmarket.player.domain.api.PlayerListener
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PlayerRepositoryImpl(
-    private var trackTimeListener: TrackTimeListener,
-    private val trackStateListener: TrackStateListener,
-) :
-    PlayerRepository {
+class PlayerRepositoryImpl : PlayerRepository {
+
+    var listener : PlayerListener? = null
+
 
     val handler = Handler(Looper.getMainLooper())
 
     private var time = DEFAULT_TIME_TRACK
-    override fun getTime(): String {
-        return time
-    }
 
     val mediaPlayer = MediaPlayer()
     private var playerState = StatePlayer.STATE_DEFAULT
 
-    override fun getState() : StatePlayer {
-        return playerState
-    }
 
     override fun preparePlayer(trackUrl: String) {
         mediaPlayer.reset()
@@ -37,11 +30,11 @@ class PlayerRepositoryImpl(
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             playerState = StatePlayer.STATE_PREPARED
-            trackStateListener.getState(playerState)
+            listener?.onStateUpdate(playerState)
         }
         mediaPlayer.setOnCompletionListener {
             playerState = StatePlayer.STATE_PREPARED
-            trackStateListener.getState(playerState)
+            listener?.onStateUpdate(playerState)
             time = DEFAULT_TIME_TRACK
         }
     }
@@ -62,7 +55,6 @@ class PlayerRepositoryImpl(
             }
             else -> {
                 StatePlayer.STATE_DEFAULT
-                    //   StatePlayer.STATE_PLAYING
             }
         }
     }
@@ -72,13 +64,15 @@ class PlayerRepositoryImpl(
         mediaPlayer.start()
         updateTime(time)
         Log.e("mylogRep", "updateTimePlayer")
-        trackStateListener.getState(playerState)
+      //  trackStateListener.getState(playerState)
+        listener?.onStateUpdate(playerState)
     }
 
     override fun pausePlayer() {
         playerState = StatePlayer.STATE_PAUSED
         mediaPlayer.pause()
-        trackStateListener.getState(playerState)
+     //   trackStateListener.getState(playerState)
+        listener?.onStateUpdate(playerState)
     }
 
 
@@ -94,8 +88,7 @@ class PlayerRepositoryImpl(
                             "mm:ss",
                             Locale.getDefault()
                         ).format(mediaPlayer.currentPosition)
-                        trackTimeListener.onTimeChanged(this@PlayerRepositoryImpl.time)
-                        Log.e("timeLOG", mediaPlayer.currentPosition.toString())
+                        listener?.onTimeUpdate(this@PlayerRepositoryImpl.time)
                         handler.postDelayed(
                             this,
                             REFRESH_LIST_DELAY_MILLIS,
@@ -107,17 +100,16 @@ class PlayerRepositoryImpl(
         )
     }
 
-    companion object {
-        private const val REFRESH_LIST_DELAY_MILLIS = 200L
-        private const val DEFAULT_TIME_TRACK = "00:00"
+
+   override fun setupListener(listener: PlayerListener){
+       this.listener = listener
     }
 
 
-//    enum class State(val state: Int) {
-//        STATE_DEFAULT(0),
-//        STATE_PREPARED(1),
-//        STATE_PLAYING(2),
-//        STATE_PAUSED(3),
-//    }
+    companion object {
+        private const val REFRESH_LIST_DELAY_MILLIS = 100L
+        private const val DEFAULT_TIME_TRACK = "00:00"
+
+    }
 
 }

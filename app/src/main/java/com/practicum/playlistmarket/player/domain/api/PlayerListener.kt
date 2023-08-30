@@ -2,8 +2,8 @@ package com.practicum.playlistmarket.player.domain.api
 
 import com.practicum.playlistmarket.player.domain.StatePlayer
 
-interface TrackStateListener {
+interface PlayerListener {
 
-    fun getState(state : StatePlayer)
-
+    fun onTimeUpdate(time : String)
+    fun onStateUpdate(state : StatePlayer)
 }

@@ -1,23 +1,42 @@
 package com.practicum.playlistmarket
 
 import android.app.Application
-import com.practicum.playlistmarket.Creator.Creator
+import com.practicum.playlistmarket.player.di.dataPlayerModule
+import com.practicum.playlistmarket.player.di.domainPlayerModule
+import com.practicum.playlistmarket.player.di.viewPlayerModelModule
+import com.practicum.playlistmarket.search.di.dataSearchModule
+import com.practicum.playlistmarket.search.di.domainSearchModule
+import com.practicum.playlistmarket.search.di.viewSearchViewModel
 import com.practicum.playlistmarket.settings.domain.api.SettingInteractor
+import com.practicum.playlistmarket.settings.di.dataSettingModule
+import com.practicum.playlistmarket.settings.di.domainSettingModule
+import com.practicum.playlistmarket.settings.di.viewSettingModelModule
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
-
-    private lateinit var interactor : SettingInteractor
 
     override fun onCreate() {
         super.onCreate()
 
-        interactor = Creator.provideSettingInteractor(applicationContext)
-        val darkTheme = interactor.defaultChange()
-        switchTheme(darkTheme)
+        startKoin {
+            androidContext(this@App)
+
+            modules(
+                listOf(
+                    viewSettingModelModule,
+                    viewSearchViewModel,
+                    viewPlayerModelModule, dataSettingModule, domainSettingModule,
+                    dataPlayerModule, domainPlayerModule,
+                    domainSearchModule, dataSearchModule,
+                )
+            )
+        }
+
+        val settingInteractor : SettingInteractor by inject()
+        val darkTheme = settingInteractor.defaultChange()
+        settingInteractor.changeTheme(darkTheme)
     }
 
-
-    private fun switchTheme(check: Boolean) {
-        interactor.changeTheme(check)
-    }
 }
