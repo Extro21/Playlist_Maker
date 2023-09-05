@@ -1,6 +1,9 @@
 package com.practicum.playlistmarket
 
 import android.app.Application
+import com.practicum.playlistmarket.media.di.viewFragmentPlayListViewModule
+import com.practicum.playlistmarket.media.di.viewFragmentSelectedViewModel
+import com.practicum.playlistmarket.media.di.viewMediaViewModel
 import com.practicum.playlistmarket.player.di.dataPlayerModule
 import com.practicum.playlistmarket.player.di.domainPlayerModule
 import com.practicum.playlistmarket.player.di.viewPlayerModelModule
@@ -30,6 +33,7 @@ class App : Application() {
                     viewPlayerModelModule, dataSettingModule, domainSettingModule,
                     dataPlayerModule, domainPlayerModule,
                     domainSearchModule, dataSearchModule,
+                    viewMediaViewModel, viewFragmentPlayListViewModule, viewFragmentSelectedViewModel
                 )
             )
         }
