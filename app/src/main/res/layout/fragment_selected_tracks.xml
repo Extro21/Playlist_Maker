@@ -13,9 +13,9 @@
 
         <ImageView
             android:id="@+id/imageView2"
+            style="@style/mistakeImageNotFound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/mistakeImageNotFound"
             android:layout_gravity="center"
             android:layout_marginTop="106dp"
             app:layout_constraintEnd_toEndOf="parent"

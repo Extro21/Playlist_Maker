@@ -9,14 +9,14 @@ class MediaPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) 
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
 
-    override fun getItemCount(): Int = 2
+    private val fragments = listOf(
+        FragmentSelectedTracks.newInstance(),
+        FragmentPlayList.newInstance()
+    )
+
+    override fun getItemCount(): Int = fragments.size
 
 
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> FragmentSelectedTracks.newInstance()
-            1 -> FragmentPlayList.newInstance()
-            else -> FragmentPlayList.newInstance()
-        }
-    }
+    override fun createFragment(position: Int): Fragment = fragments[position]
+
 }

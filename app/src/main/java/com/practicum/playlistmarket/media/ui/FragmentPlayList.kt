@@ -11,9 +11,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentPlayList : Fragment() {
 
-    private val viewModel : PlayListViewModel by viewModel()
+    private val viewModel: PlayListViewModel by viewModel()
 
-    private lateinit var binding : FragmentPlayListBinding
+    private lateinit var binding: FragmentPlayListBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,

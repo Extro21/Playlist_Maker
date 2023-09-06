@@ -31,7 +31,7 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     private var songUrl: String = ""
 
-    private val vm : MediaPlayerViewModel by viewModel()
+    private val viewModel : MediaPlayerViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +40,14 @@ class MediaPlayerActivity : AppCompatActivity() {
 
         songUrl = intent.getStringExtra(EXTRA_SONG).toString()
 
-        vm.preparePlayer(songUrl)
+        viewModel.preparePlayer(songUrl)
 
 
         binding.btPlay.setOnClickListener {
-            vm.playStart()
+            viewModel.playStart()
         }
 
-        vm.checkState.observe(this) {
+        viewModel.checkState.observe(this) {
             checkState(it)
             Log.e("mylogPlay", it.toString())
 
@@ -76,8 +76,8 @@ class MediaPlayerActivity : AppCompatActivity() {
 
 
         val data = intent.getStringExtra(EXTRA_DATA).toString()
-        vm.correctDataSong(data)
-        vm.dataSong.observe(this) {
+        viewModel.correctDataSong(data)
+        viewModel.dataSong.observe(this) {
             binding.yearApp.text = it
         }
 
@@ -85,17 +85,17 @@ class MediaPlayerActivity : AppCompatActivity() {
         val time = intent.getStringExtra(EXTRA_TIME_MILLIS)
 
         if (time != null) {
-            vm.correctTimeSong(time)
+            viewModel.correctTimeSong(time)
 
-            vm.timeSong.observe(this) {
+            viewModel.timeSong.observe(this) {
                 binding.durationApp.text = it
             }
         }
 
         val urlImage = intent.getStringExtra(EXTRA_IMAGE)
-        vm.getCoverArtwork(urlImage)
+        viewModel.getCoverArtwork(urlImage)
 
-        vm.coverArtwork.observe(this) {
+        viewModel.coverArtwork.observe(this) {
             var url = it
 
             val cornerSize = resources.getDimensionPixelSize(R.dimen.corners_image_track)
@@ -107,14 +107,14 @@ class MediaPlayerActivity : AppCompatActivity() {
                 .into(binding.trackImage)
         }
 
-        vm.secondCounter.observe(this) { time ->
+        viewModel.secondCounter.observe(this) { time ->
             binding.timeLeft.text = time
         }
     }
 
     override fun onPause() {
         super.onPause()
-        vm.onPause()
+        viewModel.onPause()
     }
 
     private fun checkState(state: StatePlayer) {

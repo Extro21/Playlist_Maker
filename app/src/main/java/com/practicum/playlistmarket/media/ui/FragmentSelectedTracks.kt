@@ -11,7 +11,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentSelectedTracks : Fragment() {
 
-    private val viewModel : SelectedViewModel by viewModel()
+    private val viewModel: SelectedViewModel by viewModel()
 
 
     private lateinit var binding: FragmentSelectedTracksBinding

@@ -26,9 +26,10 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/media_menu"
-
+        style="@style/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabIndicator="@drawable/indicator_tab_media"
         app:tabTextAppearance="@style/MyCustomTextAppearance"
         app:tabTextColor="?attr/colorOnSecondary" />
 

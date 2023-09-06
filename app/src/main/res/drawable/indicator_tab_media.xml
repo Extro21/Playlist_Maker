@@ -4,7 +4,7 @@
         android:left="16dp"
         android:right="16dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/purple_200" />
+            <solid android:color="?attr/colorOnSecondary" />
             <size android:height="2dp" />
         </shape>
     </item>
