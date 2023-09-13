@@ -13,8 +13,7 @@ import java.util.*
 
 class PlayerRepositoryImpl : PlayerRepository {
 
-    var listener : PlayerListener? = null
-
+    private var listener: PlayerListener? = null
 
     val handler = Handler(Looper.getMainLooper())
 
@@ -47,11 +46,11 @@ class PlayerRepositoryImpl : PlayerRepository {
         when (playerState) {
             StatePlayer.STATE_PLAYING -> {
                 pausePlayer()
-                Log.e("mylogRep",playerState.toString())
+                Log.e("mylogRep", playerState.toString())
             }
             StatePlayer.STATE_PREPARED, StatePlayer.STATE_PAUSED -> {
                 startPlayer()
-                Log.e("mylogRep",playerState.toString())
+                Log.e("mylogRep", playerState.toString())
             }
             else -> {
                 StatePlayer.STATE_DEFAULT
@@ -64,14 +63,12 @@ class PlayerRepositoryImpl : PlayerRepository {
         mediaPlayer.start()
         updateTime(time)
         Log.e("mylogRep", "updateTimePlayer")
-      //  trackStateListener.getState(playerState)
         listener?.onStateUpdate(playerState)
     }
 
     override fun pausePlayer() {
         playerState = StatePlayer.STATE_PAUSED
         mediaPlayer.pause()
-     //   trackStateListener.getState(playerState)
         listener?.onStateUpdate(playerState)
     }
 
@@ -101,8 +98,8 @@ class PlayerRepositoryImpl : PlayerRepository {
     }
 
 
-   override fun setupListener(listener: PlayerListener){
-       this.listener = listener
+    override fun setupListener(listener: PlayerListener) {
+        this.listener = listener
     }
 
 

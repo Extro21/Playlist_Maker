@@ -33,7 +33,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private val vm: SearchViewModel by viewModel()
+    private val viewModel: SearchViewModel by viewModel()
 
     private var isClickAllowed = true
 
@@ -55,9 +55,9 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         init()
-        vm.addHistoryTracks(tracksHistory)
+        viewModel.addHistoryTracks(tracksHistory)
 
-        vm.observeState().observe(this) {
+        viewModel.observeState().observe(this) {
             render(it)
         }
 
@@ -68,11 +68,11 @@ class SearchActivity : AppCompatActivity() {
 
         binding.apply {
             btClearHistory.setOnClickListener {
-                vm.clearTrackListHistory(historyAdapter.trackListHistory)
+                viewModel.clearTrackListHistory(historyAdapter.trackListHistory)
             }
         }
 
-        vm.clearHistory.observe(this) {
+        viewModel.clearHistory.observe(this) {
             binding.historyMenu.visibility = View.GONE
             historyAdapter.notifyDataSetChanged()
         }
@@ -88,18 +88,18 @@ class SearchActivity : AppCompatActivity() {
                         tracksHistory.isNotEmpty()
                     ) View.VISIBLE else View.GONE
 
-                if (!hasFocus) vm.addHistoryList(historyAdapter.trackListHistory)
+                if (!hasFocus) viewModel.addHistoryList(historyAdapter.trackListHistory)
             }
         }
 
         binding.btResetSearch.setOnClickListener {
             binding.massageNotInternet.visibility = View.GONE
-            vm.searchRequest(binding.editSearch.text.toString())
+            viewModel.searchRequest(binding.editSearch.text.toString())
         }
 
         binding.editSearch.addTextChangedListener {
             binding.btClear.visibility = clearButtonVisibility(it)
-            vm.searchDebounce(
+            viewModel.searchDebounce(
                 changedText = it?.toString() ?: ""
             )
 
@@ -230,7 +230,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        vm.addHistoryList(historyAdapter.trackListHistory)
+        viewModel.addHistoryList(historyAdapter.trackListHistory)
     }
 
     private fun clickDebounce(): Boolean {
@@ -258,7 +258,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun openPlayer(track: Track) {
-            vm.addHistoryTrack(track)
+            viewModel.addHistoryTrack(track)
             openPlayerToIntent(track)
     }
 

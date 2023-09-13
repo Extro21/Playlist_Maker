@@ -68,4 +68,8 @@
         <item name="android:src">@drawable/dark_mode_not_found</item>
     </style>
 
+    <style name="tabLayout">
+        <item name="tabIndicatorColor">@color/white</item>
+    </style>
+
 </resources>
