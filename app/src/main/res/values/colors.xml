@@ -11,5 +11,6 @@
     <color name="gray">#AEAFB4</color>
     <color name="gray_search">#E6E8EB</color>
     <color name="blue">#3772E7</color>
+    <color name="nightTheme">#1A1B22</color>
 
 </resources>
