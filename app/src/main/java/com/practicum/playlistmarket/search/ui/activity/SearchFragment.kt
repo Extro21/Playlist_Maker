@@ -6,12 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,13 +22,14 @@ import com.practicum.playlistmarket.search.ui.adapter.SearchAdapter
 import com.practicum.playlistmarket.search.ui.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment :Fragment() {
+class SearchFragment : Fragment() {
 
-    private lateinit var binding : FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private var searchText: String = ""
 
-    private var flag = false
+    //private var flag = false
     private val tracksHistory = ArrayList<Track>()
     private val tracksSearch = ArrayList<Track>()
 
@@ -57,7 +56,7 @@ class SearchFragment :Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -87,7 +86,7 @@ class SearchFragment :Fragment() {
 
         binding.apply {
             btClear.setOnClickListener {
-                clearSearch()
+                viewModel.btClear()
             }
 
             editSearch.setOnFocusChangeListener { view, hasFocus ->
@@ -116,6 +115,7 @@ class SearchFragment :Fragment() {
             if (searchText.isNotEmpty()) {
                 binding.historyMenu.visibility = View.GONE
             }
+
         }
 
 
@@ -127,6 +127,7 @@ class SearchFragment :Fragment() {
             is TrackState.Empty -> showEmpty()
             is TrackState.Error -> showError()
             is TrackState.Loading -> showLoading()
+            is TrackState.Default -> showDefault()
         }
     }
 
@@ -167,13 +168,12 @@ class SearchFragment :Fragment() {
         searchAdapter.notifyDataSetChanged()
     }
 
-
-    fun clearSearch() {
+    private fun showDefault() {
         binding.apply {
             tracksSearch.clear()
             editSearch.setText("")
-            //проверить
-            val keyboard = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val keyboard =
+                context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(editSearch.windowToken, 0) // скрыть клавиатуру
             editSearch.clearFocus()
             progressBar.visibility = View.GONE
@@ -208,14 +208,6 @@ class SearchFragment :Fragment() {
         }
     }
 
-//    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-//        super.onRestoreInstanceState(savedInstanceState)
-//        binding.editSearch.setText(savedInstanceState.getString(SEARCH_QUERY, ""))
-//        val trackSave = savedInstanceState.getParcelableArrayList<Track>(TRACK_QUERY)
-//        if (trackSave != null) {
-//            searchAdapter.trackList.addAll(trackSave)
-//        }
-//    }
 
     private fun init() {
         searchAdapter.trackList = tracksSearch
@@ -237,25 +229,15 @@ class SearchFragment :Fragment() {
         }
     }
 
+
     override fun onStop() {
         super.onStop()
-
-        if(binding.progressBar.visibility == View.VISIBLE){
-            Log.d("clear", "onStop")
-
+        viewModel.addHistoryList(historyAdapter.trackListHistory)
+        if (binding.editSearch.text.isEmpty()) {
+            viewModel.btClear()
         }
 
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        Log.d("clear", "onResume")
-//        if(binding.editSearch.text.isEmpty()){
-//            tracksSearch.clear()
-//            searchAdapter.notifyDataSetChanged()
-//        }
-//
-//    }
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
@@ -266,7 +248,7 @@ class SearchFragment :Fragment() {
         return current
     }
 
-        private fun openPlayerToIntent(track: Track) {
+    private fun openPlayerToIntent(track: Track) {
         val intent = Intent(requireContext(), MediaPlayerActivity::class.java)
         intent.putExtra(EXTRA_TRACK_NAME, track.trackName)
         intent.putExtra(EXTRA_ARTIST_NAME, track.artistName)
@@ -281,19 +263,20 @@ class SearchFragment :Fragment() {
         historyAdapter.notifyDataSetChanged()
     }
 
-    fun openPlayer(track: Track) {
+    private fun openPlayer(track: Track) {
         viewModel.addHistoryTrack(track)
         openPlayerToIntent(track)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     companion object {
         private const val SEARCH_QUERY = "SEARCH_QUERY"
         private const val TRACK_QUERY = "TRACK_QUERY"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-
-
-
     }
 
 }

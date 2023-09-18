@@ -13,4 +13,6 @@ sealed class TrackState {
     object Error : TrackState()
 
     object Empty : TrackState()
+
+    object Default : TrackState()
 }

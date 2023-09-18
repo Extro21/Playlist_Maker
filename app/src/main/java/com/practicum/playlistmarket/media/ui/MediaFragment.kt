@@ -11,7 +11,11 @@ import com.practicum.playlistmarket.databinding.FragmentMediaBinding
 
 class MediaFragment : Fragment() {
 
-    private lateinit var binding : FragmentMediaBinding
+    //private lateinit var binding : FragmentMediaBinding
+
+    private var _binding : FragmentMediaBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var tabMediator: TabLayoutMediator
 
     override fun onCreateView(
@@ -19,14 +23,14 @@ class MediaFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMediaBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewPageMedia.adapter = MediaPagerAdapter(childFragmentManager, lifecycle)
+        binding.viewPageMedia.adapter = MediaPagerAdapter(this)
 
         tabMediator = TabLayoutMediator(binding.mediaMenu, binding.viewPageMedia) { tab, position ->
             when (position) {
@@ -37,5 +41,11 @@ class MediaFragment : Fragment() {
         tabMediator.attach()
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        tabMediator.detach()
+        _binding = null
     }
 }

@@ -16,6 +16,7 @@ class SearchViewModel(application: Application,
                     private val interactorHistory : TrackHistoryInteractor,
                    private val  interactorSearch : TrackInteractor  ) : AndroidViewModel(application) {
 
+
     private var latestSearchText: String? = null
     private val handler = Handler(Looper.getMainLooper())
 
@@ -72,6 +73,10 @@ class SearchViewModel(application: Application,
 
     }
 
+    fun btClear(){
+        renderState(TrackState.Default)
+
+    }
 
     fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
@@ -108,6 +113,7 @@ class SearchViewModel(application: Application,
 
 
     }
+
 
 
     companion object {
