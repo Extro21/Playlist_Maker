@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.practicum.playlistmarket.settings.ui.activity.SettingsFragment"
+        android:name="com.practicum.playlistmarket.settings.ui.fragment.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.practicum.playlistmarket.search.ui.activity.SearchFragment"
+        android:name="com.practicum.playlistmarket.search.ui.fragment.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search">
         <action

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".settings.ui.activity.SettingsFragment">
+    tools:context=".settings.ui.fragment.SettingsFragment">
 
     <TextView
         style="@style/tooBarText"

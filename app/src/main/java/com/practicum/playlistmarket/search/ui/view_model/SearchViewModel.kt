@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.practicum.playlistmarket.player.domain.models.Track
 import com.practicum.playlistmarket.search.domain.api.TrackHistoryInteractor
 import com.practicum.playlistmarket.search.domain.api.TrackInteractor
-import com.practicum.playlistmarket.search.ui.activity.TrackState
+import com.practicum.playlistmarket.search.ui.fragment.TrackState
 
 class SearchViewModel(application: Application,
                     private val interactorHistory : TrackHistoryInteractor,
@@ -23,23 +23,24 @@ class SearchViewModel(application: Application,
     private val _clearHistory = MutableLiveData<Unit>()
     val clearHistory: LiveData<Unit> = _clearHistory
 
-    fun addHistoryTracks(tracksHistory: ArrayList<Track>) {
-        interactorHistory.addHistoryTracks(tracksHistory)
+//    fun showHistory() {
+//        renderState(TrackState.SearchHistory(
+//            getHistoryTrack())
+//        )
+//    }
+
+
+    fun saveTrack(track: Track) {
+        interactorHistory.saveTrack(track)
     }
 
-    fun addHistoryList(tracksHistory: ArrayList<Track>) {
-        interactorHistory.editHistoryList(tracksHistory)
+    fun clearTrackListHistory() {
+        interactorHistory.clearTrack()
+        renderState(TrackState.SearchHistory(emptyList()))
+
     }
 
-
-    fun clearTrackListHistory(tracksHistory: ArrayList<Track>) {
-        _clearHistory.value = interactorHistory.clearTrack(tracksHistory)
-    }
-
-    fun addHistoryTrack(track: Track) {
-        interactorHistory.addTrackInAdapter(track)
-    }
-
+    private fun getHistoryTrack() = interactorHistory.getAllTracks()
 
     private val stateLiveData = MutableLiveData<TrackState>()
     fun observeState(): LiveData<TrackState> = stateLiveData
@@ -54,23 +55,21 @@ class SearchViewModel(application: Application,
     }
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
-            return
-        }
-
-        this.latestSearchText = changedText
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+        if (changedText.isBlank()) {
+            stateLiveData.value = TrackState.SearchHistory(getHistoryTrack())
+        } else {
+            this.latestSearchText = changedText
 
-        val searchRunnable = Runnable { searchRequest(changedText) }
+            val searchRunnable = Runnable { searchRequest(changedText) }
 
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime,
-        )
-
-
+            val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
+            handler.postAtTime(
+                searchRunnable,
+                SEARCH_REQUEST_TOKEN,
+                postTime,
+            )
+        }
     }
 
     fun btClear(){
@@ -120,14 +119,6 @@ class SearchViewModel(application: Application,
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
 
-
-//        fun factoryViewModelSearch(): ViewModelProvider.Factory =
-//            viewModelFactory {
-//                initializer {
-//                    val application = this[APPLICATION_KEY]
-//                    SearchViewModel(application!!)
-//                }
-//            }
     }
 }
 

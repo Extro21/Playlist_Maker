@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.settings.ui.activity
+package com.practicum.playlistmarket.settings.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,7 +12,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : Fragment() {
 
-    //private lateinit var binding: FragmentSettingsBinding
 
     private var _binding : FragmentSettingsBinding? = null
     private val binding get() = _binding!!

@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.search.ui.activity
+package com.practicum.playlistmarket.search.ui.fragment
 
 
 import android.content.Context
@@ -30,9 +30,6 @@ class SearchFragment : Fragment() {
     private var searchText: String = ""
 
     //private var flag = false
-    private val tracksHistory = ArrayList<Track>()
-    private val tracksSearch = ArrayList<Track>()
-
     private val handler = Handler(Looper.getMainLooper())
 
     private val viewModel: SearchViewModel by viewModel()
@@ -64,9 +61,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         init()
-        viewModel.addHistoryTracks(tracksHistory)
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
@@ -75,7 +70,9 @@ class SearchFragment : Fragment() {
 
         binding.apply {
             btClearHistory.setOnClickListener {
-                viewModel.clearTrackListHistory(historyAdapter.trackListHistory)
+                viewModel.clearTrackListHistory()
+                binding.historyMenu.visibility = View.GONE
+                historyAdapter.notifyDataSetChanged()
             }
         }
 
@@ -92,10 +89,8 @@ class SearchFragment : Fragment() {
             editSearch.setOnFocusChangeListener { view, hasFocus ->
                 historyMenu.visibility =
                     if (hasFocus && editSearch.text.isEmpty() &&
-                        tracksHistory.isNotEmpty()
+                        historyAdapter.trackListHistory.isNotEmpty()
                     ) View.VISIBLE else View.GONE
-
-                if (!hasFocus) viewModel.addHistoryList(historyAdapter.trackListHistory)
             }
         }
 
@@ -106,9 +101,11 @@ class SearchFragment : Fragment() {
 
         binding.editSearch.addTextChangedListener {
             binding.btClear.visibility = clearButtonVisibility(it)
-            viewModel.searchDebounce(
-                changedText = it?.toString() ?: ""
-            )
+            if(it != null){
+                viewModel.searchDebounce(
+                    changedText = it?.toString() ?: ""
+                )
+            }
 
             searchAdapter.notifyDataSetChanged()
 
@@ -121,6 +118,8 @@ class SearchFragment : Fragment() {
 
     }
 
+
+
     private fun render(state: TrackState) {
         when (state) {
             is TrackState.Content -> showContent(state.tracks)
@@ -128,9 +127,23 @@ class SearchFragment : Fragment() {
             is TrackState.Error -> showError()
             is TrackState.Loading -> showLoading()
             is TrackState.Default -> showDefault()
+            is TrackState.SearchHistory -> showHistory(state.tracks)
         }
     }
 
+
+
+    fun showHistory(track: List<Track>) {
+            historyAdapter.trackListHistory.clear()
+            historyAdapter.trackListHistory.addAll(track)
+            binding.rcViewSearch.visibility = View.GONE
+            binding.massageNotFound.visibility = View.GONE
+            binding.massageNotInternet.visibility = View.GONE
+            if (track.isNotEmpty() && binding.editSearch.text.isEmpty() and binding.editSearch.isActivated) {
+                binding.historyMenu.visibility = View.VISIBLE
+                searchAdapter.notifyDataSetChanged()
+            }
+    }
     fun showLoading() {
         binding.rcViewSearch.visibility = View.GONE
         binding.historyMenu.visibility = View.GONE
@@ -170,7 +183,6 @@ class SearchFragment : Fragment() {
 
     private fun showDefault() {
         binding.apply {
-            tracksSearch.clear()
             editSearch.setText("")
             val keyboard =
                 context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -179,6 +191,11 @@ class SearchFragment : Fragment() {
             progressBar.visibility = View.GONE
             massageNotFound.visibility = View.GONE
             massageNotInternet.visibility = View.GONE
+            binding.historyMenu.visibility = View.GONE
+            searchAdapter.trackList.clear()
+//            if (historyAdapter.trackListHistory.isNotEmpty()) {
+//                binding.historyMenu.visibility = View.VISIBLE
+//            }
             searchAdapter.notifyDataSetChanged()
             historyAdapter.notifyDataSetChanged()
         }
@@ -210,8 +227,7 @@ class SearchFragment : Fragment() {
 
 
     private fun init() {
-        searchAdapter.trackList = tracksSearch
-        historyAdapter.trackListHistory = tracksHistory
+        // historyAdapter.trackListHistory = tracksHistory
 
         binding.apply {
             rcViewSearch.layoutManager =
@@ -222,9 +238,9 @@ class SearchFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             rcViewHistory.adapter = historyAdapter
 
-            if (tracksHistory.isEmpty()) {
-                historyMenu.visibility = View.GONE
-            }
+//            if (historyAdapter.trackListHistory.isEmpty()) {
+//                historyMenu.visibility = View.GONE
+//            }
 
         }
     }
@@ -232,7 +248,7 @@ class SearchFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        viewModel.addHistoryList(historyAdapter.trackListHistory)
+      //  viewModel.addHistoryList(historyAdapter.trackListHistory)
         if (binding.editSearch.text.isEmpty()) {
             viewModel.btClear()
         }
@@ -264,7 +280,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun openPlayer(track: Track) {
-        viewModel.addHistoryTrack(track)
+    //    viewModel.addHistoryTrack(track)
+        viewModel.saveTrack(track)
         openPlayerToIntent(track)
     }
 
