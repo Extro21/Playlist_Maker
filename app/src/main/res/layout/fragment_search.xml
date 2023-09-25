@@ -5,24 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".search.ui.activity.SearchActivity">
+    tools:context=".search.ui.fragment.SearchFragment">
 
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/search_toolbar"
-        style="@style/toolBarTop"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        tools:ignore="UsingOnClickInXml">
+        style="@style/tooBarText"
+        android:paddingStart="12dp"
+        android:gravity="center_vertical"
+        android:text="@string/search"/>
 
-        <TextView
-            style="@style/tooBarText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/search" />
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/search_toolbar"-->
+<!--        style="@style/toolBarTop"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        tools:ignore="UsingOnClickInXml">-->
 
-    </androidx.appcompat.widget.Toolbar>
+<!--        <TextView-->
+<!--            style="@style/tooBarText"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:text="@string/search" />-->
+
+<!--    </androidx.appcompat.widget.Toolbar>-->
 
 
     <LinearLayout
@@ -31,7 +38,7 @@
         android:layout_height="36dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/figures"
         android:orientation="horizontal">
 
@@ -75,6 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="gone"
 
             >
 

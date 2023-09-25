@@ -4,8 +4,10 @@ import com.practicum.playlistmarket.player.domain.models.Track
 
 interface TrackHistoryInteractor {
 
-    fun addHistoryTracks(tracksHistory : ArrayList<Track>)
     fun editHistoryList(tracksHistory : ArrayList<Track>)
-    fun clearTrack(tracksHistory : ArrayList<Track>)
-    fun addTrackInAdapter(track : Track)
+    fun clearTrack()
+
+    fun getAllTracks() : List<Track>
+
+    fun saveTrack(track: Track)
 }

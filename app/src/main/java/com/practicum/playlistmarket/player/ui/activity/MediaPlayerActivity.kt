@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmarket.R
@@ -115,6 +116,7 @@ class MediaPlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
+
     }
 
     private fun checkState(state: StatePlayer) {
@@ -136,5 +138,8 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val DEFAULT_TIME_TRACK = "00:00"
+
+//        fun createArgs(imageResId : Int) : Bundle =
+//            bundleOf(ARGS_IMAGE to imageResId)
     }
 }

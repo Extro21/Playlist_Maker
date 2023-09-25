@@ -6,19 +6,20 @@ import com.practicum.playlistmarket.search.domain.api.TrackHistoryInteractor
 
 class TrackHistoryInteractorImpl(private val sharedHistory: SharedPreferensecHistory) : TrackHistoryInteractor {
 
-    override fun addHistoryTracks(tracksHistory: ArrayList<Track>) {
-        sharedHistory.addHistoryTracks(tracksHistory)
-    }
-
     override fun editHistoryList(tracksHistory: ArrayList<Track>) {
-        sharedHistory.editHistoryList(tracksHistory)
+        sharedHistory.editHistoryList()
     }
 
-    override fun clearTrack(tracksHistory: ArrayList<Track>) {
-        sharedHistory.clearTrack(tracksHistory)
+    override fun saveTrack(track: Track) {
+        sharedHistory.saveTrack(track)
     }
 
-   override fun addTrackInAdapter(track : Track){
-        sharedHistory.addTrackInAdapter(track)
+
+    override fun clearTrack() {
+        sharedHistory.clearTrack()
     }
+
+     override fun getAllTracks() : List<Track> {
+        return sharedHistory.getAllTracks()
+     }
 }

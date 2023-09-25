@@ -5,24 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".media.ui.MediaActivity">
+    tools:context=".media.ui.MediaFragment">
 
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/media_toolbar"
-        style="@style/toolBarTop"
+    <TextView
+        style="@style/tooBarText"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        tools:ignore="UsingOnClickInXml">
-
-        <TextView
-            style="@style/tooBarText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/mediateka" />
-
-    </androidx.appcompat.widget.Toolbar>
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:text="@string/mediateka" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/media_menu"
@@ -31,7 +23,8 @@
         android:layout_height="wrap_content"
         app:tabIndicator="@drawable/indicator_tab_media"
         app:tabTextAppearance="@style/MyCustomTextAppearance"
-        app:tabTextColor="?attr/colorOnSecondary" />
+        app:tabTextColor="?attr/colorOnSecondary"
+        android:background="?attr/colorOnPrimary"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_page_media"

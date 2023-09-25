@@ -16,49 +16,26 @@
         android:theme="@style/Theme.PlaylistMarket"
         tools:targetApi="31">
         <activity
-            android:name=".media.ui.MediaActivity"
-            android:exported="false">
+            android:name=".root.RootActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-               <activity
-            android:name=".settings.ui.activity.SettingsActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".search.ui.activity.SearchActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".player.ui.activity.MediaPlayerActivity"
-
-            android:screenOrientation="portrait"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-
-        </activity>
-        <activity
-            android:name=".main.ui.MainActivity"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+        </activity>
+        <activity
+            android:name=".player.ui.activity.MediaPlayerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-    </application>
+   </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.practicum.playlistmarket.search.di
 
+
 import com.practicum.playlistmarket.search.data.NetworkClient
 import com.practicum.playlistmarket.search.data.SharedPreferencesHistoryImpl
 import com.practicum.playlistmarket.search.data.dto.TrackRepositoryImpl
@@ -20,4 +21,5 @@ val dataSearchModule = module {
     single<SharedPreferensecHistory> {
         SharedPreferencesHistoryImpl(context = get())
     }
+
 }

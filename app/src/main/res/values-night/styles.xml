@@ -70,6 +70,20 @@
 
     <style name="tabLayout">
         <item name="tabIndicatorColor">@color/white</item>
+
     </style>
+
+    <style name="colorMenu">
+        <item name="android:background">@color/nightTheme</item>
+    </style>
+
+    <style name="colorMenuTab">
+        <item name="android:background">@color/gray_search</item>
+    </style>
+
+    <style name="colorNightMenu">
+        <item name="android:background">@color/nightTheme</item>
+    </style>
+
 
 </resources>

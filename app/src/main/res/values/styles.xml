@@ -58,7 +58,6 @@
     <style name="tooBarText">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">22sp</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
 
     </style>
@@ -111,6 +110,15 @@
         <item name="tabIndicatorColor">@color/black</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">14sp</item>
+
+    </style>
+
+    <style name="colorMenu">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="colorMenuTab">
+        <item name="android:background">@color/gray_search</item>
     </style>
 
 </resources>

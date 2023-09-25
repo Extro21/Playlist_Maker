@@ -9,13 +9,18 @@ import com.practicum.playlistmarket.search.domain.api.SharedPreferensecHistory
 
 
 const val HISTORY_TRACK = "history_track"
-const val KEY_HISTORY = "key_history"
 const val KEY_HISTORY_ALL = "key_history_all"
 
 class SharedPreferencesHistoryImpl(private val context: Context) : SharedPreferensecHistory {
 
     private lateinit var sharedPreferences: SharedPreferences
-    lateinit var searchHistory: SearchHistory
+    private var tracksHistory = mutableListOf<Track>()
+
+    override fun getAllTracks(): List<Track> {
+        getSharedPreferences()
+        tracksHistory = read()
+        return tracksHistory
+    }
 
     private fun getSharedPreferences() {
         sharedPreferences = context.getSharedPreferences(
@@ -24,33 +29,44 @@ class SharedPreferencesHistoryImpl(private val context: Context) : SharedPrefere
         )
     }
 
-    override fun addHistoryTracks(tracksHistory: ArrayList<Track>) {
-        getSharedPreferences()
-
-        searchHistory = SearchHistory(sharedPreferences)
-
-        searchHistory.addTrackHistory(tracksHistory)
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener(searchHistory.listener)
+    fun addHistoryTracks(newTrack: Track) {
+        tracksHistory = read()
+        if (tracksHistory.contains(newTrack)) tracksHistory.remove(newTrack)
+        if (tracksHistory.size == HISTORY_TRACK_MAX) {
+            tracksHistory.removeLast()
+        }
+        tracksHistory.add(0, newTrack)
+        writeHistoryToJson(tracksHistory)
     }
 
-    override fun addTrackInAdapter(track: Track) {
-        getSharedPreferences()
-
-        val json = Gson().toJson(track)
-        sharedPreferences.edit()
-            .putString(KEY_HISTORY, json)
-            .apply()
+    override fun saveTrack(track: Track) {
+        addHistoryTracks(track)
     }
 
-    override fun editHistoryList(tracksHistory: ArrayList<Track>) {
+    private fun writeHistoryToJson(searchTracksHistory: List<Track>) {
+        val json = Gson().toJson(searchTracksHistory)
+        sharedPreferences.edit().putString(KEY_HISTORY_ALL, json).apply()
+    }
+
+    override fun editHistoryList() {
         sharedPreferences.edit()
             .putString(KEY_HISTORY_ALL, Gson().toJson(tracksHistory))
             .apply()
     }
 
-    override fun clearTrack(tracksHistory: ArrayList<Track>) {
+    override fun clearTrack() {
         sharedPreferences.edit().clear().apply()
         tracksHistory.clear()
     }
+
+    companion object {
+        private const val HISTORY_TRACK_MAX = 10
+    }
+
+    private fun read(): MutableList<Track> {
+        val json = sharedPreferences.getString(KEY_HISTORY_ALL, null) ?: return mutableListOf()
+        return Gson().fromJson(json, Array<Track>::class.java).toMutableList()
+    }
+
+
 }
