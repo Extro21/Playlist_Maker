@@ -6,6 +6,6 @@ import com.practicum.playlistmarket.player.domain.StatePlayer
 interface PlayerListener {
 
 
-    fun onStateUpdate(state : StatePlayer)
+     fun onStateUpdate(state : StatePlayer)
 
 }
