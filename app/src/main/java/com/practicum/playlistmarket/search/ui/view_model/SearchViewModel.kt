@@ -76,28 +76,6 @@ class SearchViewModel(
         }
     }
 
-//    fun searchDebounce(changedText: String) {
-//
-//        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-//
-//
-//        if (changedText.isBlank()) {
-//            stateLiveData.value = TrackState.SearchHistory(getHistoryTrack())
-//        } else {
-//            this.latestSearchText = changedText
-//
-//
-//
-//            val searchRunnable = Runnable { searchRequest(changedText) }
-//
-//            val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-//            handler.postAtTime(
-//                searchRunnable,
-//                SEARCH_REQUEST_TOKEN,
-//                postTime,
-//            )
-//        }
-//    }
 
     fun btClear() {
         renderState(TrackState.Default)
@@ -144,44 +122,6 @@ class SearchViewModel(
 
 
     }
-
-
-//    fun searchRequest(newSearchText: String) {
-//        if (newSearchText.isNotEmpty()) {
-//            renderState(TrackState.Loading)
-//
-//            interactorSearch.searchTrack(newSearchText, object : TrackInteractor.TrackConsumer {
-//                override fun consume(foundTrack: List<Track>?, errorMessage: String?) {
-//                    val tracks = mutableListOf<Track>()
-//                    if (foundTrack != null) {
-//                        tracks.addAll(foundTrack)
-//                    }
-//                    when {
-//                        errorMessage != null -> {
-//                            renderState(
-//                                TrackState.Error
-//                            )
-//                        }
-//                        tracks.isEmpty() -> {
-//                            renderState(
-//                                TrackState.Empty
-//                            )
-//                        }
-//                        else -> {
-//                            renderState(
-//                                TrackState.Content(
-//                                    tracks = tracks
-//                                )
-//                            )
-//                        }
-//                    }
-//                }
-//            })
-//        }
-//
-//
-//    }
-
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
