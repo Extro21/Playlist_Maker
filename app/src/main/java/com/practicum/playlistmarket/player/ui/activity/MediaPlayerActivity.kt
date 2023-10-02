@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmarket.R
@@ -32,7 +31,7 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     private var songUrl: String = ""
 
-    private val viewModel : MediaPlayerViewModel by viewModel()
+    private val viewModel: MediaPlayerViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,17 +42,20 @@ class MediaPlayerActivity : AppCompatActivity() {
 
         viewModel.preparePlayer(songUrl)
 
-
         binding.btPlay.setOnClickListener {
+            Log.e("TimeLog", "PlayerStart")
             viewModel.playStart()
         }
 
-        viewModel.checkState.observe(this) {
-            checkState(it)
-            Log.e("mylogPlay", it.toString())
-
+        viewModel.timeSongSec.observe(this) {
+            binding.timeLeft.text = it
+            Log.e("TimeLog", "Активити $it")
         }
 
+
+        viewModel.checkState.observe(this) {
+            checkState(it)
+        }
 
         binding.apply {
             trackName.text = intent.getStringExtra(EXTRA_TRACK_NAME)
@@ -119,27 +121,24 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     }
 
+
     private fun checkState(state: StatePlayer) {
         when (state) {
             STATE_PLAYING -> {
                 binding.btPlay.setImageResource(R.drawable.button_pauseb)
                 Log.e("mylogPlayningState", state.toString())
             }
+
             STATE_PAUSED, STATE_DEFAULT -> {
                 binding.btPlay.setImageResource(R.drawable.bt_play)
                 Log.e("mylogPauseStaytrning", state.toString())
             }
+
             STATE_PREPARED -> {
                 binding.btPlay.setImageResource(R.drawable.bt_play)
-                binding.timeLeft.text = DEFAULT_TIME_TRACK
             }
         }
     }
 
-    companion object {
-        private const val DEFAULT_TIME_TRACK = "00:00"
 
-//        fun createArgs(imageResId : Int) : Bundle =
-//            bundleOf(ARGS_IMAGE to imageResId)
-    }
 }

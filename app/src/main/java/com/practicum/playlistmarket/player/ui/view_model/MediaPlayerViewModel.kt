@@ -4,9 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmarket.player.domain.StatePlayer
 import com.practicum.playlistmarket.player.domain.api.PlayerInteractor
 import com.practicum.playlistmarket.player.domain.api.PlayerListener
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -14,6 +18,8 @@ class MediaPlayerViewModel(
     private val playerInteractor: PlayerInteractor
 ) : ViewModel(), PlayerListener {
 
+
+    private var timerJob: Job? = null
 
     init {
         listen()
@@ -27,6 +33,10 @@ class MediaPlayerViewModel(
 
     private val _timeSong = MutableLiveData<String>()
     val timeSong: LiveData<String> = _timeSong
+
+    private val _timeSongSec = MutableLiveData<String>()
+    val timeSongSec: LiveData<String> = _timeSongSec
+
 
     private val _dataSong = MutableLiveData<String>()
     val dataSong: LiveData<String> = _dataSong
@@ -56,6 +66,7 @@ class MediaPlayerViewModel(
     fun playStart() {
         playerInteractor.playbackControl()
         Log.e("TimeLog", "PlayerStart")
+        onTimeUpdate()
     }
 
     fun onPause() {
@@ -66,19 +77,36 @@ class MediaPlayerViewModel(
     override fun onCleared() {
         super.onCleared()
         playerInteractor.releasePlayer()
+
     }
 
-   private fun listen(){
+    private fun listen() {
         playerInteractor.setListener(this)
     }
+
+    private fun onTimeUpdate() {
+        timerJob = viewModelScope.launch {
+            while (_checkState.value == StatePlayer.STATE_PLAYING) {
+                delay(UPDATE_TIME_FREQUENCY)
+                _timeSongSec.value = playerInteractor.getTime()
+                Log.e("TimeLog", "Время: ${playerInteractor.getTime()}")
+            }
+            if (_checkState.value == StatePlayer.STATE_PREPARED) {
+                _timeSongSec.value = DEFAULT_TIME_TRACK
+
+            }
+        }
+
+    }
+
 
     override fun onStateUpdate(state: StatePlayer) {
         _checkState.value = state
     }
 
-    override fun onTimeUpdate(time: String) {
-        Log.e("TimeLog", time)
-        _secondCounter.value = time
+    companion object {
+        private const val DEFAULT_TIME_TRACK = "00:00"
+        private const val UPDATE_TIME_FREQUENCY = 250L
     }
 
 

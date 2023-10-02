@@ -19,7 +19,7 @@ class PlayerInteractorImpl(private val repository: PlayerRepository,
         repository.playbackControl()
     }
 
-    override fun startPlayer() {
+    override suspend fun startPlayer() {
         repository.startPlayer()
     }
 
@@ -33,6 +33,12 @@ class PlayerInteractorImpl(private val repository: PlayerRepository,
 
     override fun releasePlayer() {
         repository.releasePlayer()
+    }
+
+
+
+   override fun getTime() : String {
+        return repository.getTime()
     }
 
 

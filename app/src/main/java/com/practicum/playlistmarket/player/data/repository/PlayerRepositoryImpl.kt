@@ -1,10 +1,7 @@
 package com.practicum.playlistmarket.player.data.repository
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-
 import com.practicum.playlistmarket.player.domain.repository.PlayerRepository
 import com.practicum.playlistmarket.player.domain.StatePlayer
 import com.practicum.playlistmarket.player.domain.api.PlayerListener
@@ -14,8 +11,6 @@ import java.util.*
 class PlayerRepositoryImpl : PlayerRepository {
 
     private var listener: PlayerListener? = null
-
-    val handler = Handler(Looper.getMainLooper())
 
     private var time = DEFAULT_TIME_TRACK
 
@@ -34,7 +29,7 @@ class PlayerRepositoryImpl : PlayerRepository {
         mediaPlayer.setOnCompletionListener {
             playerState = StatePlayer.STATE_PREPARED
             listener?.onStateUpdate(playerState)
-            time = DEFAULT_TIME_TRACK
+            //  time = DEFAULT_TIME_TRACK
         }
     }
 
@@ -48,10 +43,12 @@ class PlayerRepositoryImpl : PlayerRepository {
                 pausePlayer()
                 Log.e("mylogRep", playerState.toString())
             }
+
             StatePlayer.STATE_PREPARED, StatePlayer.STATE_PAUSED -> {
                 startPlayer()
                 Log.e("mylogRep", playerState.toString())
             }
+
             else -> {
                 StatePlayer.STATE_DEFAULT
             }
@@ -61,7 +58,6 @@ class PlayerRepositoryImpl : PlayerRepository {
     override fun startPlayer() {
         playerState = StatePlayer.STATE_PLAYING
         mediaPlayer.start()
-        updateTime(time)
         Log.e("mylogRep", "updateTimePlayer")
         listener?.onStateUpdate(playerState)
     }
@@ -73,30 +69,15 @@ class PlayerRepositoryImpl : PlayerRepository {
     }
 
 
-    override fun updateTime(time: String) {
-        Log.e("mylogRep", "updateTime")
-        this.time = time
-
-        handler.postDelayed(
-            object : Runnable {
-                override fun run() {
-                    if (playerState == StatePlayer.STATE_PLAYING) {
-                        this@PlayerRepositoryImpl.time = SimpleDateFormat(
-                            "mm:ss",
-                            Locale.getDefault()
-                        ).format(mediaPlayer.currentPosition)
-                        listener?.onTimeUpdate(this@PlayerRepositoryImpl.time)
-                        handler.postDelayed(
-                            this,
-                            REFRESH_LIST_DELAY_MILLIS,
-                        )
-                    }
-                }
-            },
-            REFRESH_LIST_DELAY_MILLIS
-        )
+    override fun getTime(): String {
+        time = getCurrentPlayerPosition()
+        return time
     }
 
+    private fun getCurrentPlayerPosition(): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+            ?: "00:00"
+    }
 
     override fun setupListener(listener: PlayerListener) {
         this.listener = listener
@@ -104,9 +85,9 @@ class PlayerRepositoryImpl : PlayerRepository {
 
 
     companion object {
-        private const val REFRESH_LIST_DELAY_MILLIS = 100L
         private const val DEFAULT_TIME_TRACK = "00:00"
 
     }
+
 
 }
