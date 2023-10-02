@@ -18,17 +18,6 @@ class TrackInteraktorImpl(private val repository: TrackRepository) : TrackIntera
                     is Resource.Error -> Pair(null, result.message)
                 }
             }
-
-
     }
 
-
-//    override fun searchTrack(expression: String, consumer: TrackInteractor.TrackConsumer) {
-//        executor.execute{
-//            when(val resource  = repository.searchTrack(expression)){
-//                is Resource.Success -> consumer.consume(resource.data, null)
-//                is Resource.Error -> consumer.consume(null, resource.message)
-//            }
-//        }
-//    }
 }
