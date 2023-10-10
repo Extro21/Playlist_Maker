@@ -9,8 +9,8 @@ interface PlayerRepository {
     fun pausePlayer()
     fun preparePlayer(trackUrl: String)
     fun releasePlayer()
-    fun updateTime(time : String)
-
+    //fun updateTime(time : String)
     fun setupListener(listener: PlayerListener)
+    fun getTime(): String
 
 }

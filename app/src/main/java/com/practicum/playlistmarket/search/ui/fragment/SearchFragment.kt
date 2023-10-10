@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.FragmentSearchBinding
@@ -20,6 +21,8 @@ import com.practicum.playlistmarket.player.ui.activity.*
 import com.practicum.playlistmarket.search.ui.adapter.HistoryAdapter
 import com.practicum.playlistmarket.search.ui.adapter.SearchAdapter
 import com.practicum.playlistmarket.search.ui.view_model.SearchViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -30,13 +33,21 @@ class SearchFragment : Fragment() {
     private var searchText: String = ""
 
     //private var flag = false
-    private val handler = Handler(Looper.getMainLooper())
 
     private val viewModel: SearchViewModel by viewModel()
 
     private var isClickAllowed = true
 
-    private val historyAdapter = HistoryAdapter {
+   // private lateinit var onTrackSearchDebounce : (Track) -> Unit
+
+//    private val historyAdapter = HistoryAdapter {
+//        if (clickDebounce()) {
+//            openPlayer(it)
+//        }
+//    }
+
+    private var historyAdapter = HistoryAdapter {
+        //onTrackSearchDebounce(it)
         if (clickDebounce()) {
             openPlayer(it)
         }
@@ -62,6 +73,15 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         init()
+
+//        onTrackSearchDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY,
+//            viewLifecycleOwner.lifecycleScope, false) {
+//            track -> openPlayer(track)
+//        }
+
+//        historyAdapter  = HistoryAdapter() {
+//            onTrackSearchDebounce(it)
+//        }
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
@@ -255,11 +275,23 @@ class SearchFragment : Fragment() {
 
     }
 
+//    private fun clickDebounce(): Boolean {
+//        val current = isClickAllowed
+//        if (isClickAllowed) {
+//            isClickAllowed = false
+//            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+//        }
+//        return current
+//    }
+
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }

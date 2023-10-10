@@ -29,7 +29,7 @@ class SharedPreferencesHistoryImpl(private val context: Context) : SharedPrefere
         )
     }
 
-    fun addHistoryTracks(newTrack: Track) {
+    private fun addHistoryTracks(newTrack: Track) {
         tracksHistory = read()
         if (tracksHistory.contains(newTrack)) tracksHistory.remove(newTrack)
         if (tracksHistory.size == HISTORY_TRACK_MAX) {
