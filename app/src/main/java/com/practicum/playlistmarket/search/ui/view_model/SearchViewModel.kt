@@ -21,6 +21,8 @@ class SearchViewModel(
     private val interactorSearch: TrackInteractor
 ) : AndroidViewModel(application) {
 
+    private var searchJob: Job? = null
+    private var historyJob: Job? = null
 
     private var latestSearchText: String? = null
     private val handler = Handler(Looper.getMainLooper())
@@ -47,6 +49,12 @@ class SearchViewModel(
 
     private fun getHistoryTrack() = interactorHistory.getAllTracks()
 
+//    private fun getHistoryTrack() : List<Track> {
+//        viewModelScope.launch {
+//            return@launch interactorHistory.getAllTracks()
+//        }
+//    }
+
     private val stateLiveData = MutableLiveData<TrackState>()
     fun observeState(): LiveData<TrackState> = stateLiveData
 
@@ -59,11 +67,14 @@ class SearchViewModel(
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
-    private var searchJob: Job? = null
+
     fun searchDebounce(changedText: String) {
 
         if (changedText.isBlank()) {
-            stateLiveData.value = TrackState.SearchHistory(getHistoryTrack())
+            historyJob = viewModelScope.launch {
+                stateLiveData.value = TrackState.SearchHistory(getHistoryTrack())
+            }
+            searchJob?.cancel()
         } else {
             this.latestSearchText = changedText
 
@@ -76,6 +87,9 @@ class SearchViewModel(
         }
     }
 
+//    fun historyShow(){
+//        renderState(TrackState.SearchHistory(getHistoryTrack()))
+//    }
 
     fun btClear() {
         renderState(TrackState.Default)

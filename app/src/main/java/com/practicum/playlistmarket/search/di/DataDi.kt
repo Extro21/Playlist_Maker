@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 val dataSearchModule = module {
     single<TrackRepository> {
-        TrackRepositoryImpl(networkClient = get())
+        TrackRepositoryImpl(networkClient = get(), dataBase = get(), get())
     }
 
     single<NetworkClient> {

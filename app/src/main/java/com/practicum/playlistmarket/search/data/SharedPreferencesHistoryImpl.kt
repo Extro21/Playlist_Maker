@@ -3,7 +3,9 @@ package com.practicum.playlistmarket.search.data
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
+import com.practicum.playlistmarket.media.data.db.AppDataBase
 import com.practicum.playlistmarket.player.domain.models.Track
 import com.practicum.playlistmarket.search.domain.api.SharedPreferensecHistory
 
@@ -11,7 +13,9 @@ import com.practicum.playlistmarket.search.domain.api.SharedPreferensecHistory
 const val HISTORY_TRACK = "history_track"
 const val KEY_HISTORY_ALL = "key_history_all"
 
-class SharedPreferencesHistoryImpl(private val context: Context) : SharedPreferensecHistory {
+class SharedPreferencesHistoryImpl(
+    private val context: Context,
+) : SharedPreferensecHistory {
 
     private lateinit var sharedPreferences: SharedPreferences
     private var tracksHistory = mutableListOf<Track>()
@@ -29,14 +33,21 @@ class SharedPreferencesHistoryImpl(private val context: Context) : SharedPrefere
         )
     }
 
+
     private fun addHistoryTracks(newTrack: Track) {
         tracksHistory = read()
-        if (tracksHistory.contains(newTrack)) tracksHistory.remove(newTrack)
+        removeTrackFromList(tracksHistory, newTrack.trackId)
         if (tracksHistory.size == HISTORY_TRACK_MAX) {
             tracksHistory.removeLast()
         }
         tracksHistory.add(0, newTrack)
+        Log.e("addTrack", "add $newTrack")
         writeHistoryToJson(tracksHistory)
+    }
+
+    private fun removeTrackFromList(trackList: MutableList<Track>, trackId: String) {
+        val track = trackList.find { it.trackId == trackId }
+        track?.let { trackList.remove(it) }
     }
 
     override fun saveTrack(track: Track) {

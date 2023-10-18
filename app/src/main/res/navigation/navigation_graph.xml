@@ -26,7 +26,7 @@
         tools:layout="@layout/activity_media_player" />
     <fragment
         android:id="@+id/mediaFragment"
-        android:name="com.practicum.playlistmarket.media.ui.MediaFragment"
+        android:name="com.practicum.playlistmarket.media.ui.fragments.MediaFragment"
         android:label="MediaFragment"
         tools:layout="@layout/fragment_media" />
 </navigation>
