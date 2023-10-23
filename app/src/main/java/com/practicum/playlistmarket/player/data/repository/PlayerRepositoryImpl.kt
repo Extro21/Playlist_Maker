@@ -59,7 +59,7 @@ class PlayerRepositoryImpl : PlayerRepository {
         playerState = StatePlayer.STATE_PLAYING
         mediaPlayer.start()
         Log.e("mylogRep", "updateTimePlayer")
-        listener?.onStateUpdate(playerState)
+       listener?.onStateUpdate(playerState)
     }
 
     override fun pausePlayer() {
@@ -74,9 +74,14 @@ class PlayerRepositoryImpl : PlayerRepository {
         return time
     }
 
+    /** Весь код, связанный с форматированием времени и дат вынести в
+    отдельный класс-утилиту object DateTimeUtil. Это позволяет
+    избавиться от дублирования кода, так же удобно следить за всеми
+    форматами дат и времени в проекте. Ещё этот класс будет легко перенести в
+    другой проект.*/
     private fun getCurrentPlayerPosition(): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-            ?: "00:00"
+            ?: DEFAULT_TIME_TRACK
     }
 
     override fun setupListener(listener: PlayerListener) {

@@ -5,9 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmarket.media.domain.FavoriteListener
+import com.practicum.playlistmarket.media.domain.db.FavoriteInteractor
 import com.practicum.playlistmarket.player.domain.StatePlayer
 import com.practicum.playlistmarket.player.domain.api.PlayerInteractor
 import com.practicum.playlistmarket.player.domain.api.PlayerListener
+import com.practicum.playlistmarket.player.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -15,8 +18,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MediaPlayerViewModel(
-    private val playerInteractor: PlayerInteractor
-) : ViewModel(), PlayerListener {
+    private val playerInteractor: PlayerInteractor,
+    private val favoriteInteractor: FavoriteInteractor
+) : ViewModel(), PlayerListener, FavoriteListener {
 
 
     private var timerJob: Job? = null
@@ -44,6 +48,25 @@ class MediaPlayerViewModel(
     private val _coverArtwork = MutableLiveData<String>()
     val coverArtwork: LiveData<String> = _coverArtwork
 
+    private val _likeState = MutableLiveData<Boolean>()
+    val likeState : LiveData<Boolean> = _likeState
+
+    suspend fun addTrackFavorite(track: Track){
+        Log.e("LikeLike", "${track.isFavorite} ViewModel")
+        favoriteInteractor.addTrackFavorite(track)
+
+    }
+
+    fun checkLike(trackId : String){
+        viewModelScope.launch {
+            _likeState.value = favoriteInteractor.checkLikeTrack(trackId)
+        }
+    }
+
+    override fun onFavoriteUpdate(isLiked: Boolean) {
+        _likeState.value = isLiked
+        Log.e("LikedLog", isLiked.toString())
+    }
 
     fun getCoverArtwork(urlImage: String?) {
         _coverArtwork.value = urlImage?.replaceAfterLast('/', "512x512bb.jpg")
@@ -82,6 +105,7 @@ class MediaPlayerViewModel(
 
     private fun listen() {
         playerInteractor.setListener(this)
+        favoriteInteractor.setListener(this)
     }
 
     private fun onTimeUpdate() {

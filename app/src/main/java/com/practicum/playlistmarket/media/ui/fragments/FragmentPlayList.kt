@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.media.ui
+package com.practicum.playlistmarket.media.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
