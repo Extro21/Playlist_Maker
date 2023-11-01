@@ -5,9 +5,6 @@ import com.practicum.playlistmarket.player.domain.models.Track
 
 class TrackDbConvertor {
 
-//    fun map(movie: MovieDto): MovieEntity {
-//        return MovieEntity(movie.id, movie.resultType, movie.image, movie.title, movie.description)
-//    }
 
     fun map(track: TrackEntity): Track {
         return Track(

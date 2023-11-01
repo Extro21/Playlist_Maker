@@ -16,8 +16,8 @@
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search">
         <action
-            android:id="@+id/action_searchFragment_to_mediaPlayerActivity"
-            app:destination="@id/mediaPlayerActivity" />
+            android:id="@+id/action_searchFragment_to_mediaPlayerFragment"
+            app:destination="@id/mediaPlayerFragment" />
     </fragment>
     <activity
         android:id="@+id/mediaPlayerActivity"
@@ -28,5 +28,27 @@
         android:id="@+id/mediaFragment"
         android:name="com.practicum.playlistmarket.media.ui.fragments.MediaFragment"
         android:label="MediaFragment"
-        tools:layout="@layout/fragment_media" />
+        tools:layout="@layout/fragment_media" >
+        <action
+            android:id="@+id/action_mediaFragment_to_fragmentNewPlayList"
+            app:destination="@id/fragmentNewPlayList" />
+        <action
+            android:id="@+id/action_mediaFragment_to_mediaPlayerFragment"
+            app:destination="@id/mediaPlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentNewPlayList"
+        android:name="com.practicum.playlistmarket.media.ui.fragments.FragmentNewPlayList"
+        android:label="FragmentNewPlayList"
+        tools:layout="@layout/fragment_new_play_list"
+        />
+    <fragment
+        android:id="@+id/mediaPlayerFragment"
+        android:name="com.practicum.playlistmarket.player.ui.activity.MediaPlayerFragment"
+        android:label="fragment_media_player"
+        tools:layout="@layout/fragment_media_player" >
+        <action
+            android:id="@+id/action_mediaPlayerFragment_to_fragmentNewPlayList"
+            app:destination="@id/fragmentNewPlayList" />
+    </fragment>
 </navigation>

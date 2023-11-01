@@ -16,4 +16,6 @@ interface FavoriteRepository {
     fun setupListener(listener: FavoriteListener)
 
     suspend fun checkLikeTrack(trackId: String) : Boolean
+
+
 }

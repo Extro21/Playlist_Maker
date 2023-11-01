@@ -10,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.FragmentSearchBinding
@@ -73,12 +75,9 @@ class SearchFragment : Fragment() {
 
         init()
 
-
-
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
-
 
         binding.apply {
             btClearHistory.setOnClickListener {
@@ -111,6 +110,21 @@ class SearchFragment : Fragment() {
             viewModel.searchRequest(binding.editSearch.text.toString())
         }
 
+        // TODO("Переделать!!!")
+//        binding.editSearch.addTextChangedListener {
+//            binding.btClear.visibility = clearButtonVisibility(it)
+//
+//            viewModel.searchDebounce(
+//                changedText = it?.toString() ?: ""
+//            )
+//
+//            searchAdapter.notifyDataSetChanged()
+//
+//            if (searchText.isNotEmpty()) {
+//                binding.historyMenu.visibility = View.GONE
+//            }
+//
+//        }
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -122,6 +136,13 @@ class SearchFragment : Fragment() {
                 viewModel.searchDebounce(
                     changedText = s?.toString() ?: " "
                 )
+
+//                if (searchText.isNotEmpty()) {
+//                    binding.historyMenu.visibility = View.GONE
+//                }
+//                if(s.isNullOrBlank() && binding.editSearch.isActivated){
+//                    binding.historyMenu.visibility = View.VISIBLE
+//                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -270,7 +291,7 @@ class SearchFragment : Fragment() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
+            lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY_MILLIS)
                 isClickAllowed = true
             }
@@ -278,22 +299,31 @@ class SearchFragment : Fragment() {
         return current
     }
 
+//    private fun openPlayerToIntent(track: Track) {
+//        val intent = Intent(requireContext(), MediaPlayerActivity::class.java)
+//        intent.putExtra(EXTRA_TRACK_NAME, track.trackName)
+//        intent.putExtra(EXTRA_ARTIST_NAME, track.artistName)
+//        intent.putExtra(EXTRA_TIME_MILLIS, track.trackTimeMillis)
+//        intent.putExtra(EXTRA_IMAGE, track.artworkUrl100)
+//        intent.putExtra(EXTRA_DATA, track.releaseDate)
+//        intent.putExtra(EXTRA_COLLECTION_NAME, track.collectionName)
+//        intent.putExtra(EXTRA_PRIMARY_NAME, track.primaryGenreName)
+//        intent.putExtra(EXTRA_COUNTRY, track.country)
+//        intent.putExtra(EXTRA_SONG, track.previewUrl)
+//        intent.putExtra(EXTRA_LIKE, track.isFavorite)
+//        intent.putExtra(EXTRA_ID, track.trackId)
+//        intent.putExtra(EXTRA_TRACK, track)
+//        startActivity(intent)
+//        historyAdapter.notifyDataSetChanged()
+//    }
+
     private fun openPlayerToIntent(track: Track) {
-        val intent = Intent(requireContext(), MediaPlayerActivity::class.java)
-        intent.putExtra(EXTRA_TRACK_NAME, track.trackName)
-        intent.putExtra(EXTRA_ARTIST_NAME, track.artistName)
-        intent.putExtra(EXTRA_TIME_MILLIS, track.trackTimeMillis)
-        intent.putExtra(EXTRA_IMAGE, track.artworkUrl100)
-        intent.putExtra(EXTRA_DATA, track.releaseDate)
-        intent.putExtra(EXTRA_COLLECTION_NAME, track.collectionName)
-        intent.putExtra(EXTRA_PRIMARY_NAME, track.primaryGenreName)
-        intent.putExtra(EXTRA_COUNTRY, track.country)
-        intent.putExtra(EXTRA_SONG, track.previewUrl)
-        intent.putExtra(EXTRA_LIKE, track.isFavorite)
-        intent.putExtra(EXTRA_ID, track.trackId)
-        intent.putExtra(EXTRA_TRACK, track)
-        startActivity(intent)
-        historyAdapter.notifyDataSetChanged()
+        findNavController().navigate(
+            R.id.action_searchFragment_to_mediaPlayerFragment,
+            MediaPlayerFragment.createArgs(track.trackId, track.artworkUrl100,track.trackName,
+                track.artistName, track.trackTimeMillis, track.collectionName, track.releaseDate,
+                track.primaryGenreName, track.country, track.isFavorite, track, track.previewUrl)
+        )
     }
 
     private fun openPlayer(track: Track) {

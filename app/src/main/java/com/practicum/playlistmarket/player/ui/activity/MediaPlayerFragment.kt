@@ -1,16 +1,23 @@
 package com.practicum.playlistmarket.player.ui.activity
 
+import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.ActivityMediaPlayerBinding
+import com.practicum.playlistmarket.databinding.FragmentMediaPlayerBinding
 import com.practicum.playlistmarket.media.domain.module.PlayList
 import com.practicum.playlistmarket.media.ui.PlayListState
 import com.practicum.playlistmarket.player.ui.view_model.MediaPlayerViewModel
@@ -22,23 +29,21 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-//const val EXTRA_TRACK_NAME = "track_name"
-//const val EXTRA_ARTIST_NAME = "artist_name"
-//const val EXTRA_TIME_MILLIS = "time_millis"
-//const val EXTRA_IMAGE = "track_Image"
-//const val EXTRA_COUNTRY = "track_country"
-//const val EXTRA_DATA = "track_data"
-//const val EXTRA_PRIMARY_NAME = "track_primary_name"
-//const val EXTRA_COLLECTION_NAME = "track_collection_name"
-//const val EXTRA_SONG = "track_song"
-//const val EXTRA_LIKE = "track_like"
-//const val EXTRA_ID = "track_id"
-//const val EXTRA_TRACK = "track_track"
+const val EXTRA_TRACK_NAME = "track_name"
+const val EXTRA_ARTIST_NAME = "artist_name"
+const val EXTRA_TIME_MILLIS = "time_millis"
+const val EXTRA_IMAGE = "track_Image"
+const val EXTRA_COUNTRY = "track_country"
+const val EXTRA_DATA = "track_data"
+const val EXTRA_PRIMARY_NAME = "track_primary_name"
+const val EXTRA_COLLECTION_NAME = "track_collection_name"
+const val EXTRA_SONG = "track_song"
+const val EXTRA_LIKE = "track_like"
+const val EXTRA_ID = "track_id"
+const val EXTRA_TRACK = "track_track"
+class MediaPlayerFragment : Fragment() {
 
-
-class MediaPlayerActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMediaPlayerBinding
+    private lateinit var binding: FragmentMediaPlayerBinding
 
     private var songUrl: String = ""
 
@@ -49,26 +54,29 @@ class MediaPlayerActivity : AppCompatActivity() {
     private lateinit var adapter : PlayListPlayerAdapter
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMediaPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentMediaPlayerBinding.inflate(inflater)
+        return binding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel.fillData()
 
+        val track = requireArguments().getParcelable<Track>(EXTRA_TRACK)
 
-        val track = intent.getParcelableExtra<Track>(EXTRA_TRACK)
-
-        val trackID = intent.getStringExtra(EXTRA_ID)
+        val trackID = requireArguments().getString(EXTRA_ID)
         Log.e("qazwsx", trackID.toString())
 
         if (track != null) {
             viewModel.checkLike(track.trackId)
         }
 
-        songUrl = intent.getStringExtra(EXTRA_SONG).toString()
+        songUrl = requireArguments().getString(EXTRA_SONG).toString()
 
         viewModel.preparePlayer(songUrl)
 
@@ -77,23 +85,23 @@ class MediaPlayerActivity : AppCompatActivity() {
             viewModel.playStart()
         }
 
-        viewModel.timeSongSec.observe(this) {
+        viewModel.timeSongSec.observe(viewLifecycleOwner) {
             binding.timeLeft.text = it
             Log.e("TimeLog", "Активити $it")
         }
 
 
-        viewModel.checkState.observe(this) {
+        viewModel.checkState.observe(viewLifecycleOwner) {
             checkState(it)
         }
 
         binding.apply {
-            trackName.text = intent.getStringExtra(EXTRA_TRACK_NAME)
-            groupName.text = intent.getStringExtra(EXTRA_ARTIST_NAME)
-            countryApp.text = intent.getStringExtra(EXTRA_COUNTRY)
-            isLiked = intent.getBooleanExtra(EXTRA_LIKE, false)
+            trackName.text = requireArguments().getString(EXTRA_TRACK_NAME)
+            groupName.text = requireArguments().getString(EXTRA_ARTIST_NAME)
+            countryApp.text = requireArguments().getString(EXTRA_COUNTRY)
+            isLiked = requireArguments().getBoolean(EXTRA_LIKE, false)
 
-            val albumText = intent.getStringExtra(EXTRA_COLLECTION_NAME)
+            val albumText = requireArguments().getString(EXTRA_COLLECTION_NAME)
             if (albumText != null) {
                 albumApp.text = albumText
             } else {
@@ -101,34 +109,34 @@ class MediaPlayerActivity : AppCompatActivity() {
                 album.visibility = View.GONE
             }
 
-            genreApp.text = intent.getStringExtra(EXTRA_PRIMARY_NAME)
+            genreApp.text = requireArguments().getString(EXTRA_PRIMARY_NAME)
         }
 
 
         binding.toolbar.setOnClickListener {
-            finish()
+            findNavController().popBackStack()
         }
 
-        val data = intent.getStringExtra(EXTRA_DATA).toString()
+        val data = requireArguments().getString(EXTRA_DATA).toString()
         viewModel.correctDataSong(data)
-        viewModel.dataSong.observe(this) { data ->
+        viewModel.dataSong.observe(viewLifecycleOwner) { data ->
             binding.yearApp.text = data
         }
 
-        val time = intent.getStringExtra(EXTRA_TIME_MILLIS)
+        val time = requireArguments().getString(EXTRA_TIME_MILLIS)
 
         if (time != null) {
             viewModel.correctTimeSong(time)
 
-            viewModel.timeSong.observe(this) { timeSong ->
+            viewModel.timeSong.observe(viewLifecycleOwner) { timeSong ->
                 binding.durationApp.text = timeSong
             }
         }
 
-        val urlImage = intent.getStringExtra(EXTRA_IMAGE)
+        val urlImage = requireArguments().getString(EXTRA_IMAGE)
         viewModel.getCoverArtwork(urlImage)
 
-        viewModel.coverArtwork.observe(this) { urlSong ->
+        viewModel.coverArtwork.observe(viewLifecycleOwner) { urlSong ->
             var url = urlSong
 
             val cornerSize = resources.getDimensionPixelSize(R.dimen.corners_image_track)
@@ -140,7 +148,7 @@ class MediaPlayerActivity : AppCompatActivity() {
                 .into(binding.trackImage)
         }
 
-        viewModel.secondCounter.observe(this) { time ->
+        viewModel.secondCounter.observe(viewLifecycleOwner) { time ->
             binding.timeLeft.text = time
         }
 
@@ -153,7 +161,7 @@ class MediaPlayerActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.likeState.observe(this) { isLiked ->
+        viewModel.likeState.observe(viewLifecycleOwner) { isLiked ->
             if (isLiked) {
                 binding.btLike.setImageResource(R.drawable.button_like_true)
                 if (track != null) track.isFavorite = isLiked
@@ -163,8 +171,6 @@ class MediaPlayerActivity : AppCompatActivity() {
                 if (track != null) track.isFavorite = isLiked
             }
         }
-
-
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
@@ -176,9 +182,6 @@ class MediaPlayerActivity : AppCompatActivity() {
         }
 
         bottomSheetBehavior.peekHeight = 1800
-
-
-
 
         binding.btAdd.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -195,11 +198,11 @@ class MediaPlayerActivity : AppCompatActivity() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
-        viewModel.observeStatePlayList().observe(this) {
+        viewModel.observeStatePlayList().observe(viewLifecycleOwner) {
             checkStatePlayList(it)
         }
         binding.btAddPlayList.setOnClickListener {
-
+            findNavController().navigate(R.id.action_mediaPlayerFragment_to_fragmentNewPlayList)
         }
 
 
@@ -210,12 +213,16 @@ class MediaPlayerActivity : AppCompatActivity() {
             Log.e("addTrackPlaylist", "add")
         }
 
-        binding.rvPlaylist.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvPlaylist.adapter = adapter
 
+        viewModel.playlistState.observe(viewLifecycleOwner){
+            if(!it){
+                Toast.makeText(requireContext(), "Трек уже добален", Toast.LENGTH_LONG).show()
+            }
+        }
 
     }
-
 
 
     private fun checkStatePlayList(statePlayList: PlayListState) {
@@ -238,7 +245,7 @@ class MediaPlayerActivity : AppCompatActivity() {
         rvPlaylist.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
     }
-     private fun showEmptyPlayList() = with(binding) {
+    private fun showEmptyPlayList() = with(binding) {
         rvPlaylist.visibility = View.GONE
         progressBar.visibility = View.GONE
     }
@@ -268,4 +275,33 @@ class MediaPlayerActivity : AppCompatActivity() {
     }
 
 
+
+    companion object {
+        fun createArgs(trackId: String,
+                       artworkUrl100: String?,
+                       trackName: String,
+                       artistName: String,
+                       trackTimeMillis: String?,
+                       collectionName:String?,
+                       releaseDate: String?,
+                       primaryGenreName: String?,
+                       country: String?,
+                       isFavorite: Boolean,
+                       track: Track,
+                       previewUrl: String?): Bundle =
+            bundleOf(
+                EXTRA_ID to trackId,
+                EXTRA_IMAGE to artworkUrl100,
+                EXTRA_TRACK_NAME to trackName,
+                EXTRA_ARTIST_NAME to artistName,
+                EXTRA_TIME_MILLIS to trackTimeMillis,
+                EXTRA_COLLECTION_NAME to collectionName,
+                EXTRA_DATA to releaseDate,
+                EXTRA_PRIMARY_NAME to primaryGenreName,
+                EXTRA_COUNTRY to country,
+                EXTRA_LIKE to isFavorite,
+                EXTRA_TRACK to track,
+                EXTRA_SONG to previewUrl
+            )
+    }
 }
