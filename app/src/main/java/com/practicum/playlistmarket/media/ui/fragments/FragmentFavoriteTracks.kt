@@ -15,7 +15,7 @@ import com.practicum.playlistmarket.media.ui.states.FavoriteState
 import com.practicum.playlistmarket.media.ui.adapter.favoriteAdapter.FavoriteAdapter
 import com.practicum.playlistmarket.media.ui.view_model.FavoriteViewModel
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.player.ui.activity.MediaPlayerFragment
+import com.practicum.playlistmarket.player.ui.fragment.MediaPlayerFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel

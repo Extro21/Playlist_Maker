@@ -1,5 +1,6 @@
-package com.practicum.playlistmarket.player.ui.activity
+package com.practicum.playlistmarket.player.ui.fragment
 
+import android.os.Build
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -69,19 +70,25 @@ class MediaPlayerFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.fillData()
 
 
-        val track = requireArguments().getParcelable<Track>(EXTRA_TRACK)
+        val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getParcelable<Track>(EXTRA_TRACK, Track::class.java)
+        } else {
+            requireArguments().getParcelable<Track>(EXTRA_TRACK)
+        }
 
         val trackID = requireArguments().getString(EXTRA_ID)
 
-        if (track != null) {
+        track?.let {
             viewModel.checkLike(track.trackId)
         }
+
 
         songUrl = requireArguments().getString(EXTRA_SONG).toString()
 
@@ -216,10 +223,10 @@ class MediaPlayerFragment : Fragment() {
 
 
         adapter = PlayListPlayerAdapter { playlist ->
-            if (track != null) {
+            track?.let {
                 viewModel.addTrackPlaylist(track, playlist)
-                playlistName = playlist.name
             }
+            playlistName = playlist.name
         }
 
         var massage = ""
