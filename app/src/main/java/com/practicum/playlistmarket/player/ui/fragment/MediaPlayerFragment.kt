@@ -209,6 +209,7 @@ class MediaPlayerFragment : Fragment() {
                     BottomSheetBehavior.STATE_COLLAPSED -> binding.transparencyView.visibility =
                         View.VISIBLE
                 }
+
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
