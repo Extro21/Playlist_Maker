@@ -1,6 +1,5 @@
 package com.practicum.playlistmarket.media.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,22 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.FragmentSelectedTracksBinding
-import com.practicum.playlistmarket.media.ui.FavoriteState
-import com.practicum.playlistmarket.media.ui.adapter.FavoriteAdapter
+import com.practicum.playlistmarket.media.ui.states.FavoriteState
+import com.practicum.playlistmarket.media.ui.adapter.favoriteAdapter.FavoriteAdapter
 import com.practicum.playlistmarket.media.ui.view_model.FavoriteViewModel
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_ARTIST_NAME
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_COLLECTION_NAME
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_COUNTRY
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_DATA
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_IMAGE
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_LIKE
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_PRIMARY_NAME
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_SONG
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_TIME_MILLIS
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_TRACK
-import com.practicum.playlistmarket.player.ui.activity.EXTRA_TRACK_NAME
-import com.practicum.playlistmarket.player.ui.activity.MediaPlayerActivity
 import com.practicum.playlistmarket.player.ui.activity.MediaPlayerFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -127,7 +114,6 @@ class FragmentFavoriteTracks : Fragment() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            //TODO
             lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY_MILLIS)
                 isClickAllowed = true

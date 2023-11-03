@@ -2,8 +2,6 @@ package com.practicum.playlistmarket.media.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.practicum.playlistmarket.media.data.db.dao.PlayListDao
 import com.practicum.playlistmarket.media.data.db.dao.TrackDao
 import com.practicum.playlistmarket.media.data.db.entity.PlayListEntity
@@ -15,8 +13,6 @@ import com.practicum.playlistmarket.media.data.db.entity.TrackPlaylist
 @Database(
     version = 1,
     entities = [TrackEntity::class, PlayListEntity::class, TrackPlaylist::class, TrackPlayListEntity::class],
-
-
 )
 abstract class AppDataBase : RoomDatabase() {
 

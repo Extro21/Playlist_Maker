@@ -1,12 +1,9 @@
 package com.practicum.playlistmarket.media.data.repository
 
 import android.util.Log
-import androidx.room.Database
 import com.practicum.playlistmarket.media.data.db.AppDataBase
 import com.practicum.playlistmarket.media.data.db.PlayListConvector
-import com.practicum.playlistmarket.media.data.db.TrackDbConvertor
 import com.practicum.playlistmarket.media.data.db.entity.PlayListEntity
-import com.practicum.playlistmarket.media.data.db.entity.TrackEntity
 import com.practicum.playlistmarket.media.data.db.entity.TrackPlayListEntity
 import com.practicum.playlistmarket.media.data.db.entity.TrackPlaylist
 import com.practicum.playlistmarket.media.domain.module.PlayList
@@ -21,23 +18,19 @@ class PlayListRepositoryImpl(
     PlayListRepository {
 
     override suspend fun addTrackPlaylist(track: Track, playList: PlayList) : Boolean {
-       // Log.e("addTrackPlaylist", "${track.trackId} ${playList.playListId}")
         if(!database.playListDao().doesTrackExist(trackId = track.trackId)){
             database.playListDao().addTrack(trackConvectorEntity(track))
         }
         return if(!database.playListDao().doesTrackExistPlayList(trackId = track.trackId, playList.playListId)){
-            Log.e("addTrackPlaylist", "${track.trackId} ${playList.playListId}")
             database.playListDao()
                 .addTrackForPlaylist(TrackPlaylist(trackId = track.trackId, playListId = playList.playListId))
-            Log.e("addTrackPlaylist", "true")
+            Log.d("addTrackPlaylist", "true ")
             true
         } else {
-            Log.e("addTrackPlaylist", "false")
+            Log.d("addTrackPlaylist", "false")
             false
         }
     }
-
-
 
     override suspend fun getTracksForPlaylist(playList: PlayList): Flow<List<Track>> = flow {
         val tracks = database.playListDao().getTrackByPlaylist(playList.playListId)

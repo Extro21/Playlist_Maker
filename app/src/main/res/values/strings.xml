@@ -43,6 +43,12 @@
     <string name="playlist">Плейлист</string>
     <string name="created">создан</string>
     <string name="add_track_playlist">Добавить в плейлист</string>
+    <string name="track_already_playlist">Трек уже добален в плейлист</string>
+    <string name="add_track_for_playlist">Добавлено в плейлист</string>
+
+    <string name="trackov">треков</string>
+    <string name="track">трек</string>
+    <string name="tracka">трека</string>
 
 
 </resources>

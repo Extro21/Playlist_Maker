@@ -33,22 +33,11 @@ class SearchFragment : Fragment() {
 
     private var searchText: String = ""
 
-    //private var flag = false
-
     private val viewModel: SearchViewModel by viewModel()
 
     private var isClickAllowed = true
 
-    // private lateinit var onTrackSearchDebounce : (Track) -> Unit
-
-//    private val historyAdapter = HistoryAdapter {
-//        if (clickDebounce()) {
-//            openPlayer(it)
-//        }
-//    }
-
     private var historyAdapter = HistoryAdapter {
-        //onTrackSearchDebounce(it)
         if (clickDebounce()) {
             openPlayer(it)
         }
@@ -110,21 +99,6 @@ class SearchFragment : Fragment() {
             viewModel.searchRequest(binding.editSearch.text.toString())
         }
 
-        // TODO("Переделать!!!")
-//        binding.editSearch.addTextChangedListener {
-//            binding.btClear.visibility = clearButtonVisibility(it)
-//
-//            viewModel.searchDebounce(
-//                changedText = it?.toString() ?: ""
-//            )
-//
-//            searchAdapter.notifyDataSetChanged()
-//
-//            if (searchText.isNotEmpty()) {
-//                binding.historyMenu.visibility = View.GONE
-//            }
-//
-//        }
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -137,12 +111,6 @@ class SearchFragment : Fragment() {
                     changedText = s?.toString() ?: " "
                 )
 
-//                if (searchText.isNotEmpty()) {
-//                    binding.historyMenu.visibility = View.GONE
-//                }
-//                if(s.isNullOrBlank() && binding.editSearch.isActivated){
-//                    binding.historyMenu.visibility = View.VISIBLE
-//                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -299,23 +267,6 @@ class SearchFragment : Fragment() {
         return current
     }
 
-//    private fun openPlayerToIntent(track: Track) {
-//        val intent = Intent(requireContext(), MediaPlayerActivity::class.java)
-//        intent.putExtra(EXTRA_TRACK_NAME, track.trackName)
-//        intent.putExtra(EXTRA_ARTIST_NAME, track.artistName)
-//        intent.putExtra(EXTRA_TIME_MILLIS, track.trackTimeMillis)
-//        intent.putExtra(EXTRA_IMAGE, track.artworkUrl100)
-//        intent.putExtra(EXTRA_DATA, track.releaseDate)
-//        intent.putExtra(EXTRA_COLLECTION_NAME, track.collectionName)
-//        intent.putExtra(EXTRA_PRIMARY_NAME, track.primaryGenreName)
-//        intent.putExtra(EXTRA_COUNTRY, track.country)
-//        intent.putExtra(EXTRA_SONG, track.previewUrl)
-//        intent.putExtra(EXTRA_LIKE, track.isFavorite)
-//        intent.putExtra(EXTRA_ID, track.trackId)
-//        intent.putExtra(EXTRA_TRACK, track)
-//        startActivity(intent)
-//        historyAdapter.notifyDataSetChanged()
-//    }
 
     private fun openPlayerToIntent(track: Track) {
         findNavController().navigate(
@@ -327,7 +278,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun openPlayer(track: Track) {
-        //    viewModel.addHistoryTrack(track)
         viewModel.saveTrack(track)
         openPlayerToIntent(track)
     }

@@ -7,8 +7,6 @@
         android:gravity="center">
 
         <shape android:shape="rectangle">
-            <solid android:color="@color/white" />
-            <corners android:radius="8dp"/>
 
         </shape>
     </item>

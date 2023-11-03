@@ -2,12 +2,13 @@ package com.practicum.playlistmarket.player.ui.activity
 
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,16 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmarket.R
-import com.practicum.playlistmarket.databinding.ActivityMediaPlayerBinding
 import com.practicum.playlistmarket.databinding.FragmentMediaPlayerBinding
 import com.practicum.playlistmarket.media.domain.module.PlayList
-import com.practicum.playlistmarket.media.ui.PlayListState
+import com.practicum.playlistmarket.media.ui.states.PlayListState
 import com.practicum.playlistmarket.player.ui.view_model.MediaPlayerViewModel
 import com.practicum.playlistmarket.player.domain.StatePlayer
 import com.practicum.playlistmarket.player.domain.StatePlayer.*
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.player.ui.PlayListPlayerAdapter
+import com.practicum.playlistmarket.player.ui.adapter.PlayListPlayerAdapter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -41,17 +42,22 @@ const val EXTRA_SONG = "track_song"
 const val EXTRA_LIKE = "track_like"
 const val EXTRA_ID = "track_id"
 const val EXTRA_TRACK = "track_track"
+
 class MediaPlayerFragment : Fragment() {
 
     private lateinit var binding: FragmentMediaPlayerBinding
 
     private var songUrl: String = ""
 
+    private var playlistName = ""
+
     private var isLiked: Boolean = false
 
     private val viewModel: MediaPlayerViewModel by viewModel()
 
-    private lateinit var adapter : PlayListPlayerAdapter
+    private lateinit var adapter: PlayListPlayerAdapter
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
 
 
     override fun onCreateView(
@@ -62,15 +68,16 @@ class MediaPlayerFragment : Fragment() {
         binding = FragmentMediaPlayerBinding.inflate(inflater)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.fillData()
 
+
         val track = requireArguments().getParcelable<Track>(EXTRA_TRACK)
 
         val trackID = requireArguments().getString(EXTRA_ID)
-        Log.e("qazwsx", trackID.toString())
 
         if (track != null) {
             viewModel.checkLike(track.trackId)
@@ -81,13 +88,11 @@ class MediaPlayerFragment : Fragment() {
         viewModel.preparePlayer(songUrl)
 
         binding.btPlay.setOnClickListener {
-            Log.e("TimeLog", "PlayerStart")
             viewModel.playStart()
         }
 
         viewModel.timeSongSec.observe(viewLifecycleOwner) {
             binding.timeLeft.text = it
-            Log.e("TimeLog", "Активити $it")
         }
 
 
@@ -172,29 +177,33 @@ class MediaPlayerFragment : Fragment() {
             }
         }
 
-        val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet).apply {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
             binding.transparencyView.visibility = View.GONE
-            if(state == BottomSheetBehavior.STATE_HIDDEN){
+            if (state == BottomSheetBehavior.STATE_HIDDEN) {
                 binding.transparencyView.visibility = View.GONE
             }
-
         }
+        behaviorSize()
 
-        bottomSheetBehavior.peekHeight = 1800
 
         binding.btAdd.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             binding.transparencyView.visibility = View.VISIBLE
         }
 
-        bottomSheetBehavior.addBottomSheetCallback(object  : BottomSheetBehavior.BottomSheetCallback(){
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when(newState){
-                    BottomSheetBehavior.STATE_HIDDEN -> binding.transparencyView.visibility = View.GONE
-                    BottomSheetBehavior.STATE_COLLAPSED -> binding.transparencyView.visibility = View.VISIBLE
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> binding.transparencyView.visibility =
+                        View.GONE
+
+                    BottomSheetBehavior.STATE_COLLAPSED -> binding.transparencyView.visibility =
+                        View.VISIBLE
                 }
             }
+
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
@@ -206,27 +215,35 @@ class MediaPlayerFragment : Fragment() {
         }
 
 
-        adapter = PlayListPlayerAdapter {
+        adapter = PlayListPlayerAdapter { playlist ->
             if (track != null) {
-                viewModel.addTrackPlaylist(track, it)
+                viewModel.addTrackPlaylist(track, playlist)
+                playlistName = playlist.name
             }
-            Log.e("addTrackPlaylist", "add")
         }
 
-        binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        var massage = ""
+        viewModel.playlistState.observe(viewLifecycleOwner) {
+            if (!it) {
+                massage = getString(R.string.track_already_playlist) + " $playlistName"
+                showMassage(massage)
+            } else {
+                viewModel.fillData()
+                massage = getString(R.string.add_track_for_playlist) + " $playlistName"
+                showMassage(massage)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
+
+        binding.rvPlaylist.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvPlaylist.adapter = adapter
-
-        viewModel.playlistState.observe(viewLifecycleOwner){
-            if(!it){
-                Toast.makeText(requireContext(), "Трек уже добален", Toast.LENGTH_LONG).show()
-            }
-        }
 
     }
 
 
     private fun checkStatePlayList(statePlayList: PlayListState) {
-        when(statePlayList){
+        when (statePlayList) {
             is PlayListState.Empty -> showEmptyPlayList()
             is PlayListState.Loading -> showLoading()
             is PlayListState.Content -> showContent(statePlayList.playList)
@@ -234,17 +251,24 @@ class MediaPlayerFragment : Fragment() {
 
     }
 
-    private fun showContent(playList : List<PlayList>) = with(binding) {
+    private fun showContent(playList: List<PlayList>) = with(binding) {
         rvPlaylist.visibility = View.VISIBLE
         progressBar.visibility = View.GONE
-        adapter.playList.clear()
-        adapter.playList.addAll(playList)
-        adapter.notifyDataSetChanged()
+        lifecycleScope.launch {
+            playList.map {
+                it.quantityTracks = viewModel.getTrackCount(it)
+            }
+            adapter.playList.clear()
+            adapter.playList.addAll(playList)
+            adapter.notifyDataSetChanged()
+        }
     }
-    private fun showLoading() = with(binding){
+
+    private fun showLoading() = with(binding) {
         rvPlaylist.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
     }
+
     private fun showEmptyPlayList() = with(binding) {
         rvPlaylist.visibility = View.GONE
         progressBar.visibility = View.GONE
@@ -274,21 +298,57 @@ class MediaPlayerFragment : Fragment() {
         }
     }
 
+    private fun behaviorSize() {
+        val displayMetrics = DisplayMetrics()
+        requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val screenHeight = displayMetrics.heightPixels
+        binding.bottomSheet.layoutParams.height = screenHeight
+        bottomSheetBehavior.peekHeight = screenHeight / 2 + screenHeight / 10
+    }
 
+    private fun showMassage(massage: String) {
+        val typedValue = TypedValue()
+
+        requireActivity().theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOnPrimary,
+            typedValue,
+            true
+        )
+        val colorText = typedValue.data
+
+        requireActivity().theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOnSecondary,
+            typedValue,
+            true
+        )
+        val colorBackground = typedValue.data
+
+
+        val snackBar = Snackbar.make(binding.root, massage, Snackbar.LENGTH_LONG)
+            .setBackgroundTint(colorBackground).setTextColor(colorText)
+        val snackBarView = snackBar.view
+        snackBarView.findViewById<TextView>(android.R.id.message)
+        val textView =
+            snackBarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        snackBar.show()
+    }
 
     companion object {
-        fun createArgs(trackId: String,
-                       artworkUrl100: String?,
-                       trackName: String,
-                       artistName: String,
-                       trackTimeMillis: String?,
-                       collectionName:String?,
-                       releaseDate: String?,
-                       primaryGenreName: String?,
-                       country: String?,
-                       isFavorite: Boolean,
-                       track: Track,
-                       previewUrl: String?): Bundle =
+        fun createArgs(
+            trackId: String,
+            artworkUrl100: String?,
+            trackName: String,
+            artistName: String,
+            trackTimeMillis: String?,
+            collectionName: String?,
+            releaseDate: String?,
+            primaryGenreName: String?,
+            country: String?,
+            isFavorite: Boolean,
+            track: Track,
+            previewUrl: String?
+        ): Bundle =
             bundleOf(
                 EXTRA_ID to trackId,
                 EXTRA_IMAGE to artworkUrl100,

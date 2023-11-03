@@ -1,11 +1,11 @@
-package com.practicum.playlistmarket.player.ui
+package com.practicum.playlistmarket.player.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.media.domain.module.PlayList
-import com.practicum.playlistmarket.media.ui.adapter.PlayListClickListener
+import com.practicum.playlistmarket.media.ui.adapter.playlistAdapter.PlayListClickListener
 
 class PlayListPlayerAdapter(private val playListClickListener: PlayListClickListener) : RecyclerView.Adapter<PlayListPlayerHolder>()  {
 

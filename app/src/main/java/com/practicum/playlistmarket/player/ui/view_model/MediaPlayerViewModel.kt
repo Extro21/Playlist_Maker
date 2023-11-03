@@ -9,7 +9,7 @@ import com.practicum.playlistmarket.media.domain.FavoriteListener
 import com.practicum.playlistmarket.media.domain.db.FavoriteInteractor
 import com.practicum.playlistmarket.media.domain.db.PlayListInteractor
 import com.practicum.playlistmarket.media.domain.module.PlayList
-import com.practicum.playlistmarket.media.ui.PlayListState
+import com.practicum.playlistmarket.media.ui.states.PlayListState
 import com.practicum.playlistmarket.player.domain.StatePlayer
 import com.practicum.playlistmarket.player.domain.api.PlayerInteractor
 import com.practicum.playlistmarket.player.domain.api.PlayerListener
@@ -53,18 +53,18 @@ class MediaPlayerViewModel(
     val coverArtwork: LiveData<String> = _coverArtwork
 
     private val _likeState = MutableLiveData<Boolean>()
-    val likeState : LiveData<Boolean> = _likeState
+    val likeState: LiveData<Boolean> = _likeState
 
     private val _playlistState = MutableLiveData<Boolean>()
-    val playlistState : LiveData<Boolean> = _playlistState
+    val playlistState: LiveData<Boolean> = _playlistState
 
-    suspend fun addTrackFavorite(track: Track){
+    suspend fun addTrackFavorite(track: Track) {
         Log.e("LikeLike", "${track.isFavorite} ViewModel")
         favoriteInteractor.addTrackFavorite(track)
 
     }
 
-    fun checkLike(trackId : String){
+    fun checkLike(trackId: String) {
         viewModelScope.launch {
             _likeState.value = favoriteInteractor.checkLikeTrack(trackId)
         }
@@ -137,21 +137,21 @@ class MediaPlayerViewModel(
 
 
     private val statePlayList = MutableLiveData<PlayListState>()
-    fun observeStatePlayList() : LiveData<PlayListState> = statePlayList
+    fun observeStatePlayList(): LiveData<PlayListState> = statePlayList
 
 
-    fun fillData(){
+    fun fillData() {
         statePlayList.postValue(PlayListState.Loading)
 
         viewModelScope.launch {
-            playListInteractor.getPlayList().collect(){
+            playListInteractor.getPlayList().collect() {
                 processResult(it)
             }
         }
     }
 
     private fun processResult(playList: List<PlayList>) {
-        if(playList.isEmpty()){
+        if (playList.isEmpty()) {
             statePlayList.postValue(PlayListState.Empty)
         } else {
             statePlayList.postValue(PlayListState.Content(playList))
@@ -162,11 +162,14 @@ class MediaPlayerViewModel(
 
     fun addTrackPlaylist(track: Track, playList: PlayList) {
         viewModelScope.launch {
-            playListInteractor.addTrackPlaylist(track,  playList)
-            _playlistState.postValue(playListInteractor.addTrackPlaylist(track,  playList))
-          //  Log.e("addPlayList", "${playListInteractor.addTrackPlaylist(track,  playList)}")
+            Log.e("addTrackPlaylist", "viewmodel")
+            _playlistState.postValue(playListInteractor.addTrackPlaylist(track, playList))
         }
 
+    }
+
+    suspend fun getTrackCount(playList: PlayList): Int {
+        return playListInteractor.getTracksForPlaylistCount(playList)
     }
 
     companion object {

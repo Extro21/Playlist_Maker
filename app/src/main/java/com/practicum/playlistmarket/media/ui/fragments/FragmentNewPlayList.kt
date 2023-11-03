@@ -1,36 +1,34 @@
 package com.practicum.playlistmarket.media.ui.fragments
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
-import com.practicum.playlistmarket.databinding.FragmentNewPlayListBinding
-import android.net.Uri
 import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
+import android.util.Log
+import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.activity.addCallback
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.blue
 import androidx.core.net.toUri
-import androidx.core.view.isEmpty
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmarket.R
+import com.practicum.playlistmarket.databinding.FragmentNewPlayListBinding
 import com.practicum.playlistmarket.media.domain.module.PlayList
 import com.practicum.playlistmarket.media.ui.view_model.NewPlayListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
-import java.io.FileOutputStream
 
 class FragmentNewPlayList : Fragment() {
 
@@ -38,7 +36,7 @@ class FragmentNewPlayList : Fragment() {
 
     private lateinit var binding: FragmentNewPlayListBinding
 
-    private var uriPlaylist = "null"
+    private var uriPlaylist = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,8 +47,6 @@ class FragmentNewPlayList : Fragment() {
         return binding.root
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -58,10 +54,14 @@ class FragmentNewPlayList : Fragment() {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    binding.imagePlayList.setImageURI(uri)
-                    saveImageToPrivateStorage(uri)
-                } else {
-                    Log.d("PhotoPicker", "No media selected")
+                    val cornerSize = binding.root.resources.getDimensionPixelSize(R.dimen.indent_image_playlist)
+                    Glide.with(binding.root)
+                        .load(uri)
+                        .centerCrop()
+                        .transform(RoundedCorners(cornerSize))
+                        .into(binding.imagePlayList)
+                    viewModel.addImageStorage(uri)
+                    uriPlaylist = "${uri.toString().reversed().substringBefore("/")}.jpg"
                 }
             }
 
@@ -71,51 +71,114 @@ class FragmentNewPlayList : Fragment() {
             override fun afterTextChanged(p0: Editable?) {
                 val isEditTextEmpty = p0.isNullOrBlank()
                 binding.btAddPlayList.isEnabled = !isEditTextEmpty
-
             }
         }
         )
         binding.btAddPlayList.isEnabled = false
 
-        binding.edTextNamePlaylist.setOnFocusChangeListener { _, hasFocus ->
-                    if (hasFocus) {
-                        AppCompatResources.getColorStateList(requireContext(), R.color.blue)
-                            ?.let { binding.edTextNamePlaylist.setBoxStrokeColorStateList(it) }
-                    } else {
+        binding.edTextNamePlaylistInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                AppCompatResources.getColorStateList(requireContext(), R.color.selector_et_blue)
+                    ?.let {
+                        binding.edTextNamePlaylist.setBoxStrokeColorStateList(it)
+                        binding.edTextNamePlaylist.defaultHintTextColor = it
+                    }
+            } else {
                 when (binding.edTextNamePlaylistInput.text.isNullOrEmpty()) {
                     true -> {
-                        AppCompatResources.getColorStateList(requireContext(), R.color.blue)
+                        AppCompatResources.getColorStateList(requireContext(), R.color.selector_et)
                             ?.let {
                                 binding.edTextNamePlaylist.setBoxStrokeColorStateList(it)
+                                binding.edTextNamePlaylist.defaultHintTextColor =
+                                    AppCompatResources.getColorStateList(
+                                        requireContext(),
+                                        R.color.selector_color_text
+                                    )
                             }
                     }
-                    else -> {
-                        AppCompatResources.getColorStateList(requireContext(), R.color.blue)
+
+                    false -> {
+                        AppCompatResources.getColorStateList(
+                            requireContext(),
+                            R.color.selector_et_blue
+                        )
                             ?.let {
-                                binding.edTextNamePlaylist.setBoxStrokeColorStateList(
-                                    it
-                                )
+                                binding.edTextNamePlaylist.setBoxStrokeColorStateList(it)
+                                binding.edTextNamePlaylist.defaultHintTextColor = it
                             }
                     }
                 }
             }
         }
 
-        // binding.edTextNamePlaylist.defaultHintTextColor = R.color.blue
+        binding.edDescriptionInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                AppCompatResources.getColorStateList(requireContext(), R.color.selector_et_blue)
+                    ?.let {
+                        binding.edDescriptionLayout.setBoxStrokeColorStateList(it)
+                        binding.edDescriptionLayout.defaultHintTextColor = it
+                    }
+            } else {
+                when (binding.edDescriptionInput.text.isNullOrEmpty()) {
+                    true -> {
+                        AppCompatResources.getColorStateList(requireContext(), R.color.selector_et)
+                            ?.let {
+                                binding.edDescriptionLayout.setBoxStrokeColorStateList(it)
+                                binding.edDescriptionLayout.defaultHintTextColor =
+                                    AppCompatResources.getColorStateList(
+                                        requireContext(),
+                                        R.color.selector_color_text
+                                    )
+                            }
+                    }
 
+                    false -> {
+                        AppCompatResources.getColorStateList(
+                            requireContext(),
+                            R.color.selector_et_blue
+                        )
+                            ?.let {
+                                binding.edDescriptionLayout.setBoxStrokeColorStateList(it)
+                                binding.edDescriptionLayout.defaultHintTextColor = it
+                            }
+                    }
+                }
+            }
+        }
 
         binding.imagePlayList.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest((ActivityResultContracts.PickVisualMedia.ImageOnly)))
+        }
 
+        val confirmDialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.finish_creating_playlist)
+            .setMessage(R.string.all_unsaved_data_will_be_lost)
+            .setNeutralButton(R.string.cancellation) { dialog, which ->
+
+            }
+            .setPositiveButton(R.string.complete) { dialog, which ->
+                findNavController().popBackStack()
+            }
+
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (binding.edTextNamePlaylistInput.text.toString().isNotEmpty() ||
+                binding.edDescriptionInput.text.toString().isNotEmpty() || uriPlaylist != ""
+            ) {
+                confirmDialog.show()
+            } else {
+                findNavController().popBackStack()
+            }
         }
 
         binding.btAddPlayList.setOnClickListener {
+
             val filePath = File(
                 requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 "myalbum"
             )
+
             val file = File(filePath, uriPlaylist)
-            Log.e("uriPlaylist", file.toUri().toString())
+            Log.e("PathPlayList", uriPlaylist)
             lifecycleScope.launch {
                 viewModel.addPlaylist(
                     PlayList(
@@ -129,44 +192,46 @@ class FragmentNewPlayList : Fragment() {
             }
 
 
-            Toast.makeText(
-                requireContext(),
+            val typedValue = TypedValue()
+
+            requireActivity().theme.resolveAttribute(
+                com.google.android.material.R.attr.colorOnPrimary,
+                typedValue,
+                true
+            )
+            val colorText = typedValue.data
+
+            requireActivity().theme.resolveAttribute(
+                com.google.android.material.R.attr.colorOnSecondary,
+                typedValue,
+                true
+            )
+            val colorBackground = typedValue.data
+
+
+            val snackBar = Snackbar.make(
+                binding.root,
                 "${getString(R.string.playlist)} ${binding.edTextNamePlaylistInput.text} ${
                     getString(
                         R.string.created
                     )
-                }", Toast.LENGTH_LONG
-            ).show()
+                }",
+                Snackbar.LENGTH_LONG
+            ).setBackgroundTint(colorBackground).setTextColor(colorText)
+            val snackBarView = snackBar.view
+            snackBarView.findViewById<TextView>(android.R.id.message)
+            val textView =
+                snackBarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+            textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+            snackBar.show()
+            callback.isEnabled = false
             findNavController().popBackStack()
         }
 
 
-        val confirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.finish_creating_playlist)
-            .setMessage(R.string.all_unsaved_data_will_be_lost)
-            .setNeutralButton(R.string.cancellation) { dialog, which ->
-
-            }
-            .setPositiveButton(R.string.complete) { dialog, which ->
-                findNavController().popBackStack()
-            }
-
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (binding.edTextNamePlaylistInput.text.toString().isNotEmpty() ||
-                    binding.edDescriptionInput.text.toString().isNotEmpty()
-                ) {
-                    confirmDialog.show()
-                } else {
-                    findNavController().popBackStack()
-                }
-
-            }
-        })
-
         binding.newPlaylistToolbar.setOnClickListener {
             if (binding.edTextNamePlaylistInput.text.toString().isNotEmpty() ||
-                binding.edDescriptionInput.text.toString().isNotEmpty() || uriPlaylist != "null"
+                binding.edDescriptionInput.text.toString().isNotEmpty() || uriPlaylist != ""
             ) {
                 confirmDialog.show()
             } else {
@@ -175,33 +240,6 @@ class FragmentNewPlayList : Fragment() {
         }
 
 
-    }
-
-    fun checkEnteredFields() {
-
-    }
-
-    private fun saveImageToPrivateStorage(uri: Uri) {
-        val filePath =
-            File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum")
-
-        if (!filePath.exists()) {
-            filePath.mkdirs()
-        }
-
-        uriPlaylist = "${uri.toString().reversed().substringBefore("/")}.jpg"
-
-        Log.e("uriPlaylist", uriPlaylist)
-        Log.e("uriPlaylist", "first_cover1.jpg")
-        val file = File(filePath, uriPlaylist)
-
-        val inputStream = requireActivity().contentResolver.openInputStream(uri)
-
-        val outputStream = FileOutputStream(file)
-
-        BitmapFactory
-            .decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 
 

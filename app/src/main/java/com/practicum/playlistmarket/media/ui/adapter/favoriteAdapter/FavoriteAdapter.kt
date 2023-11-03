@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.media.ui.adapter
+package com.practicum.playlistmarket.media.ui.adapter.favoriteAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,8 +10,6 @@ import com.practicum.playlistmarket.search.ui.adapter.TrackClickListener
 class FavoriteAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<FavoriteViewHolder>() {
 
     var trackListFavorite = ArrayList<Track>()
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder =
-//        FavoriteViewHolder(parent)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
         val view =

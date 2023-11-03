@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.media.ui.adapter
+package com.practicum.playlistmarket.media.ui.adapter.favoriteAdapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

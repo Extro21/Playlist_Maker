@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".player.ui.activity.MediaPlayerFragment">
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -355,10 +354,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="28dp"
-            android:backgroundTint="?attr/colorOnSecondary"
-            android:text="@string/newplaylist"
             android:layout_marginBottom="24dp"
+            android:backgroundTint="?attr/colorOnSecondary"
+            android:fontFamily="@font/ys_text_medium"
+            android:letterSpacing="0"
+            android:text="@string/newplaylist"
             android:textAllCaps="false"
+            android:textSize="14sp"
             app:cornerRadius="54dp" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator

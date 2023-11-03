@@ -31,7 +31,7 @@ interface PlayListDao {
     @Query("SELECT EXISTS(SELECT 1 FROM playlist_for_tracks WHERE trackId = :trackId)")
     suspend fun doesTrackExist(trackId: String): Boolean
 
-    @Query("SELECT * FROM playlist WHERE idTrack = :trackId AND playListId = :playlistId")
+    @Query("SELECT count(playListId) > 0 FROM tracks_playlist WHERE trackId = :trackId AND playListId = :playlistId")
     suspend fun doesTrackExistPlayList(trackId: String, playlistId : Int): Boolean
 
 

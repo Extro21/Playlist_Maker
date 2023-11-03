@@ -13,7 +13,7 @@ val interactorFavoriteModule = module {
     }
 
     single<PlayListInteractor> {
-        PlayListInteractorImpl(get())
+        PlayListInteractorImpl(get(), get())
     }
 
 }

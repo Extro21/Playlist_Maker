@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.media.ui
+package com.practicum.playlistmarket.media.ui.states
 
 import com.practicum.playlistmarket.player.domain.models.Track
 

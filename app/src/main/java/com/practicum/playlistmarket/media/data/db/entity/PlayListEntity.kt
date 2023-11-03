@@ -2,21 +2,9 @@ package com.practicum.playlistmarket.media.data.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(
-    tableName = "playlist",
-//    foreignKeys = [
-//        ForeignKey(
-//            entity = TrackEntity::class,
-//            parentColumns = ["trackId"],
-//            childColumns = ["idTracks"],
-//            onDelete = ForeignKey.CASCADE,
-//            onUpdate = ForeignKey.CASCADE
-//        )
-//    ]
-)
+@Entity(tableName = "playlist")
 data class PlayListEntity(
     @PrimaryKey(autoGenerate = true)
     val playListId: Int,

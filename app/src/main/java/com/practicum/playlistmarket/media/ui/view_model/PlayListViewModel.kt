@@ -1,16 +1,13 @@
 package com.practicum.playlistmarket.media.ui.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmarket.media.domain.db.PlayListInteractor
 import com.practicum.playlistmarket.media.domain.module.PlayList
-import com.practicum.playlistmarket.media.ui.PlayListState
-import com.practicum.playlistmarket.media.ui.PlayListStateTracks
-import com.practicum.playlistmarket.player.domain.models.Track
-import kotlinx.coroutines.flow.collect
+import com.practicum.playlistmarket.media.ui.states.PlayListState
+import com.practicum.playlistmarket.media.ui.states.PlayListStateTracks
 import kotlinx.coroutines.launch
 
 class PlayListViewModel(val interactor: PlayListInteractor) : ViewModel() {
@@ -40,26 +37,9 @@ class PlayListViewModel(val interactor: PlayListInteractor) : ViewModel() {
         }
     }
 
-//    fun getTrackCount(playList: PlayList) {
-//        viewModelScope.launch {
-//            interactor.getTracksForPlaylist(playList).collect {
-//                Log.e("CheckTrack", "$it")
-//                processResultCountTracks(it)
-//
-//            }
-//
-//        }
-//    }
 
-    private fun processResultCountTracks(playList: List<Track>) {
-        if (playList.isEmpty()) {
-            statePlayListTracks.postValue(PlayListStateTracks.Empty)
-        } else {
-            statePlayListTracks.postValue(PlayListStateTracks.Content(playList))
-        }
-    }
 
-    suspend fun getTrackCount1(playList: PlayList): Int {
+    suspend fun getTrackCount(playList: PlayList): Int {
         return interactor.getTracksForPlaylistCount(playList)
     }
 

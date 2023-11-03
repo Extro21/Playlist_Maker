@@ -1,4 +1,4 @@
-package com.practicum.playlistmarket.media.ui.adapter
+package com.practicum.playlistmarket.media.ui.adapter.playlistAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -4,8 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".media.ui.fragments.FragmentNewPlayList">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/new_playlist_toolbar"
@@ -25,14 +31,17 @@
             android:text="@string/newplaylist" />
     </androidx.appcompat.widget.Toolbar>
 
-    <ImageView
+
+    <com.github.siyamed.shapeimageview.RoundedImageView
         android:id="@+id/imagePlayList"
-        android:layout_width="355dp"
-        android:layout_height="355dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="24dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
+        app:siRadius="8dp"
+        app:layout_constraintDimensionRatio="1:1"
         android:src="@drawable/image_shape_new_playlist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,75 +49,88 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ed_text_name_playlist"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:theme="@style/EditTextThemeOverlay"
+        style="@style/Widget.EdText.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
-        android:layout_marginEnd="17dp"
         android:layout_marginTop="34dp"
+        android:layout_marginEnd="17dp"
         android:hint="@string/name_track_list"
-        app:hintEnabled="true"
-        app:hintAnimationEnabled="true"
-        android:textColorHint="@color/black"
-        app:hintTextColor="@color/blue"
+        android:textColorHint="?attr/colorOnSecondary"
         app:helperTextTextAppearance="@style/HelperTextAppearance"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagePlayList" >
+        app:layout_constraintTop_toBottomOf="@+id/imagePlayList">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ed_text_name_playlist_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="17dp"
-            android:paddingTop="18dp"
+            android:fontFamily="@font/ys_text_regular"
             android:paddingStart="16dp"
+            android:paddingTop="18dp"
             android:paddingEnd="16dp"
             android:paddingBottom="19dp"
-            />
+            android:textColor="?attr/colorOnSecondary"
+            android:textColorHint="?attr/colorOnSecondary"
+            android:textSize="16sp"
+            app:hintTextColor="@color/blue" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edDescription"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:theme="@style/EditTextThemeOverlay"
+        android:id="@+id/edDescription_layout"
+        style="@style/Widget.EdText.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
         android:layout_marginEnd="17dp"
         android:hint="@string/description"
-        android:textColorHint="@color/black"
+        android:textColorHint="?attr/colorOnSecondary"
         app:helperTextTextAppearance="@style/HelperTextAppearance"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_text_name_playlist" >
+        app:layout_constraintTop_toBottomOf="@+id/ed_text_name_playlist">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edDescription_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:paddingTop="18dp"
+            android:fontFamily="@font/ys_text_regular"
             android:paddingStart="16dp"
+            android:paddingTop="18dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="19dp" />
+            android:paddingBottom="19dp"
+            android:textColor="?attr/colorOnSecondary"
+            android:textColorHint="?attr/colorOnSecondary"
+            android:textSize="16sp"
+            app:hintTextColor="@color/blue" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btAddPlayList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="55dp"
         android:layout_marginStart="17dp"
         android:layout_marginEnd="17dp"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/selector_edtext"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/selector_button"
         android:fontFamily="@font/ys_text_medium"
         android:text="@string/create"
         android:textAllCaps="false"
+        android:letterSpacing="0"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
