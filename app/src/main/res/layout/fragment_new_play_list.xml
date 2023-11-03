@@ -45,7 +45,7 @@
         android:src="@drawable/image_shape_new_playlist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_playlist_toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/new_playlist_toolbar" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ed_text_name_playlist"
@@ -63,7 +63,7 @@
         app:hintTextColor="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagePlayList">
+        app:layout_constraintTop_toBottomOf="@id/imagePlayList">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ed_text_name_playlist_input"
@@ -97,7 +97,7 @@
         app:hintTextColor="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_text_name_playlist">
+        app:layout_constraintTop_toBottomOf="@id/ed_text_name_playlist">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edDescription_input"
