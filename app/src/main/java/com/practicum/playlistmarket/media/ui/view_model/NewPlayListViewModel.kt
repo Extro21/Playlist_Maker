@@ -3,13 +3,12 @@ package com.practicum.playlistmarket.media.ui.view_model
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.practicum.playlistmarket.media.domain.db.PlayListInteractor
-import com.practicum.playlistmarket.media.domain.module.PlayList
 
 class NewPlayListViewModel(private val interactor: PlayListInteractor) : ViewModel() {
 
 
-    suspend fun addPlaylist(name : String, description : String, uri : String, playListId : Int) {
-            interactor.addPlayList(name, description, uri, playListId)
+    suspend fun addPlaylist(name : String, description : String, uri : String) {
+            interactor.addPlayList(name, description, uri)
     }
 
     fun addImageStorage(uri: Uri){

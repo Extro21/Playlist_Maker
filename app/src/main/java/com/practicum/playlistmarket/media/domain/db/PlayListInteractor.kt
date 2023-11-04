@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface PlayListInteractor {
 
 
-    suspend fun addPlayList(name : String, description : String, uri : String, playListId : Int)
+    suspend fun addPlayList(name : String, description : String, uri : String)
 
     fun getPlayList(): Flow<List<PlayList>>
 

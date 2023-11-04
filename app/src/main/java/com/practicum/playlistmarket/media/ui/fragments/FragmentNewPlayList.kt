@@ -14,7 +14,6 @@ import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -24,7 +23,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.FragmentNewPlayListBinding
-import com.practicum.playlistmarket.media.domain.module.PlayList
 import com.practicum.playlistmarket.media.ui.view_model.NewPlayListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -183,7 +181,6 @@ class FragmentNewPlayList : Fragment() {
                         name = binding.edTextNamePlaylistInput.text.toString(),
                         description = binding.edDescriptionInput.text.toString(),
                         uri = uri,
-                        playListId = 0,
                     )
             }
 

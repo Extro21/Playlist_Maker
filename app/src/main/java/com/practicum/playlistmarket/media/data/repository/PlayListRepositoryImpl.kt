@@ -17,6 +17,8 @@ class PlayListRepositoryImpl(
 ) :
     PlayListRepository {
 
+
+
     override suspend fun addTrackPlaylist(track: Track, playList: PlayList) : Boolean {
         if(!database.playListDao().doesTrackExist(trackId = track.trackId)){
             database.playListDao().addTrack(trackConvectorEntity(track))
@@ -31,6 +33,8 @@ class PlayListRepositoryImpl(
             false
         }
     }
+
+
 
     override suspend fun getTracksForPlaylist(playList: PlayList): Flow<List<Track>> = flow {
         val tracks = database.playListDao().getTrackByPlaylist(playList.playListId)
@@ -50,8 +54,8 @@ class PlayListRepositoryImpl(
         return tracks.map { tracks -> playListConvector.map(tracks) }
     }
 
-    override suspend fun addPlayList(name : String, description : String, uri : String, playListId : Int) {
-        val playlist = PlayList(name = name, description = description, uri = uri, playListId = playListId)
+    override suspend fun addPlayList(name : String, description : String, uri : String) {
+        val playlist = PlayList(name = name, description = description, uri = uri, playListId = 0)
 
         database.playListDao().insertPlayList(playListConvectorEntity(playlist))
     }

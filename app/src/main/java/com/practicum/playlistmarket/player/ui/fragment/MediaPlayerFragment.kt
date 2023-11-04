@@ -69,7 +69,6 @@ class MediaPlayerFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -157,6 +156,7 @@ class MediaPlayerFragment : Fragment() {
         }
 
         viewModel.secondCounter.observe(viewLifecycleOwner) { time ->
+            Log.d("addTrackPlaylist", "fragment text")
             binding.timeLeft.text = time
         }
 
@@ -211,31 +211,29 @@ class MediaPlayerFragment : Fragment() {
         })
 
         viewModel.observeStatePlayList().observe(viewLifecycleOwner) {
+            Log.d("addTrackPlaylist", "fragmentPlayList")
             checkStatePlayList(it)
         }
+
         binding.btAddPlayList.setOnClickListener {
             findNavController().navigate(R.id.action_mediaPlayerFragment_to_fragmentNewPlayList)
-        }
 
+
+        }
 
         adapter = PlayListPlayerAdapter { playlist ->
-            track?.let {track ->
+            track?.let { track ->
                 viewModel.addTrackPlaylist(track, playlist)
+                playlistName = playlist.name
             }
-            playlistName = playlist.name
         }
 
-        var massage = ""
         viewModel.playlistState.observe(viewLifecycleOwner) {
-            Log.d("addTrackPlaylist", "fragment $it")
-            if (!it) {
-                massage = getString(R.string.track_already_playlist) + " $playlistName"
-                showMassage(massage)
-            } else {
-                viewModel.fillData()
-                massage = getString(R.string.add_track_for_playlist) + " $playlistName"
-                showMassage(massage)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED ||
+                bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED||
+                bottomSheetBehavior.state == BottomSheetBehavior.STATE_DRAGGING ||
+                bottomSheetBehavior.state == BottomSheetBehavior.STATE_SETTLING) {
+                showMassage(it)
             }
         }
 
@@ -243,6 +241,21 @@ class MediaPlayerFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvPlaylist.adapter = adapter
 
+    }
+
+
+    private fun showMassage(isAdd: Boolean) {
+        Log.e("addTrackPlaylist", "showMassage")
+        var massage = ""
+        if (!isAdd) {
+            massage = getString(R.string.track_already_playlist) + " $playlistName"
+            showMassage(massage)
+        } else {
+            viewModel.fillData()
+            massage = getString(R.string.add_track_for_playlist) + " $playlistName"
+            showMassage(massage)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
     }
 
 
@@ -272,6 +285,7 @@ class MediaPlayerFragment : Fragment() {
         rvPlaylist.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
     }
+
 
     private fun showEmptyPlayList() = with(binding) {
         rvPlaylist.visibility = View.GONE
