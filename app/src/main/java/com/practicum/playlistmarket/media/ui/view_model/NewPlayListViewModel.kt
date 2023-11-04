@@ -8,8 +8,8 @@ import com.practicum.playlistmarket.media.domain.module.PlayList
 class NewPlayListViewModel(private val interactor: PlayListInteractor) : ViewModel() {
 
 
-    suspend fun addPlaylist(playList: PlayList) {
-            interactor.addPlayList(playList)
+    suspend fun addPlaylist(name : String, description : String, uri : String, playListId : Int) {
+            interactor.addPlayList(name, description, uri, playListId)
     }
 
     fun addImageStorage(uri: Uri){
@@ -17,6 +17,8 @@ class NewPlayListViewModel(private val interactor: PlayListInteractor) : ViewMod
     }
 
 
-
+    fun getUri(uriPlaylist: String, path: String): String{
+        return interactor.getUri(uriPlaylist, path)
+    }
 
 }

@@ -46,13 +46,12 @@ const val EXTRA_TRACK = "track_track"
 
 class MediaPlayerFragment : Fragment() {
 
-    private lateinit var binding: FragmentMediaPlayerBinding
+    private var _binding: FragmentMediaPlayerBinding? = null
+    private val binding get() = _binding!!
 
     private var songUrl: String = ""
 
     private var playlistName = ""
-
-    private var isLiked: Boolean = false
 
     private val viewModel: MediaPlayerViewModel by viewModel()
 
@@ -66,7 +65,7 @@ class MediaPlayerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMediaPlayerBinding.inflate(inflater)
+        _binding = FragmentMediaPlayerBinding.inflate(inflater)
         return binding.root
     }
 
@@ -82,8 +81,6 @@ class MediaPlayerFragment : Fragment() {
         } else {
             requireArguments().getParcelable<Track>(EXTRA_TRACK)
         }
-
-        val trackID = requireArguments().getString(EXTRA_ID)
 
         track?.let {
             viewModel.checkLike(track.trackId)
@@ -111,7 +108,6 @@ class MediaPlayerFragment : Fragment() {
             trackName.text = requireArguments().getString(EXTRA_TRACK_NAME)
             groupName.text = requireArguments().getString(EXTRA_ARTIST_NAME)
             countryApp.text = requireArguments().getString(EXTRA_COUNTRY)
-            isLiked = requireArguments().getBoolean(EXTRA_LIKE, false)
 
             val albumText = requireArguments().getString(EXTRA_COLLECTION_NAME)
             if (albumText != null) {
@@ -167,7 +163,6 @@ class MediaPlayerFragment : Fragment() {
         binding.btLike.setOnClickListener {
             lifecycleScope.launch {
                 if (track != null) {
-                    Log.e("LikeLike", "${track.isFavorite.toString()} Activity, $isLiked ")
                     viewModel.addTrackFavorite(track)
                 }
             }
@@ -224,7 +219,7 @@ class MediaPlayerFragment : Fragment() {
 
 
         adapter = PlayListPlayerAdapter { playlist ->
-            track?.let {
+            track?.let {track ->
                 viewModel.addTrackPlaylist(track, playlist)
             }
             playlistName = playlist.name
@@ -232,6 +227,7 @@ class MediaPlayerFragment : Fragment() {
 
         var massage = ""
         viewModel.playlistState.observe(viewLifecycleOwner) {
+            Log.d("addTrackPlaylist", "fragment $it")
             if (!it) {
                 massage = getString(R.string.track_already_playlist) + " $playlistName"
                 showMassage(massage)
@@ -340,6 +336,11 @@ class MediaPlayerFragment : Fragment() {
             snackBarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
         textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
         snackBar.show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

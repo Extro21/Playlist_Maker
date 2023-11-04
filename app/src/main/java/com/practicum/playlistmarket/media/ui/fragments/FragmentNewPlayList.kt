@@ -28,13 +28,14 @@ import com.practicum.playlistmarket.media.domain.module.PlayList
 import com.practicum.playlistmarket.media.ui.view_model.NewPlayListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
+
 
 class FragmentNewPlayList : Fragment() {
 
     private val viewModel: NewPlayListViewModel by viewModel()
 
-    private lateinit var binding: FragmentNewPlayListBinding
+    private var _binding: FragmentNewPlayListBinding? = null
+    private val binding get() = _binding!!
 
     private var uriPlaylist = ""
 
@@ -43,7 +44,7 @@ class FragmentNewPlayList : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentNewPlayListBinding.inflate(inflater)
+        _binding = FragmentNewPlayListBinding.inflate(inflater)
         return binding.root
     }
 
@@ -54,7 +55,8 @@ class FragmentNewPlayList : Fragment() {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    val cornerSize = binding.root.resources.getDimensionPixelSize(R.dimen.indent_image_playlist)
+                    val cornerSize =
+                        binding.root.resources.getDimensionPixelSize(R.dimen.indent_image_playlist)
                     Glide.with(binding.root)
                         .load(uri)
                         .centerCrop()
@@ -171,24 +173,18 @@ class FragmentNewPlayList : Fragment() {
         }
 
         binding.btAddPlayList.setOnClickListener {
+            val path =
+                requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString()
+            val uri = viewModel.getUri(uriPlaylist, path)
 
-            val filePath = File(
-                requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                "myalbum"
-            )
-
-            val file = File(filePath, uriPlaylist)
-            Log.e("PathPlayList", uriPlaylist)
+            Log.d("PathPlayList", uriPlaylist)
             lifecycleScope.launch {
                 viewModel.addPlaylist(
-                    PlayList(
                         name = binding.edTextNamePlaylistInput.text.toString(),
                         description = binding.edDescriptionInput.text.toString(),
-                        uri = file.toUri().toString(),
+                        uri = uri,
                         playListId = 0,
-                        idTracks = 1
                     )
-                )
             }
 
 
@@ -240,6 +236,11 @@ class FragmentNewPlayList : Fragment() {
         }
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 

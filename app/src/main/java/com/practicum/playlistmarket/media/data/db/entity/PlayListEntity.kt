@@ -14,8 +14,6 @@ data class PlayListEntity(
     val description: String?,
     @ColumnInfo("uri")
     val uri: String?,
-    @ColumnInfo("idTrack")
-    val idTracks: Int?,
     @ColumnInfo("quantityTracks")
     val quantityTracks: Int = 0,
 )

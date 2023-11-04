@@ -14,8 +14,8 @@ class PlayListInteractorImpl(val playListRepository: PlayListRepository, val ima
         return playListRepository.getTracksForPlaylist(playList)
     }
 
-    override suspend fun addPlayList(playList: PlayList) {
-        playListRepository.addPlayList(playList)
+    override suspend fun addPlayList(name : String, description : String, uri : String, playListId : Int) {
+        playListRepository.addPlayList(name, description, uri, playListId)
     }
 
     override fun getPlayList(): Flow<List<PlayList>> {
@@ -35,4 +35,8 @@ class PlayListInteractorImpl(val playListRepository: PlayListRepository, val ima
      override fun saveImageToPrivateStorage(uri: Uri) {
          imageRepository.saveImageToPrivateStorage(uri)
      }
+
+    override fun getUri(uriPlaylist: String, path: String): String {
+       return imageRepository.getUri(uriPlaylist, path)
+    }
 }

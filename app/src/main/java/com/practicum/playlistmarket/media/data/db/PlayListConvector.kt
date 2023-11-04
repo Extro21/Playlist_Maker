@@ -14,7 +14,6 @@ class PlayListConvector {
             playList.name,
             playList.description,
             playList.uri,
-            playList.idTracks,
             playList.quantityTracks,
         )
     }
@@ -25,7 +24,6 @@ class PlayListConvector {
             playList.name,
             playList.description,
             playList.uri,
-            playList.idTracks,
             playList.quantityTracks,
         )
     }

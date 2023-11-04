@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface PlayListInteractor {
 
 
-    suspend fun addPlayList(playList: PlayList)
+    suspend fun addPlayList(name : String, description : String, uri : String, playListId : Int)
 
     fun getPlayList(): Flow<List<PlayList>>
 
@@ -20,5 +20,7 @@ interface PlayListInteractor {
     suspend fun getTracksForPlaylistCount(playList: PlayList) : Int
 
     fun saveImageToPrivateStorage(uri: Uri)
+
+    fun getUri(uriPlaylist: String, path: String): String
 
 }

@@ -50,8 +50,10 @@ class PlayListRepositoryImpl(
         return tracks.map { tracks -> playListConvector.map(tracks) }
     }
 
-    override suspend fun addPlayList(playList: PlayList) {
-        database.playListDao().insertPlayList(playListConvectorEntity(playList))
+    override suspend fun addPlayList(name : String, description : String, uri : String, playListId : Int) {
+        val playlist = PlayList(name = name, description = description, uri = uri, playListId = playListId)
+
+        database.playListDao().insertPlayList(playListConvectorEntity(playlist))
     }
 
     override fun getPlaylist(): Flow<List<PlayList>> = flow {

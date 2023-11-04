@@ -59,7 +59,7 @@ class MediaPlayerViewModel(
     val playlistState: LiveData<Boolean> = _playlistState
 
     suspend fun addTrackFavorite(track: Track) {
-        Log.e("LikeLike", "${track.isFavorite} ViewModel")
+        Log.d("LikeLike", "${track.isFavorite} ViewModel")
         favoriteInteractor.addTrackFavorite(track)
 
     }
@@ -162,8 +162,9 @@ class MediaPlayerViewModel(
 
     fun addTrackPlaylist(track: Track, playList: PlayList) {
         viewModelScope.launch {
-            Log.e("addTrackPlaylist", "viewmodel")
-            _playlistState.postValue(playListInteractor.addTrackPlaylist(track, playList))
+            Log.e("addTrackPlaylist", "viewmodel ${playListInteractor.addTrackPlaylist(track, playList)}")
+            val isTrackAddPlaylist = playListInteractor.addTrackPlaylist(track, playList)
+            _playlistState.postValue(isTrackAddPlaylist)
         }
 
     }

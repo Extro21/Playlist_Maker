@@ -37,6 +37,6 @@ val repositoryModule = module {
 
 val dataModule = module {
     single {
-        Room.databaseBuilder(androidContext(), AppDataBase::class.java, "databaseMedia.db").build()
+        Room.databaseBuilder(androidContext(), AppDataBase::class.java, "databaseMediaApp.db").build()
     }
 }
