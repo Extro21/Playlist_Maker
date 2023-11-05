@@ -36,7 +36,7 @@ class PlayListInteractorImpl(val playListRepository: PlayListRepository, val ima
          imageRepository.saveImageToPrivateStorage(uri)
      }
 
-    override fun getUri(uriPlaylist: String, path: String): String {
-       return imageRepository.getUri(uriPlaylist, path)
+    override fun getUri(uriPlaylist: String): String {
+       return imageRepository.getUri(uriPlaylist)
     }
 }

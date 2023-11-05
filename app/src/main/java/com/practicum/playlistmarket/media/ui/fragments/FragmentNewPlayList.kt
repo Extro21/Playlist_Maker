@@ -171,9 +171,7 @@ class FragmentNewPlayList : Fragment() {
         }
 
         binding.btAddPlayList.setOnClickListener {
-            val path =
-                requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString()
-            val uri = viewModel.getUri(uriPlaylist, path)
+            val uri = viewModel.getUri(uriPlaylist)
 
             Log.d("PathPlayList", uriPlaylist)
             lifecycleScope.launch {

@@ -15,7 +15,9 @@ class ImageRepositoryImpl(val context: Context) : ImageRepository {
 
     private val childName = "myalbum"
 
-    override fun getUri(uriPlaylist: String, path: String): String {
+    override fun getUri(uriPlaylist: String): String {
+        val path =
+            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString()
 
         val filePath = File(
             path,

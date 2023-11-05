@@ -16,8 +16,8 @@ class NewPlayListViewModel(private val interactor: PlayListInteractor) : ViewMod
     }
 
 
-    fun getUri(uriPlaylist: String, path: String): String{
-        return interactor.getUri(uriPlaylist, path)
+    fun getUri(uriPlaylist: String): String{
+        return interactor.getUri(uriPlaylist)
     }
 
 }

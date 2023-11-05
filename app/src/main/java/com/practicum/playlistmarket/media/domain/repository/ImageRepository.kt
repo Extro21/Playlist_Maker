@@ -6,5 +6,5 @@ interface ImageRepository {
 
     fun saveImageToPrivateStorage(uri: Uri)
 
-    fun getUri(uriPlaylist: String, path: String): String
+    fun getUri(uriPlaylist: String): String
 }
