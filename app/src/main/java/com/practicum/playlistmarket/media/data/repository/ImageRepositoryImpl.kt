@@ -12,15 +12,15 @@ import java.io.FileOutputStream
 
 class ImageRepositoryImpl(val context: Context) : ImageRepository {
 
+    val path =
+        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
     private val childName = "myalbum"
 
     override fun getUri(uriPlaylist: String): String {
-        val path =
-            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString()
 
         val filePath = File(
-            path,
+            path.toString(),
             childName
         )
 
@@ -32,7 +32,7 @@ class ImageRepositoryImpl(val context: Context) : ImageRepository {
 
     override fun saveImageToPrivateStorage(uri: Uri) {
         val filePath =
-            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), childName)
+            File(path, childName)
 
         if (!filePath.exists()) {
             filePath.mkdirs()

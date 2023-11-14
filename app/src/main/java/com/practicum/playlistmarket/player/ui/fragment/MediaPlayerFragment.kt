@@ -21,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.FragmentMediaPlayerBinding
 import com.practicum.playlistmarket.media.domain.module.PlayList
+import com.practicum.playlistmarket.media.ui.fragments.FragmentNewPlayList
 import com.practicum.playlistmarket.media.ui.states.PlayListState
 import com.practicum.playlistmarket.player.ui.view_model.MediaPlayerViewModel
 import com.practicum.playlistmarket.player.domain.StatePlayer
@@ -216,7 +217,8 @@ class MediaPlayerFragment : Fragment() {
         }
 
         binding.btAddPlayList.setOnClickListener {
-            findNavController().navigate(R.id.action_mediaPlayerFragment_to_fragmentNewPlayList)
+            findNavController().navigate(R.id.action_mediaPlayerFragment_to_fragmentNewPlayList,
+                FragmentNewPlayList.createArgs(null, null, null, null))
 
 
         }

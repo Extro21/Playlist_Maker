@@ -45,10 +45,21 @@
     <string name="add_track_playlist">Добавить в плейлист</string>
     <string name="track_already_playlist">Трек уже добавлен в плейлист</string>
     <string name="add_track_for_playlist">Добавлено в плейлист</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="delete_track">Хотите удалить трек?</string>
+    <string name="delete_playlist">Хотите удалить плейлист</string>
+    <string name="save">Сохранить</string>
+    <string name="edit">Редактировать</string>
+    <string name="no_sharing_no_track">В этом плейлисте нет списка треков, которым можно поделиться</string>
 
     <string name="trackov">треков</string>
     <string name="track">трек</string>
     <string name="tracka">трека</string>
+
+    <string name="minut">минут</string>
+    <string name="minuta">минута</string>
+    <string name="minuti">минуты</string>
 
 
 </resources>
