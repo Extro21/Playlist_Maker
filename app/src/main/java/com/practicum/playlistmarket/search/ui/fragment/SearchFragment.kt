@@ -2,6 +2,7 @@ package com.practicum.playlistmarket.search.ui.fragment
 
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,12 +12,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.FragmentSearchBinding
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.player.ui.fragment.*
+import com.practicum.playlistmarket.player.ui.activity.*
 import com.practicum.playlistmarket.search.ui.adapter.HistoryAdapter
 import com.practicum.playlistmarket.search.ui.adapter.SearchAdapter
 import com.practicum.playlistmarket.search.ui.view_model.SearchViewModel
@@ -31,11 +31,22 @@ class SearchFragment : Fragment() {
 
     private var searchText: String = ""
 
+    //private var flag = false
+
     private val viewModel: SearchViewModel by viewModel()
 
     private var isClickAllowed = true
 
+    // private lateinit var onTrackSearchDebounce : (Track) -> Unit
+
+//    private val historyAdapter = HistoryAdapter {
+//        if (clickDebounce()) {
+//            openPlayer(it)
+//        }
+//    }
+
     private var historyAdapter = HistoryAdapter {
+        //onTrackSearchDebounce(it)
         if (clickDebounce()) {
             openPlayer(it)
         }
@@ -62,9 +73,12 @@ class SearchFragment : Fragment() {
 
         init()
 
+
+
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
+
 
         binding.apply {
             btClearHistory.setOnClickListener {
@@ -108,7 +122,6 @@ class SearchFragment : Fragment() {
                 viewModel.searchDebounce(
                     changedText = s?.toString() ?: " "
                 )
-
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -257,7 +270,7 @@ class SearchFragment : Fragment() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY_MILLIS)
                 isClickAllowed = true
             }
@@ -265,17 +278,26 @@ class SearchFragment : Fragment() {
         return current
     }
 
-
     private fun openPlayerToIntent(track: Track) {
-        findNavController().navigate(
-            R.id.action_searchFragment_to_mediaPlayerFragment,
-            MediaPlayerFragment.createArgs(track.trackId, track.artworkUrl100,track.trackName,
-                track.artistName, track.trackTimeMillis, track.collectionName, track.releaseDate,
-                track.primaryGenreName, track.country, track.isFavorite, track, track.previewUrl)
-        )
+        val intent = Intent(requireContext(), MediaPlayerActivity::class.java)
+        intent.putExtra(EXTRA_TRACK_NAME, track.trackName)
+        intent.putExtra(EXTRA_ARTIST_NAME, track.artistName)
+        intent.putExtra(EXTRA_TIME_MILLIS, track.trackTimeMillis)
+        intent.putExtra(EXTRA_IMAGE, track.artworkUrl100)
+        intent.putExtra(EXTRA_DATA, track.releaseDate)
+        intent.putExtra(EXTRA_COLLECTION_NAME, track.collectionName)
+        intent.putExtra(EXTRA_PRIMARY_NAME, track.primaryGenreName)
+        intent.putExtra(EXTRA_COUNTRY, track.country)
+        intent.putExtra(EXTRA_SONG, track.previewUrl)
+        intent.putExtra(EXTRA_LIKE, track.isFavorite)
+        intent.putExtra(EXTRA_ID, track.trackId)
+        intent.putExtra(EXTRA_TRACK, track)
+        startActivity(intent)
+        historyAdapter.notifyDataSetChanged()
     }
 
     private fun openPlayer(track: Track) {
+        //    viewModel.addHistoryTrack(track)
         viewModel.saveTrack(track)
         openPlayerToIntent(track)
     }

@@ -18,12 +18,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
     }
 
     buildTypes {
@@ -45,12 +39,6 @@ android {
 }
 
 dependencies {
-
-    implementation ("androidx.navigation:navigation-runtime-ktx:2.3.5")
-
-    implementation ("com.github.siyamed:android-shape-imageview:0.9.+@aar")
-
-
     // Room
     def room_version = "2.5.1"
     implementation("androidx.room:room-runtime:$room_version")
