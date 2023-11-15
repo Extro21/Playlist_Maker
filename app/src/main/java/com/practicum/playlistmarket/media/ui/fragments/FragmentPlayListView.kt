@@ -47,7 +47,7 @@ class FragmentPlayListView : Fragment(), TrackClickListenerLong {
 
     private var trackIdPlayList: String = "null"
     var uri: String = "null"
-    var playListId = 0
+
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
     private lateinit var bottomSheetBehaviorSetting: BottomSheetBehavior<*>
@@ -101,6 +101,7 @@ class FragmentPlayListView : Fragment(), TrackClickListenerLong {
             viewModel.observePlaylist().observe(viewLifecycleOwner){ playlist ->
                 namePlaylist.text = playlist.name
                 description.text = playlist.description
+                Log.d("playlistName" , binding.namePlaylist.text.toString() + "view")
                 uri = playlist.uri.toString()
                 Glide.with(binding.root)
                     .load(uri)
@@ -146,12 +147,9 @@ class FragmentPlayListView : Fragment(), TrackClickListenerLong {
             }
         }
 
-        deletePlaylist = MaterialAlertDialogBuilder(requireContext())
-            .setMessage(resources.getString(R.string.delete_playlist) + " \"${binding.namePlaylist.text}\"?")
-            .setNegativeButton(R.string.no) { dialog, which -> }
-            .setPositiveButton(R.string.yes) { dialog, which ->
-                viewModel.deletePlaylist(idPlaylist)
-            }
+
+
+        Log.d("playlistName" , binding.namePlaylist.text.toString())
 
 
         //Размер bottomSheet
@@ -195,6 +193,13 @@ class FragmentPlayListView : Fragment(), TrackClickListenerLong {
         }
 
         binding.btRemovePlaylist.setOnClickListener {
+            val namePlaylist = binding.namePlaylist.text
+            deletePlaylist = MaterialAlertDialogBuilder(requireContext(), R.style.AlertTheme)
+                .setMessage(resources.getString(R.string.delete_playlist) + " \"$namePlaylist\"?")
+                .setNegativeButton(R.string.no) { dialog, which -> }
+                .setPositiveButton(R.string.yes) { dialog, which ->
+                    viewModel.deletePlaylist(idPlaylist)
+                }
             deletePlaylist.show()
         }
 
@@ -263,7 +268,6 @@ class FragmentPlayListView : Fragment(), TrackClickListenerLong {
     }
 
     private fun showContent(tracks: List<Track>) {
-        Log.d("showContent", "showContent")
         var timeSec = 0
         for (track in tracks) {
             timeSec += track.trackTimeMillis?.toInt() ?: 0
@@ -271,7 +275,7 @@ class FragmentPlayListView : Fragment(), TrackClickListenerLong {
         val timeMin = timeSec / 60000
         val trackCount = tracks.size
         adapter.tracks.clear()
-        adapter.tracks.addAll(tracks)
+        adapter.tracks.addAll(tracks.reversed())
 
         val duration = timeMin.toString() + " ${minuteString(timeMin)}"
         val quantityTracks = trackCount.toString() + " ${getEnding(trackCount)}"

@@ -126,7 +126,7 @@ class PlayListRepositoryImpl(
         var listTrack = ""
         var count = 1
         for (track in tracks) {
-            var timeTrack =
+            val timeTrack =
                 SimpleDateFormat(
                     "mm:ss",
                     Locale.getDefault()
@@ -142,8 +142,9 @@ class PlayListRepositoryImpl(
                         listTrack
             )
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            Intent.createChooser(this, null)
         }
-        context.startActivity(intent)
+        context.startActivity(intent, null)
     }
 
 

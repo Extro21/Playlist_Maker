@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
@@ -47,6 +48,8 @@ class FragmentNewPlayList : Fragment() {
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+
+    private lateinit var callback : OnBackPressedCallback
 
 
     override fun onCreateView(
@@ -222,7 +225,7 @@ class FragmentNewPlayList : Fragment() {
     }
 
     private fun onBackPressedDispatcher() {
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+        callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (binding.edTextNamePlaylistInput.text.toString().isNotEmpty() ||
                 binding.edDescriptionInput.text.toString().isNotEmpty() || uriPlaylist != ""
             ) {
@@ -281,7 +284,7 @@ class FragmentNewPlayList : Fragment() {
                 snackBarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
             textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
             snackBar.show()
-            //callback.isEnabled = false
+            callback.isEnabled = false
             findNavController().popBackStack()
         }
     }
