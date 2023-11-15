@@ -7,9 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmarket.media.domain.FavoriteListener
 import com.practicum.playlistmarket.media.domain.db.FavoriteInteractor
-import com.practicum.playlistmarket.media.domain.db.PlayListInteractor
-import com.practicum.playlistmarket.media.domain.module.PlayList
-import com.practicum.playlistmarket.media.ui.states.PlayListState
 import com.practicum.playlistmarket.player.domain.StatePlayer
 import com.practicum.playlistmarket.player.domain.api.PlayerInteractor
 import com.practicum.playlistmarket.player.domain.api.PlayerListener
@@ -22,8 +19,7 @@ import java.util.*
 
 class MediaPlayerViewModel(
     private val playerInteractor: PlayerInteractor,
-    private val favoriteInteractor: FavoriteInteractor,
-    private val playListInteractor: PlayListInteractor
+    private val favoriteInteractor: FavoriteInteractor
 ) : ViewModel(), PlayerListener, FavoriteListener {
 
 
@@ -53,19 +49,15 @@ class MediaPlayerViewModel(
     val coverArtwork: LiveData<String> = _coverArtwork
 
     private val _likeState = MutableLiveData<Boolean>()
-    val likeState: LiveData<Boolean> = _likeState
+    val likeState : LiveData<Boolean> = _likeState
 
-    private val _playlistState = MutableLiveData<Boolean>()
-    val playlistState: LiveData<Boolean> = _playlistState
-
-
-    suspend fun addTrackFavorite(track: Track) {
-        Log.d("LikeLike", "${track.isFavorite} ViewModel")
+    suspend fun addTrackFavorite(track: Track){
+        Log.e("LikeLike", "${track.isFavorite} ViewModel")
         favoriteInteractor.addTrackFavorite(track)
 
     }
 
-    fun checkLike(trackId: String) {
+    fun checkLike(trackId : String){
         viewModelScope.launch {
             _likeState.value = favoriteInteractor.checkLikeTrack(trackId)
         }
@@ -134,43 +126,6 @@ class MediaPlayerViewModel(
 
     override fun onStateUpdate(state: StatePlayer) {
         _checkState.value = state
-    }
-
-
-    private val statePlayList = MutableLiveData<PlayListState>()
-    fun observeStatePlayList(): LiveData<PlayListState> = statePlayList
-
-
-    fun fillData() {
-        statePlayList.postValue(PlayListState.Loading)
-
-        viewModelScope.launch {
-            playListInteractor.getPlayList().collect() {
-                processResult(it)
-            }
-        }
-    }
-
-    private fun processResult(playList: List<PlayList>) {
-        if (playList.isEmpty()) {
-            statePlayList.postValue(PlayListState.Empty)
-        } else {
-            statePlayList.postValue(PlayListState.Content(playList))
-        }
-
-    }
-
-
-    fun addTrackPlaylist(track: Track, playList: PlayList) {
-        viewModelScope.launch {
-            val isTrackAddPlaylist = playListInteractor.addTrackPlaylist(track, playList)
-            _playlistState.postValue(isTrackAddPlaylist)
-        }
-    }
-
-
-    suspend fun getTrackCount(playList: PlayList): Int {
-        return playListInteractor.getTracksForPlaylistCount(playList)
     }
 
     companion object {

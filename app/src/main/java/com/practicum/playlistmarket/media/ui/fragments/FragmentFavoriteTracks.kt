@@ -1,5 +1,6 @@
 package com.practicum.playlistmarket.media.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,15 +8,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmarket.R
 import com.practicum.playlistmarket.databinding.FragmentSelectedTracksBinding
-import com.practicum.playlistmarket.media.ui.states.FavoriteState
-import com.practicum.playlistmarket.media.ui.adapter.favoriteAdapter.FavoriteAdapter
+import com.practicum.playlistmarket.media.ui.FavoriteState
+import com.practicum.playlistmarket.media.ui.adapter.FavoriteAdapter
 import com.practicum.playlistmarket.media.ui.view_model.FavoriteViewModel
 import com.practicum.playlistmarket.player.domain.models.Track
-import com.practicum.playlistmarket.player.ui.fragment.MediaPlayerFragment
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_ARTIST_NAME
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_COLLECTION_NAME
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_COUNTRY
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_DATA
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_IMAGE
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_LIKE
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_PRIMARY_NAME
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_SONG
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_TIME_MILLIS
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_TRACK
+import com.practicum.playlistmarket.player.ui.activity.EXTRA_TRACK_NAME
+import com.practicum.playlistmarket.player.ui.activity.MediaPlayerActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,9 +39,7 @@ class FragmentFavoriteTracks : Fragment() {
 
 
     private val adapter = FavoriteAdapter { track ->
-        Log.e("CheckRV", "check")
         if (clickDebounce()) {
-            Log.e("CheckRV", "check clickDebounce")
             openPlayerToIntent(track)
             Log.e("fovarite", track.isFavorite.toString())
         }
@@ -102,19 +110,27 @@ class FragmentFavoriteTracks : Fragment() {
     }
 
     private fun openPlayerToIntent(track: Track) {
-        findNavController().navigate(
-            R.id.action_mediaFragment_to_mediaPlayerFragment,
-            MediaPlayerFragment.createArgs(track.trackId, track.artworkUrl100,track.trackName,
-                track.artistName, track.trackTimeMillis, track.collectionName, track.releaseDate,
-                track.primaryGenreName, track.country, track.isFavorite, track, track.previewUrl)
-        )
+        val intent = Intent(requireContext(), MediaPlayerActivity::class.java)
+        intent.putExtra(EXTRA_TRACK_NAME, track.trackName)
+        intent.putExtra(EXTRA_ARTIST_NAME, track.artistName)
+        intent.putExtra(EXTRA_TIME_MILLIS, track.trackTimeMillis)
+        intent.putExtra(EXTRA_IMAGE, track.artworkUrl100)
+        intent.putExtra(EXTRA_DATA, track.releaseDate)
+        intent.putExtra(EXTRA_COLLECTION_NAME, track.collectionName)
+        intent.putExtra(EXTRA_PRIMARY_NAME, track.primaryGenreName)
+        intent.putExtra(EXTRA_COUNTRY, track.country)
+        intent.putExtra(EXTRA_SONG, track.previewUrl)
+        intent.putExtra(EXTRA_LIKE, track.isFavorite)
+        intent.putExtra(EXTRA_TRACK, track)
+        startActivity(intent)
+        adapter.notifyDataSetChanged()
     }
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY_MILLIS)
                 isClickAllowed = true
             }

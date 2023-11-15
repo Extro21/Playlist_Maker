@@ -9,12 +9,11 @@ interface FavoriteRepository {
 
     fun favoriteTrack(): Flow<List<Track>>
 
+  //  fun addTrackFavorite(track: Track)
     suspend fun addTrackFavorite(track: Track)
     suspend fun deleteTrackFavorite(trackId: String)
 
     fun setupListener(listener: FavoriteListener)
 
     suspend fun checkLikeTrack(trackId: String) : Boolean
-
-
 }
