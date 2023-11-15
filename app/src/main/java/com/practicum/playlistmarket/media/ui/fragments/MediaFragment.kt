@@ -36,7 +36,7 @@ class MediaFragment : Fragment() {
         tabMediator = TabLayoutMediator(binding.mediaMenu, binding.viewPageMedia) { tab, position ->
             when (position) {
                 0 -> tab.text = getString(R.string.selected_tracks)
-                1 -> tab.text = getString(R.string.play_list)
+                1 -> tab.text = getString(R.string.play_lists)
             }
         }
         tabMediator.attach()

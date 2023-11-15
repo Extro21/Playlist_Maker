@@ -14,7 +14,7 @@ class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository)
     }
 
     override suspend fun addTrackFavorite(track: Track) {
-        Log.e("LikeLike", "${track.isFavorite} Interactor")
+        Log.d("LikeLike", "${track.isFavorite} Interactor")
         favoriteRepository.addTrackFavorite(track)
 
     }

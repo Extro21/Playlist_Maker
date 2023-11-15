@@ -28,10 +28,38 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="mediateka">Медиатека</string>
     <string name="selected_tracks">Избранные треки</string>
-    <string name="play_list">Плейлисты</string>
+    <string name="play_lists">Плейлисты</string>
     <string name="mediateka_no_playlist">Вы не создали\n ни одного плейлиста</string>
     <string name="new_playlist">Новый плейлист</string>
     <string name="empty_mediateka">Ваша медиатека пуста</string>
+    <string name="newplaylist">Новый плейлист</string>
+    <string name="name_track_list">Название*</string>
+    <string name="description">Описание</string>
+    <string name="create">Создать</string>
+    <string name="finish_creating_playlist">Завершить создание плейлиста?</string>
+    <string name="all_unsaved_data_will_be_lost">Все несохраненные данные будут потеряны</string>
+    <string name="cancellation">Отмена</string>
+    <string name="complete">Завершить</string>
+    <string name="playlist">Плейлист</string>
+    <string name="created">создан</string>
+    <string name="add_track_playlist">Добавить в плейлист</string>
+    <string name="track_already_playlist">Трек уже добавлен в плейлист</string>
+    <string name="add_track_for_playlist">Добавлено в плейлист</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="delete_track">Хотите удалить трек?</string>
+    <string name="delete_playlist">Хотите удалить плейлист</string>
+    <string name="save">Сохранить</string>
+    <string name="edit">Редактировать</string>
+    <string name="no_sharing_no_track">В этом плейлисте нет списка треков, которым можно поделиться</string>
+
+    <string name="trackov">треков</string>
+    <string name="track">трек</string>
+    <string name="tracka">трека</string>
+
+    <string name="minut">минут</string>
+    <string name="minuta">минута</string>
+    <string name="minuti">минуты</string>
 
 
 </resources>
