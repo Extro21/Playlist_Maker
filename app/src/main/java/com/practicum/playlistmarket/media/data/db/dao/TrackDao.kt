@@ -18,17 +18,11 @@ interface TrackDao {
     @Query("SELECT trackId FROM favorite_tracks")
     suspend fun getTrackFavoriteId(): List<String>
 
-//    @Query("SELECT * FROM favorite_tracks")
-//    suspend fun getTrackId(id : String): List<String>
-
     @Query("SELECT * FROM favorite_tracks WHERE trackId = :idTrack")
     suspend fun getTrackFavoriteForId(idTrack : String): TrackEntity
 
     @Query("SELECT EXISTS(SELECT 1 FROM favorite_tracks WHERE trackId = :trackId)")
     suspend fun doesTrackExist(trackId: String): Boolean
-
-//    @Delete(entity = TrackEntity::class)
-//    fun deleteTrackEntity(trackEntity: TrackEntity)
 
     @Query("DELETE FROM favorite_tracks WHERE trackId is :id")
     suspend fun deleteTrackFavorite(id: String)

@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TrackHolder(item: View) : RecyclerView.ViewHolder(item) {
+
     private val binding = SearchTrackItemBinding.bind(item)
     fun bind(track: Track) = with(binding) {
         val cornerSize = itemView.resources.getDimensionPixelSize(R.dimen.corners_image_track)
