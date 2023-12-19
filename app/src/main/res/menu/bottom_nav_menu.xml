@@ -11,11 +11,11 @@
         android:id="@+id/navigation_dashboard"
         android:icon="@drawable/ic_music"
         android:title="@string/media_library"
-        
+
         />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings" />
 

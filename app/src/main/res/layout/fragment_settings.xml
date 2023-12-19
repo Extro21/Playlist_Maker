@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".settings.ui.fragment.SettingsFragment">
+
+    <TextView
+        style="@style/tooBarText"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:text="@string/settings" />
+
+
+    <LinearLayout
+        android:id="@+id/switch_app"
+        style="@style/LinearLayoutSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TextViewSetting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_setting_menu"
+            android:layout_marginBottom="@dimen/margin_bot_setting_menu"
+            android:layout_weight="1"
+            android:text="@string/dark_theme" />
+
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_setting"
+            style="@style/switchStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:ignore="UseSwitchCompatOrMaterialXml,UsingOnClickInXml" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/share_app"
+        style="@style/LinearLayoutSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+
+            style="@style/TextViewSetting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_setting_menu"
+            android:layout_marginBottom="@dimen/margin_bot_setting_menu"
+            android:layout_weight="1"
+            android:text="@string/share_app" />
+
+
+        <ImageView
+            style="@style/imageSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/indent_image_setting"
+            android:src="@drawable/ic_baseline_share_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/support"
+        style="@style/LinearLayoutSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            style="@style/TextViewSetting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_setting_menu"
+            android:layout_marginBottom="@dimen/margin_bot_setting_menu"
+            android:layout_weight="1"
+            android:text="@string/write_support" />
+
+        <ImageView
+            style="@style/imageSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/indent_image_setting"
+            android:src="@drawable/ic_baseline_support_agent_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/termsОfUse"
+        style="@style/LinearLayoutSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TextViewSetting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_setting_menu"
+            android:layout_marginBottom="@dimen/margin_bot_setting_menu"
+            android:layout_weight="1"
+            android:text="@string/user_agreement" />
+
+        <ImageView
+            style="@style/imageSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/indent_image_setting"
+            android:src="@drawable/arrow_setting_privacy" />
+
+    </LinearLayout>
+
+</LinearLayout>

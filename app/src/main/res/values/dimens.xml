@@ -15,5 +15,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="corners_image_track">2dp</dimen>
     <dimen name="size_delimiter_track">3dp</dimen>
+    <dimen name="indent_image_playlist">8dp</dimen>
 
 </resources>

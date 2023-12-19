@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/mediaFragment">
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.practicum.playlistmarket.settings.ui.fragment.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.practicum.playlistmarket.search.ui.fragment.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_mediaPlayerFragment"
+            app:destination="@id/mediaPlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mediaFragment"
+        android:name="com.practicum.playlistmarket.media.ui.fragments.MediaFragment"
+        android:label="MediaFragment"
+        tools:layout="@layout/fragment_media" >
+        <action
+            android:id="@+id/action_mediaFragment_to_fragmentNewPlayList"
+            app:destination="@id/fragmentNewPlayList" />
+        <action
+            android:id="@+id/action_mediaFragment_to_mediaPlayerFragment"
+            app:destination="@id/mediaPlayerFragment" />
+        <action
+            android:id="@+id/action_mediaFragment_to_fragmentPlayListView"
+            app:destination="@id/fragmentPlayListView" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentNewPlayList"
+        android:name="com.practicum.playlistmarket.media.ui.fragments.FragmentNewPlayList"
+        android:label="FragmentNewPlayList"
+        tools:layout="@layout/fragment_new_play_list"
+        />
+    <fragment
+        android:id="@+id/mediaPlayerFragment"
+        android:name="com.practicum.playlistmarket.player.ui.fragment.MediaPlayerFragment"
+        android:label="fragment_media_player"
+        tools:layout="@layout/fragment_media_player" >
+        <action
+            android:id="@+id/action_mediaPlayerFragment_to_fragmentNewPlayList"
+            app:destination="@id/fragmentNewPlayList" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentPlayListView"
+        android:name="com.practicum.playlistmarket.media.ui.fragments.FragmentPlayListView"
+        android:label="fragment_play_list_view"
+        tools:layout="@layout/fragment_play_list_view" >
+        <action
+            android:id="@+id/action_fragmentPlayListView_to_mediaPlayerFragment"
+            app:destination="@id/mediaPlayerFragment" />
+        <action
+            android:id="@+id/action_fragmentPlayListView_to_fragmentNewPlayList"
+            app:destination="@id/fragmentNewPlayList" />
+    </fragment>
+</navigation>
