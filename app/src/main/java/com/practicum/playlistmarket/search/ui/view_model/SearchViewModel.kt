@@ -30,13 +30,6 @@ class SearchViewModel(
     private val _clearHistory = MutableLiveData<Unit>()
     val clearHistory: LiveData<Unit> = _clearHistory
 
-//    fun showHistory() {
-//        renderState(TrackState.SearchHistory(
-//            getHistoryTrack())
-//        )
-//    }
-
-
     fun saveTrack(track: Track) {
         interactorHistory.saveTrack(track)
     }
@@ -48,12 +41,6 @@ class SearchViewModel(
     }
 
     private fun getHistoryTrack() = interactorHistory.getAllTracks()
-
-//    private fun getHistoryTrack() : List<Track> {
-//        viewModelScope.launch {
-//            return@launch interactorHistory.getAllTracks()
-//        }
-//    }
 
     private val stateLiveData = MutableLiveData<TrackState>()
     fun observeState(): LiveData<TrackState> = stateLiveData
@@ -69,7 +56,6 @@ class SearchViewModel(
 
 
     fun searchDebounce(changedText: String) {
-
         if (changedText.isBlank()) {
             historyJob = viewModelScope.launch {
                 stateLiveData.value = TrackState.SearchHistory(getHistoryTrack())
@@ -85,15 +71,6 @@ class SearchViewModel(
                 searchRequest(changedText)
             }
         }
-    }
-
-//    fun historyShow(){
-//        renderState(TrackState.SearchHistory(getHistoryTrack()))
-//    }
-
-    fun btClear() {
-        renderState(TrackState.Default)
-
     }
 
 
@@ -133,8 +110,6 @@ class SearchViewModel(
                     }
             }
         }
-
-
     }
 
     companion object {
@@ -142,6 +117,11 @@ class SearchViewModel(
         private val SEARCH_REQUEST_TOKEN = Any()
 
     }
+
+    fun btClear() {
+        renderState(TrackState.Default)
+    }
+
 }
 
 

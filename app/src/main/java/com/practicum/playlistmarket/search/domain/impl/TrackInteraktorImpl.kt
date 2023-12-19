@@ -9,15 +9,13 @@ import kotlinx.coroutines.flow.map
 
 class TrackInteraktorImpl(private val repository: TrackRepository) : TrackInteractor {
 
-   //private val executor = Executors.newCachedThreadPool()
-
-    override fun searchTrack(expression: String) : Flow<Pair<List<Track>?, String?>> {
-            return repository.searchTrack(expression).map{ result ->
-                when(result){
-                    is Resource.Success -> Pair(result.data, null)
-                    is Resource.Error -> Pair(null, result.message)
-                }
+    override fun searchTrack(expression: String): Flow<Pair<List<Track>?, String?>> {
+        return repository.searchTrack(expression).map { result ->
+            when (result) {
+                is Resource.Success -> Pair(result.data, null)
+                is Resource.Error -> Pair(null, result.message)
             }
+        }
     }
 
 }

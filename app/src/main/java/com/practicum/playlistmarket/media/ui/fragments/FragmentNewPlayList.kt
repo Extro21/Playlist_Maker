@@ -136,7 +136,7 @@ class FragmentNewPlayList : Fragment() {
 
         binding.edTextNamePlaylistInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                AppCompatResources.getColorStateList(requireContext(), R.color.selector_et_blue)
+                AppCompatResources.getColorStateList(requireContext(),  R.color.purple)
                     ?.let {
                         binding.edTextNamePlaylist.setBoxStrokeColorStateList(it)
                         binding.edTextNamePlaylist.defaultHintTextColor = it

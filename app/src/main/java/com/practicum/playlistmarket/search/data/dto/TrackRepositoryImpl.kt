@@ -46,10 +46,8 @@ class TrackRepositoryImpl(
                     }
                     checkFavoriteTrack(data, listFavoriteTrack)
                     emit(Resource.Success(data))
-                   // dataBase.trackDao().insertTrackFavorite(dbConvertor.map(data[0]))
                 }
             }
-
             else -> emit(Resource.Error(SearchStatus.NO_INTERNET.nameStatus))
         }
 
@@ -64,14 +62,4 @@ class TrackRepositoryImpl(
             }
         }
     }
-
-    private fun trackConvector(track: List<TrackEntity>): List<Track> {
-        return track.map { track -> dbConvertor.map(track) }
-    }
-
-//    private suspend fun checkTrackFavorite(track : List<TrackDto>) {
-//
-//    }
-
-
 }
