@@ -4,7 +4,10 @@ import com.practicum.playlistmarket.search.data.dto.Response
 
 
 interface NetworkClient {
-    suspend fun doRequest(dto: Any): Response
+    //   fun doRequest (dto:Any) : Response
+    suspend fun doRequest (dto:Any) : Response
+
+    //  suspend fun doRequestSuspend(dto: Any): Response
 
 
 }
