@@ -47,7 +47,9 @@ class PlayListRepositoryImpl(
         if (!database.playListDao().doesTrackExist(trackId = track.trackId)) {
             database.playListDao().addTrack(trackConvectorEntity(track))
         }
-        return if (!database.playListDao().doesTrackExistPlayList(trackId = track.trackId, playList.playListId)) {
+        return if (!database.playListDao()
+            .doesTrackExistPlayList(trackId = track.trackId, playList.playListId)
+            ) {
             database.playListDao()
                 .addTrackForPlaylist(
                     TrackPlaylist(
