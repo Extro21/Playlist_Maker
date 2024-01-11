@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +63,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -76,6 +77,7 @@ class SearchFragment : Fragment() {
 
 
         viewModel.observeState().observe(viewLifecycleOwner) {
+            Log.d("stateTrack", "$it")
             render(it)
         }
 
@@ -151,7 +153,7 @@ class SearchFragment : Fragment() {
         binding.massageNotInternet.visibility = View.GONE
         if (track.isNotEmpty() && binding.editSearch.text.isEmpty() and binding.editSearch.isActivated) {
             binding.historyMenu.visibility = View.VISIBLE
-            searchAdapter.notifyDataSetChanged()
+           // searchAdapter.notifyDataSetChanged()
         }
 
     }
@@ -182,15 +184,13 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(track: List<Track>) {
+        searchAdapter.updateData(track)
         binding.massageNotFound.visibility = View.GONE
         binding.massageNotInternet.visibility = View.GONE
         binding.rcViewSearch.visibility = View.VISIBLE
         binding.placeholderMessage.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         binding.historyMenu.visibility = View.GONE
-        searchAdapter.trackList.clear()
-        searchAdapter.trackList.addAll(track)
-        searchAdapter.notifyDataSetChanged()
     }
 
     private fun showDefault() {
@@ -204,11 +204,11 @@ class SearchFragment : Fragment() {
             massageNotFound.visibility = View.GONE
             massageNotInternet.visibility = View.GONE
             binding.historyMenu.visibility = View.GONE
-            searchAdapter.trackList.clear()
+            searchAdapter.clearData(emptyList())
 //            if (historyAdapter.trackListHistory.isNotEmpty()) {
 //                binding.historyMenu.visibility = View.VISIBLE
 //            }
-            searchAdapter.notifyDataSetChanged()
+            //searchAdapter.notifyDataSetChanged()
             historyAdapter.notifyDataSetChanged()
         }
 
@@ -232,15 +232,13 @@ class SearchFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         binding.editSearch.setText(savedInstanceState?.getString(SEARCH_QUERY, ""))
         val trackSave = savedInstanceState?.getParcelableArrayList<Track>(TRACK_QUERY)
-        if (trackSave != null) {
-            searchAdapter.trackList.addAll(trackSave)
-        }
+//        if (trackSave != null) {
+//            searchAdapter.trackList.addAll(trackSave)
+//        }
     }
 
 
     private fun init() {
-        // historyAdapter.trackListHistory = tracksHistory
-
         binding.apply {
             rcViewSearch.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -249,11 +247,6 @@ class SearchFragment : Fragment() {
             rcViewHistory.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             rcViewHistory.adapter = historyAdapter
-
-//            if (historyAdapter.trackListHistory.isEmpty()) {
-//                historyMenu.visibility = View.GONE
-//            }
-
         }
     }
 
