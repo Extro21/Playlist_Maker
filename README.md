@@ -90,7 +90,7 @@
 На этом экране можно выбрать темную и светлую темы для приложения.
 
 <p align="center">
-<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/setting.png.png" width="250">
+<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/setting.png" width="250">
 </p>
 
 ### Особенности экрана
