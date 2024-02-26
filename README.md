@@ -19,7 +19,7 @@
 ## Главный экран -- экран поиска треков
 
 <p align="center">
-<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/search.png" width="450">
+<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/search.png" width="250" >
 </p>
 
 На данном экране пользователь имеет возможность осуществлять поиск треков по любому непустому набору слов в поисковом запросе. Результаты поиска будут представлены в виде списка, включающего название трека, имя исполнителя и продолжительность.
@@ -35,7 +35,7 @@
 На данном экране пользователь имеет возможность прослушать трек, добавить его в избранное или в плейлист, а также вернуться к списку треков.
 
 <p align="center">
-<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/player.png" width="450">
+<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/player.png" width="250">
 </p>
 
 ### Особенности экрана
@@ -60,13 +60,13 @@
 - При нажатии на трек мы переходим на экран плеера.
 
 <p align="center">
-<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/favorite_tracks.png" width="450">
+<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/favorite_tracks.png" width="250">
 </p>
 
 Фрагмент “Плейлисты”:
 
 <p align="center">
-<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/playlists.png" width="450">
+<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/playlists.png" width="250">
 </p>
 
 - На вкладке "Плейлисты" отображается список всех созданных плейлистов в виде сетки с двумя столбцами, используя GridLayoutManager. Также присутствует кнопка "Новый плейлист".
@@ -74,7 +74,7 @@
 - При нажатии на плейлист мы переходим на экран "Плейлист". Здесь мы видим обложку, название, описание, количество треков, общую продолжительность всех треков, две кнопки (поделиться и настройки) и BottomSheet, в котором указан список всех треков в плейлисте.
 
 <p align="center">
-<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/playlist.png" width="450">
+<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/playlist.png" width="250">
 </p>
 
 - При нажатии на трек мы переходим на экран плеера. При длительном нажатии на трек появляется диалоговое окно, которое предлагает удалить трек из плейлиста.
@@ -82,14 +82,16 @@
 - При нажатии на кнопку "Настройки" BottomSheet со списком треков скрывается, а появляется другое окно. В его заголовке отображается название плейлиста, обложка и количество треков. Мы можем удалить плейлист, отредактировать его или поделиться.
 
 <p align="center">
-<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/setting_playlist.png" width="450">
+<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/setting_playlist.png" width="250">
 </p>
 
 ## Экран Настройки
 
 На этом экране можно выбрать темную и светлую темы для приложения.
 
-![setting](https://github.com/Extro21/Playlist_Market_new/blob/master/setting.png)
+<p align="center">
+<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/setting.png.png" width="250">
+</p>
 
 ### Особенности экрана
 
