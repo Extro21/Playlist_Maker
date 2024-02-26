@@ -20,6 +20,9 @@
 
 ![Search](https://github.com/Extro21/Playlist_Market_new/blob/master/search.png)
 
+![Search](https://github.com/Extro21/Playlist_Market_new/blob/master/search.png)
+<img src="https://github.com/Extro21/Playlist_Market_new/blob/master/search.png" width="300">
+
 На данном экране пользователь имеет возможность осуществлять поиск треков по любому непустому набору слов в поисковом запросе. Результаты поиска будут представлены в виде списка, включающего название трека, имя исполнителя и продолжительность.
 
 ### Особенности экрана
